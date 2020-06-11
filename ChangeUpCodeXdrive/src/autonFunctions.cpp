@@ -21,32 +21,32 @@ void visionRGB() {
 
   while(g < 255) {
     g++;
-    Vision5.setLedColor(r,g,b);
+    visionCamera.setLedColor(r,g,b);
     wait(time,seconds);
   }
   while(r > 2) {
     r--;
-    Vision5.setLedColor(r,g,b);
+    visionCamera.setLedColor(r,g,b);
     wait(time,seconds);
   }
   while(b < 255) {
     b++;
-    Vision5.setLedColor(r,g,b);
+    visionCamera.setLedColor(r,g,b);
     wait(time,seconds);
   }
   while(g > 2) {
     g--;
-    Vision5.setLedColor(r,g,b);
+    visionCamera.setLedColor(r,g,b);
     wait(time,seconds);
   }
   while(r < 255) {
     r++;
-    Vision5.setLedColor(r,g,b);
+    visionCamera.setLedColor(r,g,b);
     wait(time,seconds);
   }
   while(b > 2) {
     b--;
-    Vision5.setLedColor(r,g,b);
+    visionCamera.setLedColor(r,g,b);
     wait(time,seconds);
   }
 }
