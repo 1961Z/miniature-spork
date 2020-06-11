@@ -13,6 +13,70 @@ void resetFunction() {
   front_R.resetRotation();
 }
 
+void visionRGB() {
+  double r = 0;
+  double g = 0;
+  double b = 0;
+  double time = .005;
+ 
+  while(g < 255) {
+    g++;
+    Vision5.setLedColor(r,g,b);
+    wait(time,seconds);
+  }
+  while(r > 2) {
+    r--;
+    Vision5.setLedColor(r,g,b);
+    wait(time,seconds);
+  }
+  while(b < 255) {
+    b++;
+    Vision5.setLedColor(r,g,b);
+    wait(time,seconds);
+  }
+  while(g > 2) {
+    g--;
+    Vision5.setLedColor(r,g,b);
+    wait(time,seconds);
+  }
+  while(r < 255) {
+    r++;
+    Vision5.setLedColor(r,g,b);
+    wait(time,seconds);
+  }
+  while(b > 2) {
+    b--;
+    Vision5.setLedColor(r,g,b);
+    wait(time,seconds);
+  }
+}
+
+void brainRGB() {
+  int hue = 0;
+  int count = 0;
+  int max = 325;
+  Brain.Screen.setPenColor(black);
+  
+  while(count < max) {
+    Brain.Screen.printAt(1, 20, "Hue value: %d ", hue);
+    Brain.Screen.printAt(1, 40, "counter: %d ", count);
+    Brain.Screen.render();
+    Brain.Screen.setFillColor(hue);
+    Brain.Screen.drawRectangle(0,0,480,280);
+    hue++;
+    count++;
+  }
+  while(count > 0) {
+    Brain.Screen.printAt(1, 20, "Hue value: %d ", hue);
+    Brain.Screen.printAt(1, 40, "counter: %d ", count);
+    Brain.Screen.render();
+    Brain.Screen.setFillColor(hue);
+    Brain.Screen.drawRectangle(0,0,480,280);
+    hue--;
+    count--;
+  }
+}
+
 void moveForward(int speed, double distanceToTravel) {
   double wheelDiameterIN = 3.25;
   double travelTargetCM = distanceToTravel; // this is the distance it goes which is set as a variable
