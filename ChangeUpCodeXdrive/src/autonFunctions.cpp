@@ -18,7 +18,7 @@ void visionRGB() {
   double g = 0;
   double b = 0;
   double time = .005;
- 
+
   while(g < 255) {
     g++;
     Vision5.setLedColor(r,g,b);
@@ -56,7 +56,7 @@ void brainRGB() {
   int count = 0;
   int max = 325;
   Brain.Screen.setPenColor(black);
-  
+
   while(count < max) {
     Brain.Screen.printAt(1, 20, "Hue value: %d ", hue);
     Brain.Screen.printAt(1, 40, "counter: %d ", count);
@@ -285,6 +285,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
   back_R.stop(hold);
   front_L.stop(hold);
   back_L.stop(hold);
+  rotatePID(headingOfRobot, 60);
 }
 
 void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply) {
