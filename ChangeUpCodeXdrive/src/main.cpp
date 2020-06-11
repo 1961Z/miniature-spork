@@ -10,11 +10,11 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// LeftFotward          motor         1               
-// LeftBack             motor         2               
-// RightForward         motor         3               
-// RightBack            motor         4               
-// Controller1          controller                    
+// LeftFotward          motor         1
+// LeftBack             motor         2
+// RightForward         motor         3
+// RightBack            motor         4
+// Controller1          controller
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "opControl.h"
@@ -67,14 +67,14 @@ void autonomous(void) {
   while (inertial_Down.isCalibrating()) {
     wait(100, msec);
   }
-  moveForwardWalk(100, 100, 0, 0.5);   
-  //moveForward(70, 24);
-  //rotatePID(90, 100);
-  //strafeWalk(-24, 100, 90, 0.5);
-  //ObjectLooker(1, 50);
-  /*rotatePID(145, 90);
+  moveForwardWalk(100, 100, 0, 0.5);
+  moveForward(70, 24);
+  rotatePID(90, 100);
+  strafeWalk(-24, 100, 90, 0.5);
+  ObjectLooker(1, 50);
+  rotatePID(145, 90);
   strafeWhileTurning(10, 10);
-  rotatePID(225,90);*/
+  rotatePID(225,90);
   strafeWalk(100, 100, 0, 0.5);
 
 }
@@ -113,7 +113,7 @@ void usercontrol(void) {
 
   while (1) {
 
-    /*double rotationRight = pow(front_R.rotation(rev), 2); 
+    /*double rotationRight = pow(front_R.rotation(rev), 2);
     double rotationLeft = pow(front_L.rotation(rev), 2);
     double rotationRightBack = pow(back_R.rotation(rev), 2);
     double rotationLeftBack = pow(back_L.rotation(rev), 2);
