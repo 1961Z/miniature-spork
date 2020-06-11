@@ -75,7 +75,7 @@ void autonomous(void) {
   /*rotatePID(145, 90);
   strafeWhileTurning(10, 10);
   rotatePID(225,90);*/
-  //strafeWalk(-100, 100, 0, 0.5);
+  strafeWalk(100, 100, 0, 0.5);
 
 }
 
