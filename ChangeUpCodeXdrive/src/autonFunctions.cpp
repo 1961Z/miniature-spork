@@ -319,9 +319,9 @@ void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, do
   printf("front right encoder %f\n", front_R.rotation(rev));
   printf("distance needed to travel %f\n", rightEndPoint);
   double distanceTraveled = 0;
-  double driftLeftError = (front_R.rotation(deg) + back_L.rotation(deg));
-  double driftRightError = (front_L.rotation(deg) + back_R.rotation(deg));
-  double previousOffset = (driftLeftError - driftRightError) / 2;
+  //double driftLeftError = (front_R.rotation(deg) + back_L.rotation(deg));
+  //double driftRightError = (front_L.rotation(deg) + back_R.rotation(deg));
+  //double previousOffset = (driftLeftError - driftRightError) / 2;
 
   while (direction * (rightStartPoint + distanceTraveled) < direction * rightEndPoint) {
 
@@ -455,9 +455,9 @@ void wait_until_drive_settled(int angle) {
   wait(10, msec);
   int maxPower = 10;
   int maxError = 10;
-  int waiting;
+  //int waiting;
   wait(10, msec);
-  waiting++;
+  //waiting++;
   while (1 == 1) {
     if (fabs(angle - get_average_inertial()) < maxError) {
       break;
@@ -481,8 +481,6 @@ void wait_until_drive_settled(int angle) {
 void rotatePID(int angle) {
   int maxError = 20;
   int maxPower = 80;
-  int timer = 0;
-  int minVelocity = 1;
   exit_function = false;
 
   sRotatePid.integral = 0;
@@ -543,17 +541,21 @@ bool reached = false;
 /** @brief      Go toward set color */
 /*-----------------------------------------------------------------------------*/
 void goTo(int sigNumber, int velocity) {
-  visionCamera.setBrightness(80);
+  visionCamera.setBrightness(50);
   visionCamera.setSignature(SIG_1);
 
   while (!reached) {
     visionCamera.takeSnapshot(SIG_1);
-    printf("Object Count %i\n", visionCamera.objectCount);
+    printf("Object Count %ld\n", visionCamera.objectCount);
     printf("Object height %i\n", visionCamera.largestObject.height);
     if (visionCamera.largestObject.exists) {
-      if (visionCamera.largestObject.height < 95 && visionCamera.largestObject.height > 2) {
+      if (visionCamera.largestObject.height < 105 && visionCamera.largestObject.height > 2) {
         moveForwardSimple(velocity);
-      } else {
+        /*if(back_L.velocity(pct) < 1){
+          reached = true;
+        }*/
+      } 
+      else {
         reached = true;
         front_L.stop(hold); // Stop the left motor.
         front_R.stop(hold);
@@ -566,13 +568,13 @@ void goTo(int sigNumber, int velocity) {
 }
 
 void ObjectLooker(int sigNumber, int speed) {
-  visionCamera.setBrightness(80);
+  visionCamera.setBrightness(50);
   visionCamera.setSignature(SIG_1);
   int centerFOV = 158;
   int offsetX = 5;
   while (!linedUp) {
     visionCamera.takeSnapshot(SIG_1);
-    printf("Object Count %i\n", visionCamera.objectCount);
+    printf("Object Count %ld\n", visionCamera.objectCount);
     if (visionCamera.largestObject.exists) {
       if (visionCamera.largestObject.centerX > centerFOV + offsetX) {
         strafeSimpleRight(speed);
@@ -589,6 +591,7 @@ void ObjectLooker(int sigNumber, int speed) {
   reached = false;
 }
 
+
 void strafeWhileTurning(int speed, double distance){
 
 while(get_average_inertial() < 176){
@@ -599,4 +602,70 @@ while(get_average_inertial() < 176){
 }
 strafeWalk(-100, 100, 180, 0.5);
 
+}
+
+int timeKeeper;
+
+void intakeMoves(){
+ conveyor_L.rotateFor(fwd, 1, sec, 100, velocityUnits::pct);
+ conveyor_R.rotateFor(fwd, 1, sec, 100, velocityUnits::pct);
+}
+
+int threshold = 40;
+bool cancel = false;
+
+int primeShoot() {
+  int timerBased = 0;
+  cancel = false;
+  while (true) {
+
+    if (LineTrackerTop.reflectivity() < threshold) {
+      conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
+      conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
+    } 
+    else {
+      conveyor_L.stop(brake);
+      conveyor_R.stop(brake);
+      break;
+    }
+
+    task::sleep(0);
+    timerBased += 10;
+  }
+  return 1;
+}
+
+bool canceled = false; 
+
+int scoreGoal(){
+  int timerBased = 0;
+  canceled = false;
+  while (true) {
+
+    if (LineTrackerIntake.reflectivity() > 4) {
+      conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
+      conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
+      task::sleep(1000);
+    } 
+    else {
+      conveyor_L.stop(brake);
+      conveyor_R.stop(brake);
+      break;
+    }
+
+    task::sleep(0);
+    timerBased += 10;
+  }
+  return 1;
+}
+
+void primeShooterWithVision(){
+  visionCamera.takeSnapshot(SIG_1);
+    printf("Object Count %ld\n", visionCamera.objectCount);
+    printf("Object height %i\n", visionCamera.largestObject.height);
+    if (visionCamera.largestObject.exists) {
+      if (visionCamera.largestObject.height < 105 && visionCamera.largestObject.height > 70) {
+      task L = task(primeShoot);
+      } 
+  }
 }

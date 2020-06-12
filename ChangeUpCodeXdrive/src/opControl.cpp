@@ -98,14 +98,34 @@ int conveyorToggle() {
 
 int autoAlignWithGoal() {
   while (true) {
-    if (Controller1.ButtonB.pressing()) {
-      if (inertial_Down.rotation() != 0) {
-        rotatePID(0, 90);
-      }
-      task::stop(joyStickControl);
-      ObjectLooker(1, 30);
-      task::resume(joyStickControl);
-    }
+   task::stop(conveyorToggle);
+   primeShooterWithVision();
+   task::resume(conveyorToggle);
   }
   task::sleep(10);
+ }
+
+
+int primeTheConveyor(){
+  while(true){
+    if(Controller1.ButtonX.pressing()){
+      task::stop(conveyorToggle);
+      task L = task(primeShoot);
+      task::resume(conveyorToggle);
+    }
+    task::sleep(10);
+  }
+}
+
+int intakeBall(){
+while(true){
+    if(Controller1.ButtonY.pressing()){
+      task::stop(conveyorToggle);
+      task::stop(primeTheConveyor);
+      scoreGoal();
+      task::resume(conveyorToggle);
+      task::resume(primeTheConveyor);
+    }
+    task::sleep(10);
+  }
 }

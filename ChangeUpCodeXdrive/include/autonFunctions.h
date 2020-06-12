@@ -47,4 +47,12 @@ void moveForwardSimple(int speed);
 
 void strafeWhileTurning(int speed, double distance); 
 
+int primeShoot( void ); 
+
+void intakeMoves( void );
+
+int scoreGoal( void );
+
+void primeShooterWithVision( void );
+
 #endif  

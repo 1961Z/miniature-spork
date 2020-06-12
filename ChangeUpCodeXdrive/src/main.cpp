@@ -76,7 +76,6 @@ void autonomous(void) {
   strafeWhileTurning(10, 10);
   rotatePID(225,90);
   strafeWalk(100, 100, 0, 0.5);
-
 }
 
 /*---------------------------------------------------------------------------*/
@@ -110,6 +109,8 @@ void usercontrol(void) {
   task z = task(autoAlignWithGoal);
   task a = task(intakeToggle);
   task x = task(conveyorToggle);
+  //task b = task(primeTheConveyor);
+  task g = task(intakeBall);
 
   while (1) {
 
@@ -124,6 +125,7 @@ void usercontrol(void) {
     printf("encoder strafeLeft %f\n", distanceTraveledStrafeLeft);
     printf("encoder strafeRight %f\n", distanceTraveledStrafeRight);*/
 
+    printf("Light Sensor %ld\n", LineTrackerIntake.reflectivity());
     Brain.Screen.printAt(1, 20, "Encoder rotations: %f left", inertial_Down.rotation(deg));
     Brain.Screen.printAt(1, 40, "Encoder rotations: %f leftBack", inertial_Up.rotation(deg));
     wait(10, msec); // Sleep the task for a short amount of time to

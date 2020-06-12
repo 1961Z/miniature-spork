@@ -14,6 +14,9 @@ extern motor conveyor_L;
 extern inertial inertial_Up;
 extern inertial inertial_Down;
 extern controller Controller1;
+extern line LineTrackerTop;
+extern line LineTrackerIntake;
+
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Text.

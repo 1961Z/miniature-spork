@@ -18,6 +18,8 @@ motor conveyor_L = motor(PORT3, ratio6_1, true);
 motor conveyor_R =  motor(PORT18, ratio6_1, false);
 inertial inertial_Up = inertial(PORT1);
 inertial inertial_Down = inertial(PORT10);
+line LineTrackerTop = line(Brain.ThreeWirePort.B);
+line LineTrackerIntake = line(Brain.ThreeWirePort.A);
 controller Controller1 = controller(primary);
 
 // VEXcode generated functions
