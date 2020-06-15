@@ -55,4 +55,8 @@ int scoreGoal( void );
 
 void primeShooterWithVision( void );
 
+int outtake1Ball( void );
+
+extern bool whenIntakingPrime; 
+
 #endif  

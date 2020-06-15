@@ -108,9 +108,9 @@ void usercontrol(void) {
   task q = task(joyStickControl);
   task z = task(autoAlignWithGoal);
   task a = task(intakeToggle);
-  task x = task(conveyorToggle);
+  //task x = task(conveyorToggle);
   //task b = task(primeTheConveyor);
-  task g = task(intakeBall);
+  //task g = task(intakeBall);
 
   while (1) {
 
@@ -125,7 +125,9 @@ void usercontrol(void) {
     printf("encoder strafeLeft %f\n", distanceTraveledStrafeLeft);
     printf("encoder strafeRight %f\n", distanceTraveledStrafeRight);*/
 
-    printf("Light Sensor %ld\n", LineTrackerIntake.reflectivity());
+    printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
+    printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
+     printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
     Brain.Screen.printAt(1, 20, "Encoder rotations: %f left", inertial_Down.rotation(deg));
     Brain.Screen.printAt(1, 40, "Encoder rotations: %f leftBack", inertial_Up.rotation(deg));
     wait(10, msec); // Sleep the task for a short amount of time to

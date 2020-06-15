@@ -20,6 +20,7 @@ inertial inertial_Up = inertial(PORT1);
 inertial inertial_Down = inertial(PORT10);
 line LineTrackerTop = line(Brain.ThreeWirePort.B);
 line LineTrackerIntake = line(Brain.ThreeWirePort.A);
+line LineTrackerMiddle = line(Brain.ThreeWirePort.C);
 controller Controller1 = controller(primary);
 
 // VEXcode generated functions

@@ -611,6 +611,7 @@ void intakeMoves(){
  conveyor_R.rotateFor(fwd, 1, sec, 100, velocityUnits::pct);
 }
 
+bool waitTillOver = true; 
 int threshold = 40;
 bool cancel = false;
 
@@ -626,6 +627,7 @@ int primeShoot() {
     else {
       conveyor_L.stop(brake);
       conveyor_R.stop(brake);
+      waitTillOver = true; 
       break;
     }
 
@@ -642,10 +644,9 @@ int scoreGoal(){
   canceled = false;
   while (true) {
 
-    if (LineTrackerIntake.reflectivity() > 4) {
+    if (LineTrackerIntake.reflectivity() > 4 || (LineTrackerMiddle.reflectivity() < 9 && LineTrackerIntake.reflectivity() > 2)) {
       conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
       conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
-      task::sleep(1000);
     } 
     else {
       conveyor_L.stop(brake);
@@ -659,13 +660,59 @@ int scoreGoal(){
   return 1;
 }
 
+bool whenIntakingPrime = false; 
+
 void primeShooterWithVision(){
   visionCamera.takeSnapshot(SIG_1);
-    printf("Object Count %ld\n", visionCamera.objectCount);
-    printf("Object height %i\n", visionCamera.largestObject.height);
+  printf("Object Count %ld\n", visionCamera.objectCount);
+  printf("Object height %i\n", visionCamera.largestObject.height);
+  if(waitTillOver == false){ 
     if (visionCamera.largestObject.exists) {
-      if (visionCamera.largestObject.height < 105 && visionCamera.largestObject.height > 70) {
+      if (visionCamera.largestObject.height < 105 && visionCamera.largestObject.height > 80) {
       task L = task(primeShoot);
+      whenIntakingPrime = true; 
       } 
+    }
+  } else {
+    int timerCountDown = 0;
+    while (timerCountDown < 3000) {
+      task::sleep(10);
+      timerCountDown += 10;
+    }
+    timerCountDown = 0;
+    while (timerCountDown < 1000 && whenIntakingPrime == true) {
+      conveyor_L.spin(directionType::rev, 100, velocityUnits::pct);
+      conveyor_R.spin(directionType::rev, 100, velocityUnits::pct);
+      intake_L.spin(directionType::rev, 100, velocityUnits::pct);
+      intake_R.spin(directionType::rev, 100, velocityUnits::pct);
+      task::sleep(10);
+      timerCountDown += 10;   
+    }
+    conveyor_L.stop(brake);
+    conveyor_R.stop(brake);
+    intake_R.stop(brake);
+    intake_L.stop(brake);
+    waitTillOver = false;
+    whenIntakingPrime = false;
   }
+}
+
+int outtake1Ball() {
+  while (true) {
+    if (LineTrackerMiddle.reflectivity() < 10) {
+      printf("I reached the second time");
+      conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
+      conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
+      intake_R.spin(directionType::fwd, 100, velocityUnits::pct);
+      intake_L.spin(directionType::fwd, 100, velocityUnits::pct);
+    } else {
+      conveyor_L.stop(brake);
+      conveyor_R.stop(brake);
+      intake_R.stop(brake);
+      intake_L.stop(brake);
+      break;
+    }
+    task::sleep(1);
+  }
+  return 1; 
 }
