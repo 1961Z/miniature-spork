@@ -13,6 +13,8 @@ void resetFunction() {
   front_R.resetRotation();
 }
 
+int intakeSpeedPCT = 100;
+
 void visionRGB() {
   double r = 0;
   double g = 0;
@@ -604,6 +606,32 @@ strafeWalk(-100, 100, 180, 0.5);
 
 }
 
+int intakeToggle() {
+  while (true) {
+    
+    if (Controller1.ButtonR1.pressing()) {
+      intake_R.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
+      intake_L.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
+      if(LineTrackerIntake.reflectivity() >= 4){
+        task intakingBalls = task(scoreGoal);
+        if(whenIntakingPrime == true) {
+          task intakeAndScore = task(primeShoot);
+        }
+      }
+    } 
+    else if (Controller1.ButtonR2.pressing()) {
+      intake_R.spin(directionType::rev, intakeSpeedPCT, voltageUnits::volt);
+      intake_L.spin(directionType::rev, intakeSpeedPCT, voltageUnits::volt);
+    } 
+    else {
+      intake_R.stop(brake);
+      intake_L.stop(brake);
+    }
+
+    task::sleep(10);
+  }
+}
+
 int timeKeeper;
 
 void intakeMoves(){
@@ -661,6 +689,7 @@ int scoreGoal(){
 }
 
 bool whenIntakingPrime = false; 
+bool startConveyorToGoDown = false;
 
 void primeShooterWithVision(){
   visionCamera.takeSnapshot(SIG_1);
@@ -670,21 +699,25 @@ void primeShooterWithVision(){
     if (visionCamera.largestObject.exists) {
       if (visionCamera.largestObject.height < 105 && visionCamera.largestObject.height > 80) {
       task L = task(primeShoot);
-      whenIntakingPrime = true; 
+      whenIntakingPrime = true;  
+      startConveyorToGoDown = true; 
+
       } 
     }
-  } else {
+  } else if(visionCamera.largestObject.height < 80 || !visionCamera.largestObject.exists) {
+    whenIntakingPrime = false;
     int timerCountDown = 0;
     while (timerCountDown < 3000) {
       task::sleep(10);
       timerCountDown += 10;
     }
     timerCountDown = 0;
-    while (timerCountDown < 1000 && whenIntakingPrime == true) {
+    while (timerCountDown < 1000 && startConveyorToGoDown == true) {
+      task::stop(intakeToggle);
       conveyor_L.spin(directionType::rev, 100, velocityUnits::pct);
       conveyor_R.spin(directionType::rev, 100, velocityUnits::pct);
-      intake_L.spin(directionType::rev, 100, velocityUnits::pct);
-      intake_R.spin(directionType::rev, 100, velocityUnits::pct);
+      intake_L.spin(directionType::fwd, 100, velocityUnits::pct);
+      intake_R.spin(directionType::fwd, 100, velocityUnits::pct);
       task::sleep(10);
       timerCountDown += 10;   
     }
@@ -692,24 +725,35 @@ void primeShooterWithVision(){
     conveyor_R.stop(brake);
     intake_R.stop(brake);
     intake_L.stop(brake);
+    task::resume(intakeToggle);
+    startConveyorToGoDown = false; 
     waitTillOver = false;
-    whenIntakingPrime = false;
   }
 }
 
 int outtake1Ball() {
   while (true) {
-    if (LineTrackerMiddle.reflectivity() < 10) {
-      printf("I reached the second time");
+    if (LineTrackerTop.reflectivity() > 10) {
       conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
       conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
-      intake_R.spin(directionType::fwd, 100, velocityUnits::pct);
-      intake_L.spin(directionType::fwd, 100, velocityUnits::pct);
     } else {
       conveyor_L.stop(brake);
       conveyor_R.stop(brake);
-      intake_R.stop(brake);
-      intake_L.stop(brake);
+      break;
+    }
+    task::sleep(1);
+  }
+  return 1; 
+}
+
+int outtake3Ball() {
+  while (true) {
+    if (LineTrackerTop.reflectivity() > 10) {
+      conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
+      conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
+    } else {
+      conveyor_L.stop(brake);
+      conveyor_R.stop(brake);
       break;
     }
     task::sleep(1);

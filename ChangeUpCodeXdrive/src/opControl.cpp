@@ -6,8 +6,6 @@
 
 using namespace vex;
 
-int intakeSpeedPCT = 100;
-
 /*-----------------------------------------------------------------------------*/
 /** @brief     Base Control */
 /*-----------------------------------------------------------------------------*/
@@ -66,7 +64,7 @@ int conveyorToggle() {
     if (Controller1.ButtonL1.pressing()) {
       task::stop(primeShoot);
       task::stop(intakeToggle);
-      printf("I come here too");
+      //printf("I come here too");
       task f = task(outtake1Ball);
       task::resume(intakeToggle);
     } 
@@ -88,32 +86,6 @@ int primeTheConveyor(){
       task::stop(outtake1Ball);
       task::resume(primeShoot);
     }
-    task::sleep(10);
-  }
-}
-
-int intakeToggle() {
-  while (true) {
-    
-    if (Controller1.ButtonR1.pressing()) {
-      intake_R.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
-      intake_L.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
-      if(LineTrackerIntake.reflectivity() >= 4){
-        task intakingBalls = task(scoreGoal);
-        if(whenIntakingPrime == true) {
-          task intakeAndScore = task(primeShoot);
-        }
-      }
-    } 
-    else if (Controller1.ButtonR2.pressing()) {
-      intake_R.spin(directionType::rev, intakeSpeedPCT, voltageUnits::volt);
-      intake_L.spin(directionType::rev, intakeSpeedPCT, voltageUnits::volt);
-    } 
-    else {
-      intake_R.stop(brake);
-      intake_L.stop(brake);
-    }
-
     task::sleep(10);
   }
 }

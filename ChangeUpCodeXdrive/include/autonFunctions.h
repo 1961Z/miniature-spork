@@ -27,6 +27,8 @@ int iMovePid(int target);
 
 int iRotatePid(int target);
 
+int intakeToggle(void);
+
 void wait_until_drive_settled(int angle);
 
 void rotatePID(int angle);
@@ -56,6 +58,8 @@ int scoreGoal( void );
 void primeShooterWithVision( void );
 
 int outtake1Ball( void );
+
+int outtake3Ball( void );
 
 extern bool whenIntakingPrime; 
 

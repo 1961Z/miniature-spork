@@ -5,8 +5,6 @@ int joyStickControl(void);
 
 int autoAlignWithGoal(void);
 
-int intakeToggle(void);
-
 int conveyorToggle(void);
 
 int primeTheConveyor(void);
