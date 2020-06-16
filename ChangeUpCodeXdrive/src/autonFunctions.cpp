@@ -60,8 +60,8 @@ void brainRGB() {
   Brain.Screen.setPenColor(black);
 
   while(count < max) {
-    Brain.Screen.printAt(1, 20, "Hue value: %d ", hue);
-    Brain.Screen.printAt(1, 40, "counter: %d ", count);
+    // Brain.Screen.printAt(1, 20, "Hue value: %d ", hue);
+    // Brain.Screen.printAt(1, 40, "counter: %d ", count);
     Brain.Screen.render();
     Brain.Screen.setFillColor(hue);
     Brain.Screen.drawRectangle(0,0,480,280);
@@ -69,8 +69,8 @@ void brainRGB() {
     count++;
   }
   while(count > 0) {
-    Brain.Screen.printAt(1, 20, "Hue value: %d ", hue);
-    Brain.Screen.printAt(1, 40, "counter: %d ", count);
+    // Brain.Screen.printAt(1, 20, "Hue value: %d ", hue);
+    // Brain.Screen.printAt(1, 40, "counter: %d ", count);
     Brain.Screen.render();
     Brain.Screen.setFillColor(hue);
     Brain.Screen.drawRectangle(0,0,480,280);
@@ -667,6 +667,15 @@ int primeShoot() {
 
 bool canceled = false; 
 
+int balls = 0;
+
+int BallCount() {
+    if(LineTrackerIntake.reflectivity() > 2) {
+        balls++;
+    }
+    Brain.Screen.printAt(1, 20, "Global Ball Count: %d ", balls);
+}
+
 int scoreGoal(){
   int timerBased = 0;
   canceled = false;
@@ -685,6 +694,7 @@ int scoreGoal(){
     task::sleep(0);
     timerBased += 10;
   }
+  balls--;
   return 1;
 }
 
@@ -743,6 +753,7 @@ int outtake1Ball() {
     }
     task::sleep(1);
   }
+  balls--;
   return 1; 
 }
 
@@ -758,5 +769,6 @@ int outtake3Ball() {
     }
     task::sleep(1);
   }
+  balls-=3;
   return 1; 
 }
