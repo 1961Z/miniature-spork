@@ -118,12 +118,8 @@ void usercontrol(void) {
   task q = task(joyStickControl);
   task z = task(autoAlignWithGoal);
   task a = task(intakeToggle);
-<<<<<<< Updated upstream
-  task x = task(conveyorToggle);
-  task r = task(BallCount);
-=======
   //task x = task(conveyorToggle);
->>>>>>> Stashed changes
+  task r = task(BallCount);
   //task b = task(primeTheConveyor);
 
   while (1) {
