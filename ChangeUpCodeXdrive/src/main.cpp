@@ -71,7 +71,7 @@ void autonomous(void) {
   moveForward(70, 24);
   rotatePID(90, 100);
   strafeWalk(-24, 100, 90, 0.5);
-  ObjectLooker(1, 50);
+  //ObjectLooker(1, 50);
   rotatePID(145, 90);
   strafeWhileTurning(10, 10);
   rotatePID(225,90);
@@ -106,7 +106,7 @@ void usercontrol(void) {
     wait(100, msec);
   }
   task q = task(joyStickControl);
-  //task z = task(autoAlignWithGoal);
+  task z = task(autoAlignWithGoal);
   task a = task(intakeToggle);
   task x = task(conveyorToggle);
   //task b = task(primeTheConveyor);

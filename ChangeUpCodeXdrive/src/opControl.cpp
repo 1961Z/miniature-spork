@@ -74,7 +74,7 @@ int conveyorToggle() {
 
 int autoAlignWithGoal() {
   while (true) {
-   primeShooterWithVision();
+   primeShooterWithVision(); 
   }
   task::sleep(10);
  }

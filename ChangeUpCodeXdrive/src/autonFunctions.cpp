@@ -553,9 +553,9 @@ void goTo(int sigNumber, int velocity) {
     if (visionCamera.largestObject.exists) {
       if (visionCamera.largestObject.height < 105 && visionCamera.largestObject.height > 2) {
         moveForwardSimple(velocity);
-        /*if(back_L.velocity(pct) < 1){
+        if(back_L.velocity(pct) < 1){
           reached = true;
-        }*/
+        }
       } 
       else {
         reached = true;
@@ -690,14 +690,16 @@ int scoreGoal(){
 
 bool whenIntakingPrime = false; 
 bool startConveyorToGoDown = false;
+int counterForSigs = 0; 
 
 void primeShooterWithVision(){
+  //visionCamera.setSignature(SIG_1);
   visionCamera.takeSnapshot(SIG_1);
   printf("Object Count %ld\n", visionCamera.objectCount);
   printf("Object height %i\n", visionCamera.largestObject.height);
   if(waitTillOver == false){ 
     if (visionCamera.largestObject.exists) {
-      if (visionCamera.largestObject.height < 105 && visionCamera.largestObject.height > 80) {
+      if (visionCamera.largestObject.height < 210 && visionCamera.largestObject.height > 120 && visionCamera.objectCount == 1) {
       task L = task(primeShoot);
       whenIntakingPrime = true;  
       startConveyorToGoDown = true; 
@@ -707,7 +709,7 @@ void primeShooterWithVision(){
   } else if(visionCamera.largestObject.height < 80 || !visionCamera.largestObject.exists) {
     whenIntakingPrime = false;
     int timerCountDown = 0;
-    while (timerCountDown < 3000) {
+    while (timerCountDown < 1000) {
       task::sleep(10);
       timerCountDown += 10;
     }
@@ -749,9 +751,11 @@ int outtake1Ball() {
 int outtake3Ball() {
   while (true) {
     if (LineTrackerTop.reflectivity() > 10) {
-      conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
-      conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
-    } else {
+     conveyor_L.rotateFor(fwd, 1, rev, 100, velocityUnits::pct);
+     conveyor_R.rotateFor(fwd, 1, rev, 100, velocityUnits::pct);
+    } 
+    
+    else {
       conveyor_L.stop(brake);
       conveyor_R.stop(brake);
       break;

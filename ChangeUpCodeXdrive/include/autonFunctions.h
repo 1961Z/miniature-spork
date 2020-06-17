@@ -63,4 +63,6 @@ int outtake3Ball( void );
 
 extern bool whenIntakingPrime; 
 
+extern int counterForSigs; 
+
 #endif  
