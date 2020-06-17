@@ -72,6 +72,13 @@ int conveyorToggle() {
   }
 }
 
+void BallCount() {
+  while(true) {  
+    bcount();
+  }
+  task::sleep(10);
+}
+
 int autoAlignWithGoal() {
   while (true) {
    primShooterWithLimit();

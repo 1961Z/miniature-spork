@@ -61,7 +61,11 @@ int outtake1Ball( void );
 
 int outtake3Ball( void );
 
+<<<<<<< Updated upstream
 void primShooterWithLimit( void );
+=======
+int bcount(void);
+>>>>>>> Stashed changes
 
 extern bool whenIntakingPrime; 
 

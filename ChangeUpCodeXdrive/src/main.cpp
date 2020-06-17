@@ -76,6 +76,15 @@ void autonomous(void) {
   strafeWhileTurning(10, 10);
   rotatePID(225,90);
   strafeWalk(100, 100, 0, 0.5);
+  // moveForwardWalk(100, 100, 0, 0.5);
+  // moveForward(70, 24);
+  // rotatePID(90, 100);
+  // strafeWalk(-24, 100, 90, 0.5);
+  // ObjectLooker(1, 50);
+  // rotatePID(145, 90);
+  // strafeWhileTurning(10, 10);
+  // rotatePID(225,90);
+  // strafeWalk(100, 100, 0, 0.5);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -111,6 +120,7 @@ void usercontrol(void) {
   task x = task(conveyorToggle);
   //task b = task(primeTheConveyor);
   //task g = task(intakeBall);
+  // task c = task(BallCount);
 
   while (1) {
 
@@ -123,11 +133,11 @@ void usercontrol(void) {
     double distanceTraveledStrafeRight = sqrt(rotationRight + rotationRightBack);*/
     /*printf("encoder forward %f\n", distanceTraveledForward);
     printf("encoder strafeLeft %f\n", distanceTraveledStrafeLeft);
-    printf("encoder strafeRight %f\n", distanceTraveledStrafeRight);*/
+    printf("encoder strafeRight %f\n", distanceTraveledStrafeRight);*/ 
 
-    printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
-    printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
-     printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
+    // printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
+    // printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
+    // printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
     Brain.Screen.printAt(1, 20, "Encoder rotations: %f left", inertial_Down.rotation(deg));
     Brain.Screen.printAt(1, 40, "Encoder rotations: %f leftBack", inertial_Up.rotation(deg));
     wait(10, msec); // Sleep the task for a short amount of time to

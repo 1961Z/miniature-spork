@@ -669,12 +669,21 @@ bool canceled = false;
 
 int balls = 0;
 
+<<<<<<< Updated upstream
 int BallCount() {
     if(LineTrackerIntake.reflectivity() > 2) {
         balls++;
     }
     Brain.Screen.printAt(1, 20, "Global Ball Count: %d ", balls);
     return 1; 
+=======
+int bcount() {
+  if(LineTrackerIntake.reflectivity() > 2) {
+    balls++;
+  }
+  printf("ball count %ld\n", balls);
+  return balls;
+>>>>>>> Stashed changes
 }
 
 
@@ -696,7 +705,6 @@ int scoreGoal(){
     task::sleep(0);
     timerBased += 10;
   }
-  balls--;
   return 1;
 }
 
@@ -788,7 +796,6 @@ int outtake1Ball() {
     }
     task::sleep(1);
   }
-  balls--;
   return 1; 
 }
 
@@ -806,6 +813,5 @@ int outtake3Ball() {
     }
     task::sleep(1);
   }
-  balls-=3;
   return 1; 
 }
