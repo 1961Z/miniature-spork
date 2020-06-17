@@ -75,8 +75,8 @@ int conveyorToggle() {
 int autoAlignWithGoal() {
   while (true) {
    primShooterWithLimit();
+   task::sleep(10);
   }
-  task::sleep(10);
  }
 
 
