@@ -777,7 +777,7 @@ void primShooterWithLimit() {
     startConveyorToGoDown = true;
   }
 
-  else if (!goalChecker.pressing()) {
+  else if (!goalChecker.pressing()  && startConveyorToGoDown == true) {
     int timerCountDown = 0;
     while (timerCountDown < 1000 && startConveyorToGoDown == true) {
       task::stop(intakeToggle);
@@ -795,6 +795,9 @@ void primShooterWithLimit() {
     task::resume(intakeToggle);
     startConveyorToGoDown = false;
     waitTillOver = false;
+  }
+  else {
+  task::resume(intakeToggle);
   }
 }
 
