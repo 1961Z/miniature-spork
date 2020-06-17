@@ -1,8 +1,6 @@
 #ifndef AUTONFUNCTIONS_H
 #define AUTONFUNCTIONS_H
 
-
-
 void moveForward(int speed, double distanceToTravel);
 
 void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply);
@@ -61,11 +59,9 @@ int outtake1Ball( void );
 
 int outtake3Ball( void );
 
-<<<<<<< Updated upstream
 void primShooterWithLimit( void );
-=======
+
 int bcount(void);
->>>>>>> Stashed changes
 
 extern bool whenIntakingPrime; 
 

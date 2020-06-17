@@ -15,6 +15,42 @@ void resetFunction() {
 
 int intakeSpeedPCT = 100;
 
+int ballI = 0;
+int ballT = 0;
+int ballFinal;
+bool checkingI = true;
+bool checkingT = true;
+
+int bcount() {
+  if(checkingI == true && LineTrackerIntake.reflectivity() > 5) {
+    // ballI++;
+    ballFinal++;
+    checkingI = false;
+  }
+  if(LineTrackerIntake.reflectivity() < 5) {
+    checkingI = true;
+  }
+
+  if(checkingT == true && LineTrackerTop.reflectivity() > 8) {
+    // ballT++;
+    ballFinal--;
+    checkingT = false;
+  }
+  if(LineTrackerTop.reflectivity() < 8) {
+    checkingT = true;
+  }
+  
+  // Brain.Screen.printAt(1, 20, "balli count: %d", ballI);
+  // Brain.Screen.printAt(1, 40, "ballT count: %d", ballT);
+  Brain.Screen.printAt(1, 40, "intake line: %d", LineTrackerIntake.reflectivity());
+  Brain.Screen.printAt(1, 60, "middle line: %d", LineTrackerMiddle.reflectivity());
+  Brain.Screen.printAt(1, 80, "top line: %d", LineTrackerTop.reflectivity());
+  // ballFinal = Ball
+  Brain.Screen.printAt(1, 20, "ball count: %d", ballFinal);
+
+  return ballFinal;
+}
+
 void visionRGB() {
   double r = 0;
   double g = 0;
@@ -666,26 +702,6 @@ int primeShoot() {
 }
 
 bool canceled = false; 
-
-int balls = 0;
-
-<<<<<<< Updated upstream
-int BallCount() {
-    if(LineTrackerIntake.reflectivity() > 2) {
-        balls++;
-    }
-    Brain.Screen.printAt(1, 20, "Global Ball Count: %d ", balls);
-    return 1; 
-=======
-int bcount() {
-  if(LineTrackerIntake.reflectivity() > 2) {
-    balls++;
-  }
-  printf("ball count %ld\n", balls);
-  return balls;
->>>>>>> Stashed changes
-}
-
 
 int scoreGoal(){
   int timerBased = 0;
