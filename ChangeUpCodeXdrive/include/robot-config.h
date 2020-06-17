@@ -17,6 +17,7 @@ extern controller Controller1;
 extern line LineTrackerTop;
 extern line LineTrackerIntake;
 extern line LineTrackerMiddle;
+extern limit goalChecker; 
 
 
 /**

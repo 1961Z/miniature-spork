@@ -21,6 +21,7 @@ inertial inertial_Down = inertial(PORT10);
 line LineTrackerTop = line(Brain.ThreeWirePort.B);
 line LineTrackerIntake = line(Brain.ThreeWirePort.A);
 line LineTrackerMiddle = line(Brain.ThreeWirePort.C);
+limit goalChecker = limit(Brain.ThreeWirePort.H);
 controller Controller1 = controller(primary);
 
 // VEXcode generated functions

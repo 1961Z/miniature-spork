@@ -61,6 +61,8 @@ int outtake1Ball( void );
 
 int outtake3Ball( void );
 
+void primShooterWithLimit( void );
+
 extern bool whenIntakingPrime; 
 
 extern int counterForSigs; 

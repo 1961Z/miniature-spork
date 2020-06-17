@@ -674,7 +674,9 @@ int BallCount() {
         balls++;
     }
     Brain.Screen.printAt(1, 20, "Global Ball Count: %d ", balls);
+    return 1; 
 }
+
 
 int scoreGoal(){
   int timerBased = 0;
@@ -701,6 +703,7 @@ int scoreGoal(){
 bool whenIntakingPrime = false; 
 bool startConveyorToGoDown = false;
 int counterForSigs = 0; 
+
 
 void primeShooterWithVision(){
   //visionCamera.setSignature(SIG_1);
@@ -741,6 +744,36 @@ void primeShooterWithVision(){
     startConveyorToGoDown = false; 
     waitTillOver = false;
   }
+}
+
+void primShooterWithLimit(){
+ if(goalChecker.pressing()){
+   task L = task(primeShoot);
+   whenIntakingPrime = true;  
+   startConveyorToGoDown = true; 
+ }
+ 
+ else if(!goalChecker.pressing())
+ { 
+   int timerCountDown = 0;
+    while (timerCountDown < 1000 && startConveyorToGoDown == true) {
+      task::stop(intakeToggle);
+      conveyor_L.spin(directionType::rev, 100, velocityUnits::pct);
+      conveyor_R.spin(directionType::rev, 100, velocityUnits::pct);
+      intake_L.spin(directionType::fwd, 100, velocityUnits::pct);
+      intake_R.spin(directionType::fwd, 100, velocityUnits::pct);
+      task::sleep(10);
+      timerCountDown += 10;   
+    }
+    conveyor_L.stop(brake);
+    conveyor_R.stop(brake);
+    intake_R.stop(brake);
+    intake_L.stop(brake);
+    task::resume(intakeToggle);
+    startConveyorToGoDown = false; 
+    waitTillOver = false;
+ }
+
 }
 
 int outtake1Ball() {
