@@ -137,7 +137,7 @@ void usercontrol(void) {
 
     // printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
     // printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
-    // printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
+     printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
     // Brain.Screen.printAt(1, 20, "Encoder rotations: %f left", inertial_Down.rotation(deg));
     // Brain.Screen.printAt(1, 40, "Encoder rotations: %f leftBack", inertial_Up.rotation(deg));
     wait(10, msec); // Sleep the task for a short amount of time to

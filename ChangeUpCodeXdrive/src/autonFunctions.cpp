@@ -684,7 +684,7 @@ int primeShoot() {
   cancel = false;
   while (true) {
 
-    if (LineTrackerTop.reflectivity() < threshold) {
+    if (LineTrackerTop.reflectivity() < 10) {
       conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
       conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
     } 
@@ -766,6 +766,7 @@ void primeShooterWithVision(){
     intake_L.stop(brake);
     task::resume(intakeToggle);
     startConveyorToGoDown = false; 
+    whenIntakingPrime = false; 
     waitTillOver = false;
   }
 }
@@ -794,6 +795,7 @@ void primShooterWithLimit() {
     intake_L.stop(brake);
     task::resume(intakeToggle);
     startConveyorToGoDown = false;
+    whenIntakingPrime = false; 
     waitTillOver = false;
   }
   else{
