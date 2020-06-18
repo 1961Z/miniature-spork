@@ -15,15 +15,12 @@ void resetFunction() {
 
 int intakeSpeedPCT = 100;
 
-int ballI = 0;
-int ballT = 0;
 int ballFinal;
 bool checkingI = true;
 bool checkingT = true;
 
 int bcount() {
   if(checkingI == true && LineTrackerIntake.reflectivity() > 5) {
-    // ballI++;
     ballFinal++;
     checkingI = false;
   }
@@ -32,7 +29,6 @@ int bcount() {
   }
 
   if(checkingT == true && LineTrackerTop.reflectivity() > 8) {
-    // ballT++;
     ballFinal--;
     checkingT = false;
   }
@@ -42,11 +38,10 @@ int bcount() {
   
   // Brain.Screen.printAt(1, 20, "balli count: %d", ballI);
   // Brain.Screen.printAt(1, 40, "ballT count: %d", ballT);
-  Brain.Screen.printAt(1, 40, "intake line: %d", LineTrackerIntake.reflectivity());
-  Brain.Screen.printAt(1, 60, "middle line: %d", LineTrackerMiddle.reflectivity());
-  Brain.Screen.printAt(1, 80, "top line: %d", LineTrackerTop.reflectivity());
-  // ballFinal = Ball
-  Brain.Screen.printAt(1, 20, "ball count: %d", ballFinal);
+  // Brain.Screen.printAt(1, 40, "intake line: %d", LineTrackerIntake.reflectivity());
+  // Brain.Screen.printAt(1, 60, "middle line: %d", LineTrackerMiddle.reflectivity());
+  // Brain.Screen.printAt(1, 80, "top line: %d", LineTrackerTop.reflectivity());
+  Brain.Screen.printAt(1, 20, "ball count: %ld\n", ballFinal);
 
   return ballFinal;
 }
