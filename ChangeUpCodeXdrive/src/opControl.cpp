@@ -62,12 +62,9 @@ int conveyorToggle() {
   while (true) {
 
     if (Controller1.ButtonL1.pressing()) {
-      task::stop(autoAlignWithGoal);
-      task::stop(intakeToggle);
+     // task::suspend(autoAlignWithGoal);
       //printf("I come here too");
       task f = task(outtake1Ball);
-      task::resume(intakeToggle);
-      task::resume(autoAlignWithGoal);
     } 
     task::sleep(10);
   }
