@@ -3404,88 +3404,92 @@ Linker script and memory map
  *(.gnu.linkonce.sb2.*)
                 0x03805d1c                __sbss2_end = .
 
-.data           0x03805d20      0x444
+.data           0x03805d20      0x44c
                 0x03805d20                __data_start = .
  *(.data)
  *(.data.*)
  .data.intakeSpeedPCT
                 0x03805d20        0x4 build/src/autonFunctions.o
                 0x03805d20                intakeSpeedPCT
+ .data.ballFinal
+                0x03805d24        0x4 build/src/autonFunctions.o
+                0x03805d24                ballFinal
  .data.checkingI
-                0x03805d24        0x1 build/src/autonFunctions.o
-                0x03805d24                checkingI
+                0x03805d28        0x1 build/src/autonFunctions.o
+                0x03805d28                checkingI
  .data.checkingT
-                0x03805d25        0x1 build/src/autonFunctions.o
-                0x03805d25                checkingT
+                0x03805d29        0x1 build/src/autonFunctions.o
+                0x03805d29                checkingT
  .data.waitTillOver
-                0x03805d26        0x1 build/src/autonFunctions.o
-                0x03805d26                waitTillOver
- *fill*         0x03805d27        0x1 
+                0x03805d2a        0x1 build/src/autonFunctions.o
+                0x03805d2a                waitTillOver
+ *fill*         0x03805d2b        0x1 
  .data.threshold
-                0x03805d28        0x4 build/src/autonFunctions.o
-                0x03805d28                threshold
+                0x03805d2c        0x4 build/src/autonFunctions.o
+                0x03805d2c                threshold
  .data.appRunning
-                0x03805d2c        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_startup.c.obj)
-                0x03805d2c                appRunning
- .data.__yoff   0x03805d30        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_apijump.c.obj)
+                0x03805d30        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_startup.c.obj)
+                0x03805d30                appRunning
+ .data.__yoff   0x03805d34        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_apijump.c.obj)
  .data._ZN3vex24__default_motor_velocityE
-                0x03805d34        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_motor.cpp.obj)
-                0x03805d34                vex::__default_motor_velocity
+                0x03805d38        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_motor.cpp.obj)
+                0x03805d38                vex::__default_motor_velocity
+ *fill*         0x03805d3c        0x4 
  .data.impure_data
-                0x03805d38      0x428 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5/gcc/libs\libc.a(lib_a-impure.o)
+                0x03805d40      0x428 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5/gcc/libs\libc.a(lib_a-impure.o)
  .data._impure_ptr
-                0x03806160        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5/gcc/libs\libc.a(lib_a-impure.o)
-                0x03806160                _impure_ptr
+                0x03806168        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5/gcc/libs\libc.a(lib_a-impure.o)
+                0x03806168                _impure_ptr
  *(.gnu.linkonce.d.*)
  *(.jcr)
  *(.got)
  *(.got.plt)
-                0x03806164                __data_end = .
+                0x0380616c                __data_end = .
 
-.igot.plt       0x03806164        0x0
+.igot.plt       0x0380616c        0x0
  .igot.plt      0x00000000        0x0 build/src/main.o
 
-.data1          0x03806164        0x0
-                0x03806164                __data1_start = .
+.data1          0x0380616c        0x0
+                0x0380616c                __data1_start = .
  *(.data1)
  *(.data1.*)
-                0x03806164                __data1_end = .
+                0x0380616c                __data1_end = .
 
 .got
  *(.got)
 
-.ctors          0x03806164        0x0
-                0x03806164                __CTOR_LIST__ = .
-                0x03806164                ___CTORS_LIST___ = .
+.ctors          0x0380616c        0x0
+                0x0380616c                __CTOR_LIST__ = .
+                0x0380616c                ___CTORS_LIST___ = .
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *(.ctors)
-                0x03806164                __CTOR_END__ = .
-                0x03806164                ___CTORS_END___ = .
+                0x0380616c                __CTOR_END__ = .
+                0x0380616c                ___CTORS_END___ = .
 
-.dtors          0x03806164        0x0
-                0x03806164                __DTOR_LIST__ = .
-                0x03806164                ___DTORS_LIST___ = .
+.dtors          0x0380616c        0x0
+                0x0380616c                __DTOR_LIST__ = .
+                0x0380616c                ___DTORS_LIST___ = .
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *(.dtors)
-                0x03806164                __DTOR_END__ = .
-                0x03806164                ___DTORS_END___ = .
+                0x0380616c                __DTOR_END__ = .
+                0x0380616c                ___DTORS_END___ = .
 
-.fixup          0x03806164        0x0
-                0x03806164                __fixup_start = .
+.fixup          0x0380616c        0x0
+                0x0380616c                __fixup_start = .
  *(.fixup)
-                0x03806164                __fixup_end = .
+                0x0380616c                __fixup_end = .
 
 .eh_frame
  *(.eh_frame)
 
-.eh_framehdr    0x03806164        0x0
-                0x03806164                __eh_framehdr_start = .
+.eh_framehdr    0x0380616c        0x0
+                0x0380616c                __eh_framehdr_start = .
  *(.eh_framehdr)
-                0x03806164                __eh_framehdr_end = .
+                0x0380616c                __eh_framehdr_end = .
 
 .gcc_except_table
  *(.gcc_except_table)
@@ -3495,277 +3499,273 @@ Linker script and memory map
  *(.mmu_tbl)
                 0x03808000                __mmu_tbl_end = .
 
-.ARM.exidx      0x03806164        0x8
-                0x03806164                __exidx_start = .
+.ARM.exidx      0x0380616c        0x8
+                0x0380616c                __exidx_start = .
  *(.ARM.exidx*)
  .ARM.exidx.text._Z10autonomousv
-                0x03806164        0x8 build/src/main.o
+                0x0380616c        0x8 build/src/main.o
  .ARM.exidx.text._Z11usercontrolv
-                0x0380616c        0x0 build/src/main.o
+                0x03806174        0x0 build/src/main.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text.main
-                0x0380616c        0x0 build/src/main.o
+                0x03806174        0x0 build/src/main.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._GLOBAL__sub_I_main.cpp
-                0x0380616c        0x0 build/src/main.o
+                0x03806174        0x0 build/src/main.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z11vexcodeInitv
-                0x0380616c        0x0 build/src/robot-config.o
+                0x03806174        0x0 build/src/robot-config.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._GLOBAL__sub_I_robot_config.cpp
-                0x0380616c        0x0 build/src/robot-config.o
+                0x03806174        0x0 build/src/robot-config.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z15joyStickControlv
-                0x0380616c        0x0 build/src/opControl.o
+                0x03806174        0x0 build/src/opControl.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z14conveyorTogglev
-                0x0380616c        0x0 build/src/opControl.o
+                0x03806174        0x0 build/src/opControl.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z17autoAlignWithGoalv
-                0x0380616c        0x0 build/src/opControl.o
+                0x03806174        0x0 build/src/opControl.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z9BallCountv
-                0x0380616c        0x0 build/src/opControl.o
+                0x03806174        0x0 build/src/opControl.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._ZN3vex6visionC2IJNS0_9signatureES2_S2_S2_S2_S2_S2_EEElhDpRT_
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z13resetFunctionv
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z6bcountv
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z11moveForwardid
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z20get_average_inertialv
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z15moveForwardWalkdddd
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z9rotatePIDii
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z10strafeWalkdddd
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z10iRotatePidi
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z18strafeWhileTurningid
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z12intakeTogglev
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z9scoreGoalv
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z10primeShootv
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z20primShooterWithLimitv
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z12outtake1Ballv
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._ZN3vex6vision7_setsigINS0_9signatureEJS2_S2_S2_S2_EEEvRT_DpRT0_
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._GLOBAL__sub_I_autonFunctions.cpp
-                0x0380616c        0x0 build/src/autonFunctions.o
+                0x03806174        0x0 build/src/autonFunctions.o
                                   0x8 (size before relaxing)
  *(.gnu.linkonce.armexidix.*.*)
-                0x0380616c                __exidx_end = .
+                0x03806174                __exidx_end = .
 
-.rel.dyn        0x0380616c        0x0
+.rel.dyn        0x03806174        0x0
  .rel.iplt      0x00000000        0x0 build/src/main.o
 
-.preinit_array  0x0380616c        0x0
-                0x0380616c                __preinit_array_start = .
+.preinit_array  0x03806174        0x0
+                0x03806174                __preinit_array_start = .
  *(SORT(.preinit_array.*))
  *(.preinit_array)
-                0x0380616c                __preinit_array_end = .
+                0x03806174                __preinit_array_end = .
 
-.init_array     0x0380616c       0x14
-                0x0380616c                __init_array_start = .
+.init_array     0x03806174       0x14
+                0x03806174                __init_array_start = .
  *(SORT(.init_array.*))
  *(.init_array)
- .init_array    0x0380616c        0x4 build/src/main.o
- .init_array    0x03806170        0x4 build/src/robot-config.o
- .init_array    0x03806174        0x4 build/src/autonFunctions.o
- .init_array    0x03806178        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_triport.cpp.obj)
- .init_array    0x0380617c        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03806180                __init_array_end = .
+ .init_array    0x03806174        0x4 build/src/main.o
+ .init_array    0x03806178        0x4 build/src/robot-config.o
+ .init_array    0x0380617c        0x4 build/src/autonFunctions.o
+ .init_array    0x03806180        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_triport.cpp.obj)
+ .init_array    0x03806184        0x4 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_color.cpp.obj)
+                0x03806188                __init_array_end = .
 
-.fini_array     0x03806180        0x0
-                0x03806180                __fini_array_start = .
+.fini_array     0x03806188        0x0
+                0x03806188                __fini_array_start = .
  *(SORT(.fini_array.*))
  *(.fini_array)
-                0x03806180                __fini_array_end = .
+                0x03806188                __fini_array_end = .
 
 .ARM.attributes
-                0x03806180       0x3c
-                0x03806180                __ARM.attributes_start = .
+                0x03806188       0x3c
+                0x03806188                __ARM.attributes_start = .
  *(.ARM.attributes)
  .ARM.attributes
-                0x03806180       0x3a build/src/main.o
+                0x03806188       0x3a build/src/main.o
  .ARM.attributes
-                0x038061ba       0x3a build/src/robot-config.o
+                0x038061c2       0x3a build/src/robot-config.o
  .ARM.attributes
-                0x038061f4       0x3a build/src/opControl.o
+                0x038061fc       0x3a build/src/opControl.o
  .ARM.attributes
-                0x0380622e       0x3a build/src/autonFunctions.o
+                0x03806236       0x3a build/src/autonFunctions.o
  .ARM.attributes
-                0x03806268       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_startup.c.obj)
+                0x03806270       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_startup.c.obj)
  .ARM.attributes
-                0x0380629d       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_util.c.obj)
+                0x038062a5       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_util.c.obj)
  .ARM.attributes
-                0x038062d2       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_apijump.c.obj)
+                0x038062da       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_apijump.c.obj)
  .ARM.attributes
-                0x03806307       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_apiversions.c.obj)
+                0x0380630f       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_apiversions.c.obj)
  .ARM.attributes
-                0x0380633c       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806344       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_global.cpp.obj)
  .ARM.attributes
-                0x03806371       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_motor.cpp.obj)
+                0x03806379       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_motor.cpp.obj)
  .ARM.attributes
-                0x038063a6       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_vision.cpp.obj)
+                0x038063ae       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_vision.cpp.obj)
  .ARM.attributes
-                0x038063db       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_imu.cpp.obj)
+                0x038063e3       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_imu.cpp.obj)
  .ARM.attributes
-                0x03806410       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_controller.cpp.obj)
+                0x03806418       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_controller.cpp.obj)
  .ARM.attributes
-                0x03806445       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_task.cpp.obj)
+                0x0380644d       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_task.cpp.obj)
  .ARM.attributes
-                0x0380647a       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_thread.cpp.obj)
+                0x03806482       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_thread.cpp.obj)
  .ARM.attributes
-                0x038064af       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_event.cpp.obj)
+                0x038064b7       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_event.cpp.obj)
  .ARM.attributes
-                0x038064e4       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_mevent.cpp.obj)
+                0x038064ec       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_mevent.cpp.obj)
  .ARM.attributes
-                0x03806519       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_brain.cpp.obj)
+                0x03806521       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_brain.cpp.obj)
  .ARM.attributes
-                0x0380654e       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_competition.cpp.obj)
+                0x03806556       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_competition.cpp.obj)
  .ARM.attributes
-                0x03806583       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_triport.cpp.obj)
+                0x0380658b       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_triport.cpp.obj)
  .ARM.attributes
-                0x038065b8       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_color.cpp.obj)
+                0x038065c0       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_color.cpp.obj)
  .ARM.attributes
-                0x038065ed       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_timer.cpp.obj)
+                0x038065f5       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_timer.cpp.obj)
  .ARM.attributes
-                0x03806622       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_apiuser.c.obj)
+                0x0380662a       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_apiuser.c.obj)
  .ARM.attributes
-                0x03806657       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_device.cpp.obj)
+                0x0380665f       0x35 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(vex_device.cpp.obj)
  .ARM.attributes
-                0x0380668c       0x2b C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5/gcc/libs\libc.a(lib_a-fini.o)
+                0x03806694       0x2b C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5/gcc/libs\libc.a(lib_a-fini.o)
  .ARM.attributes
-                0x038066b7       0x2b C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5/gcc/libs\libc.a(lib_a-impure.o)
+                0x038066bf       0x2b C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5/gcc/libs\libc.a(lib_a-impure.o)
  .ARM.attributes
-                0x038066e2       0x2b C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5/gcc/libs\libc.a(lib_a-init.o)
-                0x0380670d                __ARM.attributes_end = .
+                0x038066ea       0x2b C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5/gcc/libs\libc.a(lib_a-init.o)
+                0x03806715                __ARM.attributes_end = .
 
-.sdata          0x03806180        0x0
-                0x03806180                __sdata_start = .
+.sdata          0x03806188        0x0
+                0x03806188                __sdata_start = .
  *(.sdata)
  *(.sdata.*)
  *(.gnu.linkonce.s.*)
-                0x03806180                __sdata_end = .
+                0x03806188                __sdata_end = .
 
-.sbss           0x03806180        0x0
-                0x03806180                __sbss_start = .
+.sbss           0x03806188        0x0
+                0x03806188                __sbss_start = .
  *(.sbss)
  *(.sbss.*)
  *(.gnu.linkonce.sb.*)
-                0x03806180                __sbss_end = .
+                0x03806188                __sbss_end = .
 
-.tdata          0x03806180        0x0
-                0x03806180                __tdata_start = .
+.tdata          0x03806188        0x0
+                0x03806188                __tdata_start = .
  *(.tdata)
  *(.tdata.*)
  *(.gnu.linkonce.td.*)
-                0x03806180                __tdata_end = .
+                0x03806188                __tdata_end = .
 
-.tbss           0x03806180        0x0
-                0x03806180                __tbss_start = .
+.tbss           0x03806188        0x0
+                0x03806188                __tbss_start = .
  *(.tbss)
  *(.tbss.*)
  *(.gnu.linkonce.tb.*)
-                0x03806180                __tbss_end = .
+                0x03806188                __tbss_end = .
 
-.bss            0x03806180     0x1044
-                0x03806180                __bss_start = .
+.bss            0x03806188     0x103c
+                0x03806188                __bss_start = .
  *(.bss)
  *(.bss.*)
  .bss.Competition
-                0x03806180       0x28 build/src/main.o
-                0x03806180                Competition
- .bss.Brain     0x038061a8      0x2bc build/src/robot-config.o
-                0x038061a8                Brain
- .bss.front_L   0x03806464       0x24 build/src/robot-config.o
-                0x03806464                front_L
- .bss.front_R   0x03806488       0x24 build/src/robot-config.o
-                0x03806488                front_R
- .bss.back_R    0x038064ac       0x24 build/src/robot-config.o
-                0x038064ac                back_R
- .bss.back_L    0x038064d0       0x24 build/src/robot-config.o
-                0x038064d0                back_L
- .bss.intake_R  0x038064f4       0x24 build/src/robot-config.o
-                0x038064f4                intake_R
- .bss.intake_L  0x03806518       0x24 build/src/robot-config.o
-                0x03806518                intake_L
+                0x03806188       0x28 build/src/main.o
+                0x03806188                Competition
+ .bss.Brain     0x038061b0      0x2bc build/src/robot-config.o
+                0x038061b0                Brain
+ .bss.front_L   0x0380646c       0x24 build/src/robot-config.o
+                0x0380646c                front_L
+ .bss.front_R   0x03806490       0x24 build/src/robot-config.o
+                0x03806490                front_R
+ .bss.back_R    0x038064b4       0x24 build/src/robot-config.o
+                0x038064b4                back_R
+ .bss.back_L    0x038064d8       0x24 build/src/robot-config.o
+                0x038064d8                back_L
+ .bss.intake_R  0x038064fc       0x24 build/src/robot-config.o
+                0x038064fc                intake_R
+ .bss.intake_L  0x03806520       0x24 build/src/robot-config.o
+                0x03806520                intake_L
  .bss.conveyor_L
-                0x0380653c       0x24 build/src/robot-config.o
-                0x0380653c                conveyor_L
+                0x03806544       0x24 build/src/robot-config.o
+                0x03806544                conveyor_L
  .bss.conveyor_R
-                0x03806560       0x24 build/src/robot-config.o
-                0x03806560                conveyor_R
- *fill*         0x03806584        0x4 
+                0x03806568       0x24 build/src/robot-config.o
+                0x03806568                conveyor_R
+ *fill*         0x0380658c        0x4 
  .bss.inertial_Up
-                0x03806588       0x30 build/src/robot-config.o
-                0x03806588                inertial_Up
+                0x03806590       0x30 build/src/robot-config.o
+                0x03806590                inertial_Up
  .bss.inertial_Down
-                0x038065b8       0x30 build/src/robot-config.o
-                0x038065b8                inertial_Down
+                0x038065c0       0x30 build/src/robot-config.o
+                0x038065c0                inertial_Down
  .bss.LineTrackerTop
-                0x038065e8       0x1c build/src/robot-config.o
-                0x038065e8                LineTrackerTop
+                0x038065f0       0x1c build/src/robot-config.o
+                0x038065f0                LineTrackerTop
  .bss.LineTrackerIntake
-                0x03806604       0x1c build/src/robot-config.o
-                0x03806604                LineTrackerIntake
+                0x0380660c       0x1c build/src/robot-config.o
+                0x0380660c                LineTrackerIntake
  .bss.LineTrackerMiddle
-                0x03806620       0x1c build/src/robot-config.o
-                0x03806620                LineTrackerMiddle
+                0x03806628       0x1c build/src/robot-config.o
+                0x03806628                LineTrackerMiddle
  .bss.goalChecker
-                0x0380663c       0x20 build/src/robot-config.o
-                0x0380663c                goalChecker
+                0x03806644       0x20 build/src/robot-config.o
+                0x03806644                goalChecker
  .bss.Controller1
-                0x0380665c      0x1e0 build/src/robot-config.o
-                0x0380665c                Controller1
- .bss.SIG_1     0x0380683c       0x50 build/src/autonFunctions.o
-                0x0380683c                SIG_1
- .bss.SIG_2     0x0380688c       0x50 build/src/autonFunctions.o
-                0x0380688c                SIG_2
- .bss.SIG_3     0x038068dc       0x50 build/src/autonFunctions.o
-                0x038068dc                SIG_3
- .bss.SIG_4     0x0380692c       0x50 build/src/autonFunctions.o
-                0x0380692c                SIG_4
- .bss.SIG_5     0x0380697c       0x50 build/src/autonFunctions.o
-                0x0380697c                SIG_5
- .bss.SIG_6     0x038069cc       0x50 build/src/autonFunctions.o
-                0x038069cc                SIG_6
- .bss.SIG_7     0x03806a1c       0x50 build/src/autonFunctions.o
-                0x03806a1c                SIG_7
- *fill*         0x03806a6c        0x4 
+                0x03806664      0x1e0 build/src/robot-config.o
+                0x03806664                Controller1
+ .bss.SIG_1     0x03806844       0x50 build/src/autonFunctions.o
+                0x03806844                SIG_1
+ .bss.SIG_2     0x03806894       0x50 build/src/autonFunctions.o
+                0x03806894                SIG_2
+ .bss.SIG_3     0x038068e4       0x50 build/src/autonFunctions.o
+                0x038068e4                SIG_3
+ .bss.SIG_4     0x03806934       0x50 build/src/autonFunctions.o
+                0x03806934                SIG_4
+ .bss.SIG_5     0x03806984       0x50 build/src/autonFunctions.o
+                0x03806984                SIG_5
+ .bss.SIG_6     0x038069d4       0x50 build/src/autonFunctions.o
+                0x038069d4                SIG_6
+ .bss.SIG_7     0x03806a24       0x50 build/src/autonFunctions.o
+                0x03806a24                SIG_7
+ *fill*         0x03806a74        0x4 
  .bss.visionCamera
-                0x03806a70      0x690 build/src/autonFunctions.o
-                0x03806a70                visionCamera
- .bss.ballFinal
-                0x03807100        0x4 build/src/autonFunctions.o
-                0x03807100                ballFinal
- *fill*         0x03807104        0x4 
+                0x03806a78      0x690 build/src/autonFunctions.o
+                0x03806a78                visionCamera
  .bss.headingError
                 0x03807108        0x8 build/src/autonFunctions.o
                 0x03807108                headingError
@@ -3852,7 +3852,7 @@ Linker script and memory map
  COMMON         0x038071ac       0x18 C:\Program Files (x86)\VEX Robotics\VEXcode V5 Text\sdk/vexv5\libv5rt.a(v5_startup.c.obj)
                 0x038071b0                __vex_critical_section
                 0x038071c4                __bss_end = .
-                0x03806180                _SDA_BASE_ = (__sdata_start + ((__sbss_end - __sdata_start) / 0x2))
+                0x03806188                _SDA_BASE_ = (__sdata_start + ((__sbss_end - __sdata_start) / 0x2))
                 0x03805d1c                _SDA2_BASE_ = (__sdata2_start + ((__sbss2_end - __sdata2_start) / 0x2))
 
 .heap           0x038071c4   0x10000c
