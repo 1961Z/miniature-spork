@@ -15,7 +15,11 @@ void resetFunction() {
 
 int intakeSpeedPCT = 100;
 
+<<<<<<< HEAD
 int ballFinal = 0;
+=======
+int ballFinal = 1;
+>>>>>>> master
 bool checkingI = true;
 bool checkingT = true;
 
