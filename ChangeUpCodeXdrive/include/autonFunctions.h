@@ -57,6 +57,8 @@ void primeShooterWithVision( void );
 
 int outtake1Ball( void );
 
+int outtake2Ball( void ); 
+
 int outtake3Ball( void );
 
 void primShooterWithLimit( void );

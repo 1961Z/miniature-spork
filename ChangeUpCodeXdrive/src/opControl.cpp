@@ -62,10 +62,17 @@ int conveyorToggle() {
   while (true) {
 
     if (Controller1.ButtonL1.pressing()) {
-     // task::suspend(autoAlignWithGoal);
-      //printf("I come here too");
       task f = task(outtake1Ball);
     } 
+    else if (Controller1.ButtonL2.pressing()) {
+    task m = task(outtake3Ball);
+    }
+    else if(Controller1.ButtonB.pressing()){
+    task q = task(outtake2Ball);
+    }
+    else{
+      //nothing needed in else but it just makes the code look a bit cleaner
+    }
     task::sleep(10);
   }
 }
@@ -80,7 +87,7 @@ int autoAlignWithGoal() {
 
 int primeTheConveyor(){
   while(true){
-    if(Controller1.ButtonX.pressing()){
+    if(Controller1.ButtonA.pressing()){
       task::stop(outtake1Ball);
       task::resume(primeShoot);
     }

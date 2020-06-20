@@ -120,7 +120,7 @@ void usercontrol(void) {
   task a = task(intakeToggle);
   task x = task(conveyorToggle);
   task r = task(BallCount);
-  //task b = task(primeTheConveyor);
+  task b = task(primeTheConveyor);
 
   while (1) {
 

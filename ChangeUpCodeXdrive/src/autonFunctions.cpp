@@ -15,11 +15,8 @@ void resetFunction() {
 
 int intakeSpeedPCT = 100;
 
-<<<<<<< HEAD
-int ballFinal = 0;
-=======
+//int ballFinal = 0;
 int ballFinal = 1;
->>>>>>> master
 bool checkingI = true;
 bool checkingT = true;
 
@@ -771,7 +768,7 @@ void primeShooterWithVision(){
 }
 
 void primShooterWithLimit() {
-  if (goalChecker.pressing() && !Controller1.ButtonL1.pressing() && whenIntakingPrime == false) {
+  if (goalChecker.pressing() && !(Controller1.ButtonL1.pressing() || Controller1.ButtonL2.pressing() || Controller1.ButtonB.pressing()) && whenIntakingPrime == false) { 
     task L = task(primeShoot);
     whenIntakingPrime = true;
     startConveyorToGoDown = true;
@@ -808,8 +805,23 @@ void primShooterWithLimit() {
 int outtake1Ball() {
   while (true) { 
     if (LineTrackerTop.reflectivity() > 10) {
-      conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
-      conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
+      conveyor_L.rotateFor(fwd, 0.5, rev, 100, velocityUnits::pct);
+      conveyor_R.rotateFor(fwd, 0.5, rev, 100, velocityUnits::pct);
+    } else {
+      conveyor_L.stop(brake);
+      conveyor_R.stop(brake);
+      break;
+    }
+    task::sleep(1);
+  }
+  return 1; 
+}
+
+int outtake2Ball() {
+  while (true) { 
+    if (LineTrackerTop.reflectivity() > 10) {
+      conveyor_L.rotateFor(fwd, 1, rev, 100, velocityUnits::pct);
+      conveyor_R.rotateFor(fwd, 1, rev, 100, velocityUnits::pct);
     } else {
       conveyor_L.stop(brake);
       conveyor_R.stop(brake);
@@ -823,8 +835,8 @@ int outtake1Ball() {
 int outtake3Ball() {
   while (true) {
     if (LineTrackerTop.reflectivity() > 10) {
-     conveyor_L.rotateFor(fwd, 1, rev, 100, velocityUnits::pct);
-     conveyor_R.rotateFor(fwd, 1, rev, 100, velocityUnits::pct);
+     conveyor_L.rotateFor(fwd, 1.5, rev, 100, velocityUnits::pct);
+     conveyor_R.rotateFor(fwd, 1.5, rev, 100, velocityUnits::pct);
     } 
     
     else {
