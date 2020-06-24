@@ -116,11 +116,11 @@ void usercontrol(void) {
     wait(100, msec);
   }
   task q = task(joyStickControl);
-  task z = task(autoAlignWithGoal);
+  //task z = task(autoAlignWithGoal);
   task a = task(intakeToggle);
   task x = task(conveyorToggle);
   task r = task(BallCount);
-  task b = task(primeTheConveyor);
+  task b = task(toggle);
 
   while (1) {
 

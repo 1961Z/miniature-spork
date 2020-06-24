@@ -49,6 +49,8 @@ void strafeWhileTurning(int speed, double distance);
 
 int primeShoot( void ); 
 
+int goBackDown( void );
+
 void intakeMoves( void );
 
 int scoreGoal( void );

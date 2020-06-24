@@ -9,6 +9,8 @@ int conveyorToggle(void);
 
 int primeTheConveyor(void);
 
+int toggle(void);
+
 int intakeBall(void);
 
 int BallCount(void);

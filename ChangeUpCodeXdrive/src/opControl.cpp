@@ -61,10 +61,10 @@ int joyStickControl() {
 int conveyorToggle() {
   while (true) {
 
-    if (Controller1.ButtonL1.pressing()) {
+    if (Controller1.ButtonL2.pressing()) {
       task f = task(outtake1Ball);
     } 
-    else if (Controller1.ButtonL2.pressing()) {
+    else if (Controller1.ButtonA.pressing()) {
     task m = task(outtake3Ball);
     }
     else if(Controller1.ButtonB.pressing()){
@@ -83,12 +83,45 @@ int autoAlignWithGoal() {
    task::sleep(10);
   }
  }
+ 
+ bool hit = false; 
+ bool switchMode = false;
+
+ int toggle() {
+ static bool lowTower = false; //coolio
+
+  while (true) {
+
+    if (Controller1.ButtonL1.pressing() && hit == false) {
+
+      hit = 1;
+      lowTower = !lowTower;
+      switchMode = !switchMode;
+
+      if (lowTower == true) {
+       task::stop(goBackDown);
+       task::resume(primeShoot);
+      }
+
+      else {
+        task::stop(primeShoot);
+        task::resume(goBackDown);
+      }
+    }
+
+    if (!Controller1.ButtonL1.pressing() && hit == 1) {
+      hit = 0;
+       }
+    task::sleep(10);
+  }
+}
+
 
 
 int primeTheConveyor(){
   while(true){
-    if(Controller1.ButtonA.pressing()){
-      task::stop(outtake1Ball);
+    if(Controller1.ButtonL1.pressing()){
+      //task::stop(outtake1Ball);
       task::resume(primeShoot);
     }
     task::sleep(10);
