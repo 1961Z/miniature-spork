@@ -19,24 +19,26 @@ int intakeSpeedPCT = 100;
 int ballFinal = 1;
 bool checkingI = true;
 bool checkingT = true;
+bool goingDown = false;
 
 int bcount() {
-  if(checkingI == true && LineTrackerIntake.reflectivity() > 5) {
-    ballFinal++;
-    checkingI = false;
-  }
-  if(LineTrackerIntake.reflectivity() < 5) {
-    checkingI = true;
-  }
+  if(goingDown == false) {
+    if(checkingI == true && LineTrackerIntake.reflectivity() > 5) {
+      ballFinal++;
+      checkingI = false;
+    }
+    if(LineTrackerIntake.reflectivity() < 5) {
+      checkingI = true;
+    }
 
-  if(checkingT == true && LineTrackerTop.reflectivity() < 8) {
-    ballFinal--;
-    checkingT = false;
-  }
-  if(LineTrackerTop.reflectivity() > 8) {
-    checkingT = true;
-  }
-  
+    if(checkingT == true && LineTrackerTop.reflectivity() < 8) {
+      ballFinal--;
+      checkingT = false;
+    }
+    if(LineTrackerTop.reflectivity() > 8) {
+      checkingT = true;
+    }
+  } 
   // Brain.Screen.printAt(1, 20, "balli count: %d", ballI);
   // Brain.Screen.printAt(1, 40, "ballT count: %d", ballT);
   // Brain.Screen.printAt(1, 40, "intake line: %d", LineTrackerIntake.reflectivity());
@@ -697,6 +699,27 @@ int primeShoot() {
   return 1;
 }
 
+int goBackDown(){
+ int timerCountDown = 0; 
+  while(true){
+     while (timerCountDown < 1000) {
+      task::stop(intakeToggle);
+      conveyor_L.spin(directionType::rev, 100, velocityUnits::pct);
+      conveyor_R.spin(directionType::rev, 100, velocityUnits::pct);
+      intake_L.spin(directionType::fwd, 100, velocityUnits::pct);
+      intake_R.spin(directionType::fwd, 100, velocityUnits::pct);
+      task::sleep(10);
+      timerCountDown += 10;
+      goingDown = true;
+    }
+    conveyor_L.stop(brake);
+    conveyor_R.stop(brake);
+    task::resume(intakeToggle);
+    goingDown = false;
+}
+    
+}
+
 bool canceled = false; 
 
 int scoreGoal(){
@@ -768,7 +791,7 @@ void primeShooterWithVision(){
 }
 
 void primShooterWithLimit() {
-  if (goalChecker.pressing() && !(Controller1.ButtonL1.pressing() || Controller1.ButtonL2.pressing() || Controller1.ButtonB.pressing()) && whenIntakingPrime == false) { 
+  if (goalChecker.pressing() && !(Controller1.ButtonA.pressing() || Controller1.ButtonL2.pressing() || Controller1.ButtonB.pressing()) && whenIntakingPrime == false) { 
     task L = task(primeShoot);
     whenIntakingPrime = true;
     startConveyorToGoDown = true;
@@ -803,25 +826,28 @@ void primShooterWithLimit() {
 }
 
 int outtake1Ball() {
+  conveyor_R.resetRotation(); 
   while (true) { 
-    if (LineTrackerTop.reflectivity() > 10) {
-      conveyor_L.rotateFor(fwd, 0.5, rev, 100, velocityUnits::pct);
-      conveyor_R.rotateFor(fwd, 0.5, rev, 100, velocityUnits::pct);
-    } else {
+    if (conveyor_R.rotation(rev) < 1.5) {
+      conveyor_L.spin(fwd, 100, velocityUnits::pct);
+      conveyor_R.spin(fwd, 100, velocityUnits::pct);
+    }
+    else {
       conveyor_L.stop(brake);
       conveyor_R.stop(brake);
       break;
     }
-    task::sleep(1);
+    task::sleep(10);
   }
   return 1; 
 }
 
 int outtake2Ball() {
+  conveyor_R.resetRotation(); 
   while (true) { 
-    if (LineTrackerTop.reflectivity() > 10) {
-      conveyor_L.rotateFor(fwd, 1, rev, 100, velocityUnits::pct);
-      conveyor_R.rotateFor(fwd, 1, rev, 100, velocityUnits::pct);
+    if (conveyor_R.rotation(rev) < 4) {
+      conveyor_L.spin(fwd, 100, velocityUnits::pct);
+      conveyor_R.spin(fwd, 100, velocityUnits::pct);
     } else {
       conveyor_L.stop(brake);
       conveyor_R.stop(brake);
@@ -833,10 +859,11 @@ int outtake2Ball() {
 }
 
 int outtake3Ball() {
+  conveyor_R.resetRotation(); 
   while (true) {
-    if (LineTrackerTop.reflectivity() > 10) {
-     conveyor_L.rotateFor(fwd, 1.5, rev, 100, velocityUnits::pct);
-     conveyor_R.rotateFor(fwd, 1.5, rev, 100, velocityUnits::pct);
+    if (conveyor_R.rotation(rev) < 6) {
+     conveyor_L.spin(fwd, 100, velocityUnits::pct);
+     conveyor_R.spin(fwd, 100, velocityUnits::pct);
     } 
     
     else {
