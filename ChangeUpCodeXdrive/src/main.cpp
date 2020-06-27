@@ -59,7 +59,7 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  inertial_Up.calibrate();
+  /*inertial_Up.calibrate();
   while (inertial_Up.isCalibrating()) {
     wait(100, msec);
   }
@@ -75,7 +75,7 @@ void autonomous(void) {
   rotatePID(145, 90);
   strafeWhileTurning(10, 10);
   rotatePID(225,90);
-  strafeWalk(100, 100, 0, 0.5);
+  strafeWalk(100, 100, 0, 0.5);*/
   // moveForwardWalk(100, 100, 0, 0.5);
   // moveForward(70, 24);
   // rotatePID(90, 100);
@@ -85,7 +85,7 @@ void autonomous(void) {
   // strafeWhileTurning(10, 10);
   // rotatePID(225,90);
   // strafeWalk(100, 100, 0, 0.5);
-  bcount();
+  intake_L.rotateFor(fwd, -2, rev, 100, velocityUnits::pct);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -135,9 +135,9 @@ void usercontrol(void) {
     printf("encoder strafeLeft %f\n", distanceTraveledStrafeLeft);
     printf("encoder strafeRight %f\n", distanceTraveledStrafeRight);*/ 
 
-    // printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
-    // printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
-     printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
+    printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
+    printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
+    // printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
     // Brain.Screen.printAt(1, 20, "Encoder rotations: %f left", inertial_Down.rotation(deg));
     // Brain.Screen.printAt(1, 40, "Encoder rotations: %f leftBack", inertial_Up.rotation(deg));
     wait(10, msec); // Sleep the task for a short amount of time to
