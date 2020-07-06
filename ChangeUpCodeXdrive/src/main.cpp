@@ -99,14 +99,10 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
-  back_L.stop(coast);
-  back_R.stop(coast);
   front_L.stop(coast);
   front_R.stop(coast);
-  front_L.setVelocity(0, pct);
-  front_R.setVelocity(0, pct);
-  back_L.setVelocity(0, pct);
-  back_R.setVelocity(0, pct);
+  back_L.stop(coast);
+  back_R.stop(coast);
   inertial_Up.calibrate();
   while (inertial_Up.isCalibrating()) {
     wait(100, msec);
@@ -121,7 +117,6 @@ void usercontrol(void) {
   task x = task(conveyorToggle);
   task r = task(BallCount);
   task b = task(toggle);
-
   while (1) {
 
     /*double rotationRight = pow(front_R.rotation(rev), 2);

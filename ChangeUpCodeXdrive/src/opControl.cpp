@@ -49,10 +49,10 @@ int joyStickControl() {
 
     //Write the manipulated values out to the motors
 
-    front_L.spin(forward, front_left * 0.12, voltageUnits::volt);
-    front_R.spin(forward, front_right * 0.12, voltageUnits::volt);
-    back_L.spin(forward, back_left * 0.12, voltageUnits::volt);
-    back_R.spin(forward, back_right * 0.12, voltageUnits::volt);
+    front_L.spin(forward, front_left , velocityUnits::pct);
+    front_R.spin(forward, front_right , velocityUnits::pct);
+    back_L.spin(forward, back_left , velocityUnits::pct);
+    back_R.spin(forward, back_right , velocityUnits::pct);
 
     task::sleep(10);
   }
@@ -110,8 +110,14 @@ int autoAlignWithGoal() {
     }
 
     if (!Controller1.ButtonL1.pressing() && hit == 1) {
-      hit = 0;
-       }
+      hit = 0; 
+      int timerCountDown = 0; 
+      while (timerCountDown < 1000) {
+      task::sleep(10);
+      timerCountDown += 10;
+      }
+      task::stop(goBackDown); 
+    }
     task::sleep(10);
   }
 }

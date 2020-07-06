@@ -726,7 +726,7 @@ int scoreGoal(){
   int timerBased = 0;
   canceled = false;
   while (true) {
-
+    // 79 middle 11 intake
     if (LineTrackerIntake.reflectivity() > 4 || (LineTrackerMiddle.reflectivity() < 9 && LineTrackerIntake.reflectivity() > 2)) {
       conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
       conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
