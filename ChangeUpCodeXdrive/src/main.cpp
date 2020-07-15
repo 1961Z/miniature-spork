@@ -59,7 +59,7 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  /*inertial_Up.calibrate();
+  inertial_Up.calibrate();
   while (inertial_Up.isCalibrating()) {
     wait(100, msec);
   }
@@ -67,7 +67,7 @@ void autonomous(void) {
   while (inertial_Down.isCalibrating()) {
     wait(100, msec);
   }
-  moveForwardWalk(100, 100, 0, 0.5);
+  /*moveForwardWalk(100, 100, 0, 0.5);
   moveForward(70, 24);
   rotatePID(90, 100);
   strafeWalk(-24, 100, 90, 0.5);
@@ -76,16 +76,16 @@ void autonomous(void) {
   strafeWhileTurning(10, 10);
   rotatePID(225,90);
   strafeWalk(100, 100, 0, 0.5);*/
-  // moveForwardWalk(100, 100, 0, 0.5);
-  // moveForward(70, 24);
-  // rotatePID(90, 100);
-  // strafeWalk(-24, 100, 90, 0.5);
-  // ObjectLooker(1, 50);
-  // rotatePID(145, 90);
-  // strafeWhileTurning(10, 10);
+  /*moveForwardWalk(48, 100, 0, 0.6);
+  strafeWalk(-24, 100, 0, 0.6);
+  rotatePID(90, 90);
+  moveForwardWalk(-24, 100, 90, 0.6);
+  strafeWalk(-48, 100, 90, 0.6);
+  rotatePID(0, 90);*/
+  strafeWhileTurning(10, 10);
   // rotatePID(225,90);
-  // strafeWalk(100, 100, 0, 0.5);
-  intake_L.rotateFor(fwd, -2, rev, 100, velocityUnits::pct);
+  //strafeWalk(100, 100, 0, 0.5);
+  //intake_L.rotateFor(fwd, -2, rev, 100, velocityUnits::pct);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -103,22 +103,21 @@ void usercontrol(void) {
   front_R.stop(coast);
   back_L.stop(coast);
   back_R.stop(coast);
-  inertial_Up.calibrate();
+  /*inertial_Up.calibrate();
   while (inertial_Up.isCalibrating()) {
     wait(100, msec);
   }
   inertial_Down.calibrate();
   while (inertial_Down.isCalibrating()) {
     wait(100, msec);
-  }
-  task q = task(joyStickControl);
-  //task z = task(autoAlignWithGoal);
-  task a = task(intakeToggle);
+  }*/
+  task s = task(joyStickControl);
+  task e = task(intakeToggle);
   task x = task(conveyorToggle);
-  task r = task(BallCount);
-  task b = task(toggle);
+  task y = task(BallCount);
+  task z = task(toggle);
   while (1) {
-
+    testForPrabu(); 
     /*double rotationRight = pow(front_R.rotation(rev), 2);
     double rotationLeft = pow(front_L.rotation(rev), 2);
     double rotationRightBack = pow(back_R.rotation(rev), 2);
@@ -126,12 +125,12 @@ void usercontrol(void) {
     double distanceTraveledForward = sqrt(rotationLeft + rotationRight);
     double distanceTraveledStrafeLeft = sqrt( rotationLeft + rotationLeftBack);
     double distanceTraveledStrafeRight = sqrt(rotationRight + rotationRightBack);*/
-    /*printf("encoder forward %f\n", distanceTraveledForward);
-    printf("encoder strafeLeft %f\n", distanceTraveledStrafeLeft);
-    printf("encoder strafeRight %f\n", distanceTraveledStrafeRight);*/ 
+    printf("encoder forward %f\n", verticalTracker.rotation(degrees));
+    printf("encoder strafeLeft %f\n", horizontalTracker.rotation(degrees));
+    //printf("encoder strafeRight %f\n", distanceTraveledStrafeRight);
 
-    printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
-    printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
+    //printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
+    //printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
     // printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
     // Brain.Screen.printAt(1, 20, "Encoder rotations: %f left", inertial_Down.rotation(deg));
     // Brain.Screen.printAt(1, 40, "Encoder rotations: %f leftBack", inertial_Up.rotation(deg));

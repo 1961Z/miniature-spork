@@ -18,6 +18,8 @@ extern line LineTrackerTop;
 extern line LineTrackerIntake;
 extern line LineTrackerMiddle;
 extern limit goalChecker; 
+extern encoder verticalTracker; 
+extern encoder horizontalTracker; 
 
 
 /**

@@ -22,6 +22,8 @@ line LineTrackerTop = line(Brain.ThreeWirePort.B);
 line LineTrackerIntake = line(Brain.ThreeWirePort.A);
 line LineTrackerMiddle = line(Brain.ThreeWirePort.C);
 limit goalChecker = limit(Brain.ThreeWirePort.H);
+encoder verticalTracker = encoder(Brain.ThreeWirePort.E);
+encoder horizontalTracker = encoder(Brain.ThreeWirePort.G);
 controller Controller1 = controller(primary);
 
 // VEXcode generated functions

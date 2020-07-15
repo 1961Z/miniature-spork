@@ -15,6 +15,8 @@ int intakeBall(void);
 
 int BallCount(void);
 
+void testForPrabu( void );
+
 extern double front_left, front_right, back_left, back_right;
 
 #endif 
