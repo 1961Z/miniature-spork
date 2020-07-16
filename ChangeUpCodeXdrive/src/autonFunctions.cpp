@@ -665,6 +665,31 @@ strafeWalk(-100, 100, 180, 0.5);
 
 }
 
+bool intake = false;
+void intakeON() {
+  intake = true;
+  while(intake == true){
+    intake_R.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
+    intake_L.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
+    if(LineTrackerIntake.reflectivity() >= 4) {
+      task intakingBalls = task(scoreGoal);
+      if(whenIntakingPrime == true) {
+        task intakeAndScore = task(primeShoot);
+      }
+      intake = false;
+    }
+  }
+  
+  if(intake == false){
+    intake_R.spin(directionType::rev, intakeSpeedPCT, voltageUnits::volt);
+    intake_L.spin(directionType::rev, intakeSpeedPCT, voltageUnits::volt);
+  }
+  else {
+    intake_R.stop(brake);
+    intake_L.stop(brake);
+  }
+}
+
 int intakeToggle() {
   while (true) {
     
