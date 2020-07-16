@@ -71,7 +71,11 @@ int bcount(void);
 
 int intakeOn( void );
 
+void intakeOff( void );
+
 void outtake1BallAuton( void );
+void outtake2BallAuton( void );
+void outtake3BallAuton( void );
 
 extern bool whenIntakingPrime; 
 
