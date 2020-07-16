@@ -71,6 +71,8 @@ int bcount(void);
 
 int intakeOn( void );
 
+void outtake1BallAuton( void );
+
 extern bool whenIntakingPrime; 
 
 extern int counterForSigs; 

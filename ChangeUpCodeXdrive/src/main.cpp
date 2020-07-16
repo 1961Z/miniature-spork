@@ -74,10 +74,13 @@ void autonomous(void) {
   task::stop(bitch);
   intake_R.stop(brake);
   intake_L.stop(brake);
-  /*moveForwardWalk(6, 80, 30, 0.6, 50);
+  task nword = task(primeShoot);
+  moveForwardWalk(6, 80, 30, 0.6, 50);
+  outtake1BallAuton();
   moveForwardWalk(-38,80, 30, 0.6, 50);
   strafeWhileTurning(10, 24);
-  moveForwardWalk(6, 80, 90, 0.6, 50);*/
+  moveForwardWalk(6, 80, 90, 0.6, 50);
+  outtake1BallAuton();
 }
 
 /*---------------------------------------------------------------------------*/

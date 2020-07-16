@@ -18,7 +18,7 @@ void resetFunction() {
 int intakeSpeedPCT = 100;
 
 //int ballFinal = 0;
-int ballFinal = 1;
+int ballFinal = 0;
 bool checkingI = true;
 bool checkingT = true;
 bool goingDown = false;
@@ -874,6 +874,22 @@ int outtake1Ball() {
     task::sleep(10);
   }
   return 1; 
+}
+
+void outtake1BallAuton() {
+  conveyor_R.resetRotation(); 
+  while (true) { 
+    if (conveyor_R.rotation(rev) < 1.5) {
+      conveyor_L.spin(fwd, 100, velocityUnits::pct);
+      conveyor_R.spin(fwd, 100, velocityUnits::pct);
+    }
+    else {
+      conveyor_L.stop(brake);
+      conveyor_R.stop(brake);
+      break;
+    }
+    task::sleep(10);
+  }
 }
 
 int outtake2Ball() {
