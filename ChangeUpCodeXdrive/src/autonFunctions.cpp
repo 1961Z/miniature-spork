@@ -325,7 +325,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
   back_L.stop(hold);
   front_R.stop(hold);
   front_L.stop(hold);
-  rotatePID(headingOfRobot, 60);
+  //rotatePID(headingOfRobot, 60);
 }
 
 void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply) {
@@ -456,7 +456,7 @@ void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, do
   back_R.stop(hold);
   front_L.stop(hold);
   back_L.stop(hold);
-  rotatePID(headingOfRobot, 60);
+  //rotatePID(headingOfRobot, 60);
 }
 
 bool exit_function = false;
@@ -661,7 +661,7 @@ void strafeWhileTurning(int speed, double distance){
   printf("heading average  %f\n", get_average_inertial()); 
   task::sleep(10); 
 } 
-strafeWalk(-9, 80, 90, 0.6); 
+strafeWalk(-10, 80, 90, 0.6); 
 }
 
 int intakeOn() {
