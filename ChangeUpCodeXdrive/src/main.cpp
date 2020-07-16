@@ -76,13 +76,13 @@ void autonomous(void) {
   strafeWhileTurning(10, 10);
   rotatePID(225,90);
   strafeWalk(100, 100, 0, 0.5);*/
-  /*moveForwardWalk(48, 100, 0, 0.6);
-  strafeWalk(-24, 100, 0, 0.6);
-  rotatePID(90, 90);
-  moveForwardWalk(-24, 100, 90, 0.6);
-  strafeWalk(-48, 100, 90, 0.6);
-  rotatePID(0, 90);*/
-  strafeWhileTurning(10, 10);
+  moveForwardWalk(48, 20, 0, 0.6, 75);
+  //strafeWalk(-24, 100, 0, 0.6);
+  //rotatePID(90, 90);
+  //moveForwardWalk(-24, 100, 90, 0.6);
+  //strafeWalk(-48, 100, 90, 0.6);
+  //rotatePID(0, 90);
+  //strafeWhileTurning(10, 10);
   // rotatePID(225,90);
   //strafeWalk(100, 100, 0, 0.5);
   //intake_L.rotateFor(fwd, -2, rev, 100, velocityUnits::pct);

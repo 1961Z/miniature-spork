@@ -3,7 +3,7 @@
 
 void moveForward(int speed, double distanceToTravel);
 
-void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply);
+void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal);
 
 void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply);
 
@@ -20,6 +20,8 @@ struct PID{
 	float derivative;
 	float lastError;
 };
+
+int trackingUpdate ( void );
 
 int iMovePid(int target);
 

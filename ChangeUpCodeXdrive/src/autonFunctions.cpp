@@ -193,14 +193,14 @@ float get_average_inertial() {
 double headingError;
 double headingErrorTest;
 
-void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply) {
+void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal) {
 
   static
-  const double circumference = 3.14159 * 2.75;
+  const double circumference = 3.14159 * 2.85;
   if (distanceIn == 0)
     return;
   double direction = distanceIn > 0 ? 1.0 : -1.0;
-  double wheelRevs = ((distanceIn - (direction * 1)) / circumference);
+  double wheelRevs = ((distanceIn) / circumference);
   resetFunction();
 
   //double lastEncoderValue = 0.0;
@@ -240,19 +240,20 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
 
     double driftLeftError = (front_R.rotation(deg) + back_L.rotation(deg));
     double driftRightError = (front_L.rotation(deg) + back_R.rotation(deg));
-    double error = -horizontalTracker.rotation(rev);
+    double error = horizontalTracker.rotation(rev);
 
     if (error > -2.5 && error < 2.5) {
-      headingErrorTest = direction * 0.5;
+      headingErrorTest = -error * multiplyForHorizontal;
     } else {
-      headingErrorTest = direction * 0.5;
+      headingErrorTest = -error * multiplyForHorizontal;
     }
 
     headingError = -(headingOfRobot - get_average_inertial()) * multiply;
     printf("heading error %f\n", error);
-    printf("encoder value %f\n", distanceTraveled);
-    printf("wheelRevs %f\n", wheelRevs);
-    printf("encoder error %f\n", rightEndPoint);
+    printf("heading multiplied error %f\n", headingErrorTest);
+    //printf("encoder value %f\n", distanceTraveled);
+    //printf("wheelRevs %f\n", wheelRevs);
+    //printf("encoder error %f\n", rightEndPoint);
 
     if (direction * (distanceTraveled - leftStartPoint) <
       direction * wheelRevs) {
@@ -264,7 +265,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
               distanceTraveled),
             decreasing_speed(leftEndPoint,
               distanceTraveled))) +
-        (headingError),
+        (headingError) - (headingErrorTest),
         vex::velocityUnits::pct);
     } else {
       front_L.stop(hold);
@@ -281,7 +282,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
               distanceTraveled),
             decreasing_speed(rightEndPoint,
               distanceTraveled))) -
-        (headingError),
+        (headingError) - (headingErrorTest),
         vex::velocityUnits::pct);
     } else {
       front_R.stop(hold);
@@ -297,7 +298,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
               distanceTraveled),
             decreasing_speed(leftEndPoint1,
               distanceTraveled))) +
-        (headingError),
+        (headingError) - (headingErrorTest),
         vex::velocityUnits::pct);
     } else {
       back_L.stop(hold);
@@ -313,17 +314,17 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
               distanceTraveled),
             decreasing_speed(rightEndPoint1,
               distanceTraveled))) -
-        (headingError),
+        (headingError) - (headingErrorTest),
         vex::velocityUnits::pct);
     } else {
       back_R.stop(hold);
     }
     task::sleep(10);
   }
-  front_R.stop(hold);
-  front_L.stop(hold);
   back_R.stop(hold);
   back_L.stop(hold);
+  front_R.stop(hold);
+  front_L.stop(hold);
   rotatePID(headingOfRobot, 60);
 }
 
@@ -570,6 +571,25 @@ void rotatePID(int angle, int maxPower) {
   back_R.stop(hold);
   front_L.stop(hold);
   back_L.stop(hold);
+}
+
+int trackingUpdate(){
+  double distance_LR = 0; double distance_B = 0;
+  double radiusR = 0;
+  double radiusB = 0;
+  double h = 0;
+  double h2 = 0;
+  double theta = 0; double beta = 0; double alpha = 0;
+  double Xx = 0; double Xy = 0; double Yx = 0; double Yy = 0;
+  double newleft = 0; double newright = 0; double newback = 0;
+  double Right = 0; double Left = 0; double Back = 0;
+  double lastleft = 0, lastright = 0, lastback = 0;
+  uint32_t last_time = 0;
+  double leftLastVel = 0; double rightLastVel=0; double backLastVel = 0;
+
+  while(true){
+    //newLeft = 
+  }
 }
 
 bool linedUp = false;
