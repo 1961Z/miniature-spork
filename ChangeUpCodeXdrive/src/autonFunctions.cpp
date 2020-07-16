@@ -654,39 +654,23 @@ void ObjectLooker(int sigNumber, int speed) {
 
 
 void strafeWhileTurning(int speed, double distance){
-
-while(get_average_inertial() < -45){
-  back_L.spin(fwd, speed, pct);
-  front_R.spin(fwd, speed * 4, pct);
-  front_L.spin(fwd, -speed * 4, pct);
-  task::sleep(10);
+ while(get_average_inertial() < 89){ 
+  back_L.spin(fwd, speed, pct); 
+  front_R.spin(fwd, speed * 4, pct); 
+  front_L.spin(fwd, -speed * 4, pct); 
+  printf("heading average  %f\n", get_average_inertial()); 
+  task::sleep(10); 
+} 
+strafeWalk(-9, 80, 90, 0.6); 
 }
-strafeWalk(-100, 100, 180, 0.5);
 
-}
-
-bool intake = false;
-void intakeON() {
-  intake = true;
-  while(intake == true){
+int intakeOn() {
+  while(true){
     intake_R.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
     intake_L.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
-    if(LineTrackerIntake.reflectivity() >= 4) {
+    if(LineTrackerIntake.reflectivity() >= 10) {
       task intakingBalls = task(scoreGoal);
-      if(whenIntakingPrime == true) {
-        task intakeAndScore = task(primeShoot);
-      }
-      intake = false;
     }
-  }
-  
-  if(intake == false){
-    intake_R.spin(directionType::rev, intakeSpeedPCT, voltageUnits::volt);
-    intake_L.spin(directionType::rev, intakeSpeedPCT, voltageUnits::volt);
-  }
-  else {
-    intake_R.stop(brake);
-    intake_L.stop(brake);
   }
 }
 

@@ -69,6 +69,8 @@ void primShooterWithLimit( void );
 
 int bcount(void);
 
+int intakeOn( void );
+
 extern bool whenIntakingPrime; 
 
 extern int counterForSigs; 

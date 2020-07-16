@@ -59,33 +59,25 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  inertial_Up.calibrate();
-  while (inertial_Up.isCalibrating()) {
-    wait(100, msec);
+ inertial_Up.calibrate();
+   while (inertial_Up.isCalibrating()) {
+     wait(100, msec);
   }
   inertial_Down.calibrate();
   while (inertial_Down.isCalibrating()) {
-    wait(100, msec);
+   wait(100, msec);
   }
-  /*moveForwardWalk(100, 100, 0, 0.5);
-  moveForward(70, 24);
-  rotatePID(90, 100);
-  strafeWalk(-24, 100, 90, 0.5);
-  //ObjectLooker(1, 50);
-  rotatePID(145, 90);
-  strafeWhileTurning(10, 10);
-  rotatePID(225,90);
-  strafeWalk(100, 100, 0, 0.5);*/
-  moveForwardWalk(48, 20, 0, 0.6, 75);
-  //strafeWalk(-24, 100, 0, 0.6);
-  //rotatePID(90, 90);
-  //moveForwardWalk(-24, 100, 90, 0.6);
-  //strafeWalk(-48, 100, 90, 0.6);
-  //rotatePID(0, 90);
-  //strafeWhileTurning(10, 10);
-  // rotatePID(225,90);
-  //strafeWalk(100, 100, 0, 0.5);
-  //intake_L.rotateFor(fwd, -2, rev, 100, velocityUnits::pct);
+  task y = task(BallCount);
+  task bitch = task(intakeOn);
+  moveForwardWalk(16, 80, 0, 0.6, 50);
+  rotatePID(30, 90);
+  task::stop(bitch);
+  intake_R.stop(brake);
+  intake_L.stop(brake);
+  /*moveForwardWalk(6, 80, 30, 0.6, 50);
+  moveForwardWalk(-38,80, 30, 0.6, 50);
+  strafeWhileTurning(10, 24);
+  moveForwardWalk(6, 80, 90, 0.6, 50);*/
 }
 
 /*---------------------------------------------------------------------------*/
