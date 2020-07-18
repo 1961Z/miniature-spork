@@ -114,7 +114,7 @@ void brainRGB() {
   }
 }
 
-void moveForward(int speed, double distanceToTravel) {
+void moveForwardFast(int speed, double distanceToTravel) {
   double wheelDiameterIN = 3.25;
   double travelTargetCM = distanceToTravel; // this is the distance it goes which is set as a variable
   double circumfrence = wheelDiameterIN * 3.141592;
@@ -129,6 +129,23 @@ void moveForward(int speed, double distanceToTravel) {
   back_R.rotateFor(degreesToRotate, vex::rotationUnits::deg, false);
   front_L.rotateFor(degreesToRotate, vex::rotationUnits::deg, false);
   front_R.rotateFor(degreesToRotate, vex::rotationUnits::deg, true);
+}
+
+void moveForward(int speed, double distanceToTravel) {
+  double wheelDiameterIN = 3.25;
+  double travelTargetCM = distanceToTravel; // this is the distance it goes which is set as a variable
+  double circumfrence = wheelDiameterIN * 3.141592;
+  double degreesToRotate = ((360 * travelTargetCM) / circumfrence) * sin(45);
+
+  back_L.setVelocity(speed, vex::velocityUnits::pct);
+  back_R.setVelocity(speed, vex::velocityUnits::pct);
+  front_L.setVelocity(speed, vex::velocityUnits::pct);
+  front_R.setVelocity(speed, vex::velocityUnits::pct);
+
+  back_L.rotateFor(-degreesToRotate, vex::rotationUnits::deg, false);
+  back_R.rotateFor(-degreesToRotate, vex::rotationUnits::deg, false);
+  front_L.rotateFor(-degreesToRotate, vex::rotationUnits::deg, false);
+  front_R.rotateFor(-degreesToRotate, vex::rotationUnits::deg, true);
 }
 
 void moveForwardSimple(int speed) {
@@ -225,7 +242,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
 
   while (direction * (distanceTraveled - rightStartPoint) < direction * wheelRevs) {
 
-    if (back_R.velocity(rpm) == 0) {
+    if (back_R.velocity(rpm) == 0 || back_L.velocity(rpm) == 0) {
       ++sameEncoderValue;
     }
 

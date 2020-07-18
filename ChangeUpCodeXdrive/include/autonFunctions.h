@@ -3,6 +3,8 @@
 
 void moveForward(int speed, double distanceToTravel);
 
+void moveForwardFast(int speed, double distanceToTravel);
+
 void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal);
 
 void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply);

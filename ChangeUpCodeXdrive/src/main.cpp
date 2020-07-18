@@ -68,19 +68,27 @@ void autonomous(void) {
    wait(100, msec);
   }
   task y = task(BallCount);
-  task bitch = task(intakeOn);
+  task ughh = task(intakeOn);
   moveForwardWalk(16, 80, 0, 0.6, 50);
   rotatePID(30, 90);
-  task::stop(bitch);
+  task::stop(ughh);
   intake_R.stop(brake);
   intake_L.stop(brake);
-  task nword = task(primeShoot);
-  moveForwardWalk(6, 80, 30, 0.6, 50);
+  task poop = task(primeShoot);
+  moveForwardWalk(5, 80, 30, 0.6, 50);
+  task::stop(primeShoot);
   outtake1BallAuton();
-  moveForwardWalk(-38,80, 30, 0.6, 50);
-  strafeWhileTurning(10, 24);
-  moveForwardWalk(6, 80, 90, 0.6, 50);
+  moveForward(70, 38);
+  strafeWhileTurning(20, 24);
+  moveForwardWalk(3, 80, 90, 0.6, 50);
   outtake1BallAuton();
+  moveForward(100, 20);
+  strafeWalk(-30, 80, 90, 0.6);
+  rotatePID(135, 90);
+  task a = task(intakeOn);
+  moveForwardFast(80,34);
+  conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
+  conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
 }
 
 /*---------------------------------------------------------------------------*/
