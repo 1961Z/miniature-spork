@@ -23,8 +23,6 @@ struct PID{
 	float lastError;
 };
 
-int trackingUpdate ( void );
-
 int iMovePid(int target);
 
 int iRotatePid(int target);

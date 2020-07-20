@@ -589,25 +589,6 @@ void rotatePID(int angle, int maxPower) {
   back_L.stop(hold);
 }
 
-int trackingUpdate(){
-  double distance_LR = 0; double distance_B = 0;
-  double radiusR = 0;
-  double radiusB = 0;
-  double h = 0;
-  double h2 = 0;
-  double theta = 0; double beta = 0; double alpha = 0;
-  double Xx = 0; double Xy = 0; double Yx = 0; double Yy = 0;
-  double newleft = 0; double newright = 0; double newback = 0;
-  double Right = 0; double Left = 0; double Back = 0;
-  double lastleft = 0, lastright = 0, lastback = 0;
-  uint32_t last_time = 0;
-  double leftLastVel = 0; double rightLastVel=0; double backLastVel = 0;
-
-  while(true){
-    //newLeft = 
-  }
-}
-
 bool linedUp = false;
 /*-----------------------------------------------------------------------------*/
 /** @brief      Turn Bot towards object */
