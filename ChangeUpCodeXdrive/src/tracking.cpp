@@ -11,6 +11,11 @@ float average_inertial() {
   return robotDirection;
 }
 
+float average_inertial_wrapped() {
+  float robotDirection = (-inertial_Up.heading(deg) - inertial_Down.heading(deg)) / 2;
+  return robotDirection;
+}
+
 double deg_to_rad(double degrees){
   return degrees/180 *M_PI;
 }
@@ -38,7 +43,7 @@ int update (void){
    double radiusB = 0;
    double h = 0;
    double h2 = 0;
-   double theta = 0; double beta = 0; double alpha = 0;
+   double theta = 0; double beta = 0; double alpha = 0; double theta_wrapped = 0; 
    double Xx = 0; double Xy = 0; double Yx = 0; double Yy = 0;
    double newright = 0; double newback = 0;
    double Right = 0; double Back = 0;
@@ -66,6 +71,7 @@ int update (void){
 	 lastright = newright;
 	 lastback = newback;
 	 theta = average_inertial();
+   
 //if robot turned in any direction
 	 if (theta != 0){
 		 radiusR = Right / theta;
@@ -89,6 +95,18 @@ int update (void){
 		 tracking.xcoord += Yx + Xx;
 		 tracking.ycoord += Yy + Xy;
      tracking.global_angle += theta;
+     tracking.global_angle_radian += deg_to_rad(theta_wrapped);
  task::sleep(1);
 }
+}
+
+void forwardWhileRotating(int xdistance, int angle){
+double xToTravel = 0; 
+double yToTravel = 0; 
+double lConstant = 0; 
+
+xToTravel = (tracking.velocityR * cos(angle)) - (lConstant * tracking.global_angle_radian * sin(angle)); 
+yToTravel = (tracking.velocityB * sin(angle)) + (lConstant * tracking.global_angle_radian * cos(angle));
+
+
 }

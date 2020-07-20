@@ -91,6 +91,10 @@ Discarded input sections
                 0x00000000       0x64 build/src/tracking.o
  .ARM.exidx.text._Z16average_inertialv
                 0x00000000        0x8 build/src/tracking.o
+ .text._Z24average_inertial_wrappedv
+                0x00000000       0x64 build/src/tracking.o
+ .ARM.exidx.text._Z24average_inertial_wrappedv
+                0x00000000        0x8 build/src/tracking.o
  .text._Z10deg_to_radd
                 0x00000000       0x30 build/src/tracking.o
  .ARM.exidx.text._Z10deg_to_radd
@@ -105,6 +109,10 @@ Discarded input sections
  .text._Z6updatev
                 0x00000000      0x288 build/src/tracking.o
  .ARM.exidx.text._Z6updatev
+                0x00000000        0x8 build/src/tracking.o
+ .text._Z20forwardWhileRotatingii
+                0x00000000       0x48 build/src/tracking.o
+ .ARM.exidx.text._Z20forwardWhileRotatingii
                 0x00000000        0x8 build/src/tracking.o
  .llvm_addrsig  0x00000000        0x7 build/src/tracking.o
  .text          0x00000000        0x0 build/src/autonFunctions.o
