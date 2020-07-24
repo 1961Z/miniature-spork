@@ -114,6 +114,75 @@ void brainRGB() {
   }
 }
 
+void deaccel(int speed, double dist, double strength){
+  static
+  const double circumference = 3.14159 * 2.75;
+  if (dist == 0)
+    return;
+  double wheelRevs = ((dist) / circumference);
+  resetFunction();
+
+  //double lastEncoderValue = 0.0;
+  double startPoint = (verticalTracker.rotation(rotationUnits::rev)) * -1;
+  double endPoint = startPoint + wheelRevs;
+
+  double calcVel = speed;
+  double subtractor = 0;
+  int count = 0;
+
+  while(calcVel > 1){
+    subtractor = pow(strength, count); 
+    calcVel -= subtractor;
+    if(subtractor >= calcVel){
+      calcVel = round(calcVel);
+      while(calcVel > 0){
+        calcVel--;
+        count++;
+      }
+      break;
+    }
+    count++;
+  }
+
+  front_R.spin(fwd, speed, velocityUnits::pct);
+  front_L.spin(fwd, speed, velocityUnits::pct);
+  back_R.spin(fwd, speed, velocityUnits::pct);
+  back_L.spin(fwd, speed, velocityUnits::pct);
+
+  task::sleep(70);
+  // printf("encoder %f\n", verticalTracker.position(rotationUnits::rev));
+  bool run = true;
+  calcVel = speed;
+  subtractor = 0;
+
+  while(run == true){
+    printf("encoder %f\n", horizontalTracker.position(rotationUnits::rev));
+    Brain.Screen.printAt(1, 40, "count %ld\n", count);
+    if((endPoint - verticalTracker.position(rotationUnits::rev)) == count){
+      resetFunction();      
+      while(calcVel > 1){
+        subtractor = pow(strength, verticalTracker.position(rotationUnits::rev)); 
+        calcVel -= subtractor;
+        front_R.spin(fwd, calcVel, velocityUnits::pct);
+        front_L.spin(fwd, calcVel, velocityUnits::pct);
+        back_R.spin(fwd, calcVel, velocityUnits::pct);
+        back_L.spin(fwd, calcVel, velocityUnits::pct);
+        if(subtractor >= calcVel){
+          calcVel = round(calcVel);
+          while(calcVel > 0){
+            calcVel--;
+            front_R.spin(fwd, calcVel, velocityUnits::pct);
+            front_L.spin(fwd, calcVel, velocityUnits::pct);
+            back_R.spin(fwd, calcVel, velocityUnits::pct);
+            back_L.spin(fwd, calcVel, velocityUnits::pct);
+          }
+          break;
+        }
+      }
+    }
+  }
+}
+
 void moveForwardFast(int speed, double distanceToTravel) {
   double wheelDiameterIN = 3.25;
   double travelTargetCM = distanceToTravel; // this is the distance it goes which is set as a variable

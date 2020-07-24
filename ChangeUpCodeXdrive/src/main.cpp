@@ -59,36 +59,38 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
- inertial_Up.calibrate();
-   while (inertial_Up.isCalibrating()) {
-     wait(100, msec);
-  }
-  inertial_Down.calibrate();
-  while (inertial_Down.isCalibrating()) {
-   wait(100, msec);
-  }
-  task y = task(BallCount);
-  task ughh = task(intakeOn);
-  moveForwardWalk(16, 80, 0, 0.6, 50);
-  rotatePID(30, 90);
-  task::stop(ughh);
-  intake_R.stop(brake);
-  intake_L.stop(brake);
-  task poop = task(primeShoot);
-  moveForwardWalk(5, 80, 30, 0.6, 50);
-  task::stop(primeShoot);
-  outtake1BallAuton();
-  moveForward(70, 38);
-  strafeWhileTurning(20, 24);
-  moveForwardWalk(3, 80, 90, 0.6, 50);
-  outtake1BallAuton();
-  moveForward(100, 20);
-  strafeWalk(-30, 80, 90, 0.6);
-  rotatePID(135, 90);
-  task a = task(intakeOn);
-  moveForwardFast(80,34);
-  conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
-  conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
+  deaccel(50, 24, 1.1);
+  // deaccel(50, 24, 1.1);
+//  inertial_Up.calibrate();
+//    while (inertial_Up.isCalibrating()) {
+//      wait(100, msec);
+//   }
+//   inertial_Down.calibrate();
+//   while (inertial_Down.isCalibrating()) {
+//    wait(100, msec);
+//   }
+//   task y = task(BallCount);
+  // task ughh = task(intakeOn);
+  // moveForwardWalk(16, 80, 0, 0.6, 50);
+  // rotatePID(30, 90);
+  // task::stop(ughh);
+  // intake_R.stop(brake);
+  // intake_L.stop(brake);
+  // task poop = task(primeShoot);
+  // moveForwardWalk(5, 80, 30, 0.6, 50);
+  // task::stop(primeShoot);
+  // outtake1BallAuton();
+  // moveForward(70, 38);
+  // strafeWhileTurning(20, 24);
+  // moveForwardWalk(3, 80, 90, 0.6, 50);
+  // outtake1BallAuton();
+  // moveForward(100, 20);
+  // strafeWalk(-30, 80, 90, 0.6);
+  // rotatePID(135, 90);
+  // task a = task(intakeOn);
+  // moveForwardFast(80,34);
+  // conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
+  // conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
 }
 
 /*---------------------------------------------------------------------------*/
