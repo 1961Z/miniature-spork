@@ -404,7 +404,7 @@ void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, do
     }
 
     headingError = -(headingOfRobot - get_average_inertial()) * multiply;
-    printf("heading error %f\n", error);
+    printf("heading error %f\n", headingError);
     printf("encoder value %f\n", distanceTraveled);
     printf("wheelRevs %f\n", wheelRevs);
     printf("encoder error %f\n", rightEndPoint);
