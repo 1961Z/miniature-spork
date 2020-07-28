@@ -19,6 +19,8 @@
 
 #include "opControl.h"
 
+#include "tracking.h"
+
 #include "autonFunctions.h"
 
 #include "vex.h"
@@ -59,6 +61,7 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
+<<<<<<< HEAD
   deaccel(50, 24, 1.1);
   // deaccel(50, 24, 1.1);
 //  inertial_Up.calibrate();
@@ -91,6 +94,44 @@ void autonomous(void) {
   // moveForwardFast(80,34);
   // conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
   // conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
+=======
+ inertial_Up.calibrate();
+   while (inertial_Up.isCalibrating()) {
+     wait(100, msec);
+  }
+  inertial_Down.calibrate();
+  while (inertial_Down.isCalibrating()) {
+   wait(100, msec);
+  }
+  task fakeSpaceMan = task(update);
+  /*rotatePID(30, 40);
+  forwardWhileRotating30to90(90, 0, 80, -24);
+  forwardWhileRotating90to145(135, 0, 80, 24);*/
+  //move_drive(10, 0, 0);
+  move_to_target_sync(6, 49, (M_PI/4),false, 12);
+  /*task y = task(BallCount);
+  task ughh = task(intakeOn);
+  moveForwardWalk(16, 80, 0, 0.6, 50);
+  rotatePID(30, 90);
+  task::stop(ughh);
+  intake_R.stop(brake);
+  intake_L.stop(brake);
+  task poop = task(primeShoot);
+  moveForwardWalk(5, 80, 30, 0.6, 50);
+  task::stop(primeShoot);
+  outtake1BallAuton();
+  moveForward(70, 38);
+  strafeWhileTurning(20, 24);
+  moveForwardWalk(3, 80, 90, 0.6, 50);
+  outtake1BallAuton();
+  moveForward(100, 20);
+  strafeWalk(-30, 80, 90, 0.6);
+  rotatePID(135, 90);
+  task a = task(intakeOn);
+  moveForwardFast(80,34);
+  conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
+  conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);*/
+>>>>>>> master
 }
 
 /*---------------------------------------------------------------------------*/
@@ -108,8 +149,8 @@ void usercontrol(void) {
   front_R.stop(coast);
   back_L.stop(coast);
   back_R.stop(coast);
-  /*inertial_Up.calibrate();
-  while (inertial_Up.isCalibrating()) {
+  inertial_Up.calibrate();
+  /*while (inertial_Up.isCalibrating()) {
     wait(100, msec);
   }
   inertial_Down.calibrate();
@@ -121,6 +162,7 @@ void usercontrol(void) {
   task x = task(conveyorToggle);
   task y = task(BallCount);
   task z = task(toggle);
+  task fakeSpaceMan = task(update);
   while (1) {
     testForPrabu(); 
     /*double rotationRight = pow(front_R.rotation(rev), 2);
@@ -130,15 +172,15 @@ void usercontrol(void) {
     double distanceTraveledForward = sqrt(rotationLeft + rotationRight);
     double distanceTraveledStrafeLeft = sqrt( rotationLeft + rotationLeftBack);
     double distanceTraveledStrafeRight = sqrt(rotationRight + rotationRightBack);*/
-    printf("encoder forward %f\n", verticalTracker.rotation(degrees));
-    printf("encoder strafeLeft %f\n", horizontalTracker.rotation(degrees));
     //printf("encoder strafeRight %f\n", distanceTraveledStrafeRight);
-
+    printf("Theta: %f\n", average_inertial());
+    printf("leftfront: %f\n", front_L.velocity(pct));
+    printf("leftback: %f\n", back_L.velocity(pct));
+    printf("rightfront: %f\n", front_R.velocity(pct));
+    printf("rightback: %f\n", back_R.velocity(pct));
     //printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
     //printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
     // printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
-    // Brain.Screen.printAt(1, 20, "Encoder rotations: %f left", inertial_Down.rotation(deg));
-    // Brain.Screen.printAt(1, 40, "Encoder rotations: %f leftBack", inertial_Up.rotation(deg));
     wait(10, msec); // Sleep the task for a short amount of time to
     // prevent wasted resources.
   }
