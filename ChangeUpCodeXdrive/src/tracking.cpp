@@ -257,3 +257,190 @@ void move_drive(int x, int y, int a){
   back_R.spin(fwd, x + y - a, voltageUnits::volt);
 
 }
+
+int offset = 0; 
+
+int move_to_target(){
+  tracking.target_x = moveParams.target_x;
+  tracking.target_y = moveParams.target_y;
+  tracking.target_a = moveParams.target_a;
+  double power_d;
+  bool debug = moveParams.debug;
+  bool cubeLineUp = moveParams.cubeLineUp;
+  bool brakeOn = moveParams.brakeOn;
+  bool inDrive = moveParams.inDrive;
+  double x = 1; 
+  double max_power_a = x, max_power_xy = moveParams.max_xy;
+  double min_power_a = x, min_power_xy = 1;
+  double scale;
+
+  double last_power_a = max_power_a, last_power_x = max_power_xy, last_power_y = max_power_xy;
+  double integral_a = 0.0, integral_d = 0.0;
+
+  double error_a, error_x, error_y, error_d, errorLocalx, errorLocaly;
+  double difference_a;
+  double kP_a = 127, kP_d = 0.0022;
+  double kI_a = 12, kI_d = 0.01;   // kI_a = 0.01, kI_d = 0.0022;
+  unsigned long last_time = timer().time(msec);
+
+  error_a = tracking.target_a - tracking.global_angle;
+  error_x = tracking.target_x - tracking.xcoord;
+  error_y = tracking.target_y - tracking.ycoord;
+  error_d = sqrtf(powf(error_x, 2) + powf(error_y, 2));
+
+  while (inDrive == false){
+
+
+    error_a = tracking.target_a - tracking.global_angle;
+    error_x = tracking.target_x - tracking.xcoord;
+    error_y = tracking.target_y - tracking.ycoord;
+    error_d = sqrtf(powf(error_x, 2) + powf(error_y, 2));
+    tracking.driveError = error_d;
+
+    difference_a = tracking.global_angle + atan(error_y/error_x);
+    errorLocalx = cos(difference_a) * error_d;
+    errorLocaly = sin(difference_a) * error_d;
+
+
+    if (fabs(error_a) < 5){
+      integral_a += error_a * (timer().time(msec)-last_time);
+    }
+
+    if (fabs(error_d) < 2.5){ // what triggers integral to start adding?
+      integral_d += error_d * (timer().time(msec)-last_time);
+    }
+    if(fabs(error_d)<=0.7) {
+      integral_d = 0;
+    }
+
+    if(fabs(error_a)> deg_to_rad(0.5)){
+      tracking.power_a = map_set(fabs(error_a),deg_to_rad(0.5), M_PI,12.0*sgn(error_a),127.0*sgn(error_a),
+                        deg_to_rad(5), sgn(error_a)*20.0,
+                        deg_to_rad(20),sgn(error_a)*50.0,
+                        deg_to_rad(25),sgn(error_a)*70.0,
+                        deg_to_rad(45),sgn(error_a)*85.0,
+                        deg_to_rad(60), sgn(error_a)*110.0,
+                        deg_to_rad(90),sgn(error_a)*120.0,
+                        M_PI,sgn(error_a)*127.0);
+    }
+    else {
+      tracking.power_a = 0;
+    }
+
+    power_d = map_set(fabs(error_d),0.5,200.0,15.0,127.0,
+                      10.0,127.0,
+                      15.0,127.0,
+                      18.0, 127.0,
+                      25.0,127.0,
+                      200.0,127.0);
+
+    if (error_x >= 0){
+      tracking.power_x = error_d*cos(difference_a)*kP_d;
+      tracking.power_y = error_d*sin(difference_a)*kP_d;
+    }
+    else{
+      tracking.power_x = -error_d*cos(difference_a)*kP_d;
+      tracking.power_y = -error_d*sin(difference_a)*kP_d;
+    }
+    tracking.power_x+= sgn(tracking.power_x) * integral_d * kI_d;
+    tracking.power_y+= sgn(tracking.power_y) * integral_d * kI_d;
+//controlling max power for a, x, and y
+    if (fabs(tracking.power_a) > max_power_a){
+      tracking.power_a = sgn(tracking.power_a)*max_power_a;
+    }
+    // need to scale x and y powers
+    if (fabs(tracking.power_x) > max_power_xy || fabs(tracking.power_y) > max_power_xy){
+      if (fabs(tracking.power_x) > fabs(tracking.power_y)){
+        scale = max_power_xy/fabs(tracking.power_x);
+        tracking.power_x = max_power_xy *sgn(tracking.power_x);
+        tracking.power_y = tracking.power_y *scale;
+        tracking.power_a = tracking.power_a*scale;
+      }
+      else {
+        scale = max_power_xy/fabs(tracking.power_y);
+        tracking.power_y = max_power_xy *sgn(tracking.power_y);
+        tracking.power_x = tracking.power_x *scale;
+        tracking.power_a = tracking.power_a*scale;
+      }
+    }
+
+    if (fabs(errorLocalx) > 0.5 || fabs(error_x) > 0.5 ){
+        if (fabs(tracking.power_x) < min_power_xy){
+        tracking.power_x = sgn(tracking.power_x)*min_power_xy;
+      }
+    }
+    else {
+      tracking.power_x = 0;
+    }
+
+
+    if (fabs(errorLocaly) > 0.5 || fabs(error_y) > 0.5){
+      if(fabs(tracking.power_y) < min_power_xy){
+
+      tracking.power_y = sgn(tracking.power_y)*min_power_xy;
+      }
+    }
+    else{
+      tracking.power_y = 0;
+    }
+    
+    printf("xspeed: %f\n", tracking.power_x);
+    printf("Yspeed: %f\n", tracking.power_y);
+    printf("Theataspeed: %f\n", tracking.power_a);
+    printf("error_D %f\n", error_d);
+
+    move_drive(tracking.power_x, tracking.power_y, tracking.power_a);
+    if(tracking.power_x != 0) last_power_x = tracking.power_x;
+    if(tracking.power_y != 0) last_power_y = tracking.power_y;
+    if(tracking.power_a != 0) last_power_a = tracking.power_a;
+    last_time = timer().time(msec); 
+    if (fabs(error_a) <= deg_to_rad(0.5) && fabs(error_d) < 2 && cubeLineUp){
+      if(cubeLineUp){
+        printf("I'm doing a cube line up\n");
+        //green.linedUp = false;
+        while((fabs(error_a) >= deg_to_rad(0.5)) || (fabs(error_y) >= 0.5 )) {
+          error_y =tracking.target_y - tracking.ycoord;
+          error_a = fmod(tracking.target_a - tracking.global_angle, 2*M_PI);
+          //green.lineMiddle(0.8,tracking.target_y,tracking.target_a);
+          move_drive(tracking.power_x, tracking.power_y, tracking.power_a);
+        }
+        offset = tracking.target_x - tracking.xcoord;
+        move_drive(0, 0, 0);
+        difference_a = 0;
+        printf("i can reach here");
+        tracking.moveComplete = true;
+        moveStopTask();
+        break;
+        }
+    }
+    else if (fabs(error_a) <= deg_to_rad(0.5) && fabs(error_x) <= 0.5 && fabs(error_y) <= 0.5 && !cubeLineUp){
+      difference_a = 0;
+      printf("i hope");
+      brakeDrive();
+      if(brakeOn) {
+        task::sleep(600);
+      }
+      tracking.moveComplete = true;
+      moveStopTask();
+      break;
+    }
+    task::sleep(10);
+  }
+  return 1;
+}
+
+void move_to_target_sync(double target_x, double target_y, double target_a, bool brakeOn, double max_xy, bool cubeLineUp,  bool debug, bool inDrive) {
+  if(!tracking.moveComplete) moveStopTask();
+  if(moveTask != nullptr) moveTask = nullptr;
+  moveParams.target_x = target_x;
+  moveParams.target_y = target_y;
+  moveParams.target_a = target_a; 
+  moveParams.brakeOn = brakeOn; 
+  moveParams.max_xy = max_xy; 
+  moveParams.cubeLineUp = cubeLineUp; 
+  moveParams.debug = debug; 
+  moveParams.inDrive = inDrive;
+  tracking.driveError = 0;
+  tracking.moveComplete = false;
+  move_to_target();
+}

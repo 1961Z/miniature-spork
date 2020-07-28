@@ -70,11 +70,11 @@ void autonomous(void) {
    wait(100, msec);
   }
   task fakeSpaceMan = task(update);
-  rotatePID(30, 40);
+  /*rotatePID(30, 40);
   forwardWhileRotating30to90(90, 0, 80, -24);
-  forwardWhileRotating90to145(135, 0, 80, 24);
+  forwardWhileRotating90to145(135, 0, 80, 24);*/
   //move_drive(10, 0, 0);
-  //move_to_target_sync(23.5, 38.5, 0, false, 55);
+  move_to_target_sync(6, 49, (M_PI/4),false, 12);
   /*task y = task(BallCount);
   task ughh = task(intakeOn);
   moveForwardWalk(16, 80, 0, 0.6, 50);
