@@ -61,40 +61,7 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-<<<<<<< HEAD
-  deaccel(50, 24, 1.1);
-  // deaccel(50, 24, 1.1);
-//  inertial_Up.calibrate();
-//    while (inertial_Up.isCalibrating()) {
-//      wait(100, msec);
-//   }
-//   inertial_Down.calibrate();
-//   while (inertial_Down.isCalibrating()) {
-//    wait(100, msec);
-//   }
-//   task y = task(BallCount);
-  // task ughh = task(intakeOn);
-  // moveForwardWalk(16, 80, 0, 0.6, 50);
-  // rotatePID(30, 90);
-  // task::stop(ughh);
-  // intake_R.stop(brake);
-  // intake_L.stop(brake);
-  // task poop = task(primeShoot);
-  // moveForwardWalk(5, 80, 30, 0.6, 50);
-  // task::stop(primeShoot);
-  // outtake1BallAuton();
-  // moveForward(70, 38);
-  // strafeWhileTurning(20, 24);
-  // moveForwardWalk(3, 80, 90, 0.6, 50);
-  // outtake1BallAuton();
-  // moveForward(100, 20);
-  // strafeWalk(-30, 80, 90, 0.6);
-  // rotatePID(135, 90);
-  // task a = task(intakeOn);
-  // moveForwardFast(80,34);
-  // conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
-  // conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
-=======
+  
  inertial_Up.calibrate();
    while (inertial_Up.isCalibrating()) {
      wait(100, msec);
@@ -103,12 +70,14 @@ void autonomous(void) {
   while (inertial_Down.isCalibrating()) {
    wait(100, msec);
   }
-  task fakeSpaceMan = task(update);
+  //task fakeSpaceMan = task(update);
+  moveForwardWalk(24, 80, 0, 0.6, 1, 50);
+  //deaccel(50, 24, 1.1);
   /*rotatePID(30, 40);
   forwardWhileRotating30to90(90, 0, 80, -24);
   forwardWhileRotating90to145(135, 0, 80, 24);*/
   //move_drive(10, 0, 0);
-  move_to_target_sync(6, 49, (M_PI/4),false, 12);
+ // move_to_target_sync(6, 49, (M_PI/4),false, 12);
   /*task y = task(BallCount);
   task ughh = task(intakeOn);
   moveForwardWalk(16, 80, 0, 0.6, 50);
@@ -131,7 +100,6 @@ void autonomous(void) {
   moveForwardFast(80,34);
   conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
   conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);*/
->>>>>>> master
 }
 
 /*---------------------------------------------------------------------------*/

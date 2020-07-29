@@ -5,11 +5,11 @@ void moveForward(int speed, double distanceToTravel);
 
 void moveForwardFast(int speed, double distanceToTravel);
 
-void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal);
+void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal, double addingFactor);
 
 void deaccel(int speed, double dist, double strength);
 
-void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply);
+void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double addingFactor);
 
 void turnCrawl(double degree, int velocity);  
 

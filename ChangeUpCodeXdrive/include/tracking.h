@@ -42,6 +42,6 @@ struct moveTargetParams {
 };
 
 
-//extern Tracking tracking;
+extern Tracking tracking;
 
 #endif

@@ -11,8 +11,6 @@ using namespace vex;
 
 timer Timer; 
 
-Tracking tracking;
-
 moveTargetParams moveParams;
 
 float average_inertial() {
@@ -159,7 +157,7 @@ void forwardWhileRotating(int angle, double K, double V, double strafeDistance) 
     stopWatch += 0.01;
   }
   brakeDrive();
-  strafeWalk(strafeDistance, V, angle, 0.6);
+  strafeWalk(strafeDistance, V, angle, 0.6, 0);
 }
 
 void forwardWhileRotating30(int angle, double K, double V, double strafeDistance){
@@ -182,7 +180,7 @@ void forwardWhileRotating30(int angle, double K, double V, double strafeDistance
     stopWatch += 0.01;
   }
   brakeDrive();
-  strafeWalk(strafeDistance, V, angle, 0.6);
+  strafeWalk(strafeDistance, V, angle, 0.6, 0);
 }
 
 void forwardWhileRotating30to90(int angle, double K, double V, double strafeDistance){
@@ -210,7 +208,7 @@ void forwardWhileRotating30to90(int angle, double K, double V, double strafeDist
     stopWatch += 0.01;
   }
   //brakeDrive();
-  strafeWalk(strafeDistance, V, angle, 0.6);
+  strafeWalk(strafeDistance, V, angle, 0.6, 0);
 }
 
 void forwardWhileRotating90to145(int angle, double K, double V, double strafeDistance){
@@ -238,7 +236,7 @@ void forwardWhileRotating90to145(int angle, double K, double V, double strafeDis
     stopWatch += 0.01;
   }
   //brakeDrive();
-  moveForwardWalk(strafeDistance, V, angle, 0.6, 0.6);
+  moveForwardWalk(strafeDistance, V, angle, 0.6, 0.6, 0);
 }
 
 void brakeDrive(){
@@ -269,9 +267,9 @@ int move_to_target(){
   bool cubeLineUp = moveParams.cubeLineUp;
   bool brakeOn = moveParams.brakeOn;
   bool inDrive = moveParams.inDrive;
-  double x = 1; 
+  double x = 10; 
   double max_power_a = x, max_power_xy = moveParams.max_xy;
-  double min_power_a = x, min_power_xy = 1;
+  double min_power_a = 1, min_power_xy = 2;
   double scale;
 
   double last_power_a = max_power_a, last_power_x = max_power_xy, last_power_y = max_power_xy;

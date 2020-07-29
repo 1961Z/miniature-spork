@@ -4,6 +4,8 @@
 
 #include "autonFunctions.h"
 
+#include "tracking.h"
+
 using namespace vex;
 
 void resetFunction() {
@@ -14,6 +16,9 @@ void resetFunction() {
   verticalTracker.resetRotation();
   horizontalTracker.resetRotation();
 }
+
+Tracking tracking;
+
 
 int intakeSpeedPCT = 100;
 
@@ -156,7 +161,7 @@ void deaccel(int speed, double dist, double strength){
   subtractor = 0;
 
   while(run == true){
-    printf("encoder %f\n", horizontalTracker.position(rotationUnits::rev));
+    printf("encoder %f\n", verticalTracker.rotation(rev));
     Brain.Screen.printAt(1, 40, "count %ld\n", count);
     if((endPoint - verticalTracker.position(rotationUnits::rev)) == count){
       resetFunction();      
@@ -236,11 +241,11 @@ void strafeSimpleLeft(int speed) {
 
 const double minimum_velocity = 15.0;
 
-double increasing_speed(double starting_point, double current_position) { // how fast the robot starts to pick up its speed
+double increasing_speed(double starting_point, double current_position, double addingFactor) { // how fast the robot starts to pick up its speed
   static
-  const double acceleration_constant = 50.0;
+  const double acceleration_constant = 65.0;
   return acceleration_constant * fabs(current_position - starting_point) +
-    minimum_velocity;
+    (minimum_velocity + addingFactor);
 }
 
 double decreasing_speed(double ending_point, double current_position) { // how fast the robot starts to slow down before reaching its distance
@@ -278,7 +283,7 @@ float get_average_inertial() {
 double headingError;
 double headingErrorTest;
 
-void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal) {
+void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal, double addingFactor) {
 
   static
   const double circumference = 3.14159 * 2.85;
@@ -291,26 +296,26 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
   //double lastEncoderValue = 0.0;
   double leftStartPoint = (verticalTracker.rotation(rotationUnits::rev));
   double leftEndPoint = leftStartPoint + wheelRevs;
-  double leftStartPoint1 = verticalTracker.rotation(rotationUnits::rev);
+  double leftStartPoint1 = (verticalTracker.rotation(rotationUnits::rev));
   double leftEndPoint1 = leftStartPoint1 + wheelRevs;
-  double rightStartPoint = verticalTracker.rotation(rotationUnits::rev);
+  double rightStartPoint = (verticalTracker.rotation(rotationUnits::rev));
   double rightEndPoint = rightStartPoint + wheelRevs;
-  double rightStartPoint1 = verticalTracker.rotation(rotationUnits::rev);
+  double rightStartPoint1 = (verticalTracker.rotation(rotationUnits::rev));
   double rightEndPoint1 = rightStartPoint1 + wheelRevs;
 
+  front_L.spin(fwd, direction * (minimum_velocity), velocityUnits::pct);
+  front_R.spin(fwd, direction * (minimum_velocity), velocityUnits::pct);
+  back_R.spin(fwd, direction * (minimum_velocity), velocityUnits::pct);
+  back_L.spin(fwd, direction * (minimum_velocity), velocityUnits::pct);
+  
+  task::sleep(90);
+
+
   int sameEncoderValue = 0;
-
-  front_R.spin(fwd, direction * minimum_velocity, velocityUnits::pct);
-  front_L.spin(fwd, direction * minimum_velocity, velocityUnits::pct);
-  back_R.spin(fwd, direction * minimum_velocity, velocityUnits::pct);
-  back_L.spin(fwd, direction * minimum_velocity, velocityUnits::pct);
-
-  task::sleep(70);
-  printf("front right encoder %f\n", front_R.rotation(deg));
+  //printf("front right encoder %f\n", front_R.rotation(deg));
   double distanceTraveled = 0;
 
   while (direction * (distanceTraveled - rightStartPoint) < direction * wheelRevs) {
-
     if (back_R.velocity(rpm) == 0 || back_L.velocity(rpm) == 0) {
       ++sameEncoderValue;
     }
@@ -321,11 +326,11 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
 
     double rotationRight = pow(front_R.rotation(rev), 2);
     double rotationLeft = pow(front_L.rotation(rev), 2);
-    distanceTraveled = -verticalTracker.rotation(rev);
+    distanceTraveled = -(verticalTracker.rotation(rev));
 
     double driftLeftError = (front_R.rotation(deg) + back_L.rotation(deg));
     double driftRightError = (front_L.rotation(deg) + back_R.rotation(deg));
-    double error = horizontalTracker.rotation(rev);
+    double error = horizontalTracker.rotation(degrees);
 
     if (error > -2.5 && error < 2.5) {
       headingErrorTest = -error * multiplyForHorizontal;
@@ -347,7 +352,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
           maxVelocity,
           std::min(increasing_speed(
               leftStartPoint,
-              distanceTraveled),
+              distanceTraveled, addingFactor),
             decreasing_speed(leftEndPoint,
               distanceTraveled))) +
         (headingError) - (headingErrorTest),
@@ -364,7 +369,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
           maxVelocity,
           std::min(increasing_speed(
               rightStartPoint,
-              distanceTraveled),
+              distanceTraveled, addingFactor),
             decreasing_speed(rightEndPoint,
               distanceTraveled))) -
         (headingError) - (headingErrorTest),
@@ -380,7 +385,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
         direction * std::min(
           maxVelocity,
           std::min(increasing_speed(leftStartPoint1,
-              distanceTraveled),
+              distanceTraveled, addingFactor),
             decreasing_speed(leftEndPoint1,
               distanceTraveled))) +
         (headingError) - (headingErrorTest),
@@ -396,7 +401,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
         direction * std::min(
           maxVelocity,
           std::min(increasing_speed(rightStartPoint1,
-              distanceTraveled),
+              distanceTraveled, addingFactor),
             decreasing_speed(rightEndPoint1,
               distanceTraveled))) -
         (headingError) - (headingErrorTest),
@@ -413,7 +418,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
   //rotatePID(headingOfRobot, 60);
 }
 
-void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply) {
+void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double addingFactor) {
 
   static
   const double circumference = 3.14159 * 2.75;
@@ -484,7 +489,7 @@ void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, do
           maxVelocity,
           std::min(increasing_speed(
               leftStartPoint,
-              distanceTraveled),
+              distanceTraveled, addingFactor),
             decreasing_speed(leftEndPoint,
               distanceTraveled))) +
         (headingError),
@@ -499,7 +504,7 @@ void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, do
             maxVelocity,
             std::min(increasing_speed(
                 rightStartPoint,
-                distanceTraveled),
+                distanceTraveled, addingFactor),
               decreasing_speed(rightEndPoint,
                 distanceTraveled))) -
           (headingError)),
@@ -513,7 +518,7 @@ void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, do
         direction * -(std::min(
             maxVelocity,
             std::min(increasing_speed(leftStartPoint1,
-                distanceTraveled),
+                distanceTraveled, addingFactor),
               decreasing_speed(leftEndPoint1,
                 distanceTraveled))) +
           (headingError)),
@@ -527,7 +532,7 @@ void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, do
         direction * std::min(
           maxVelocity,
           std::min(increasing_speed(rightStartPoint1,
-              distanceTraveled),
+              distanceTraveled, addingFactor),
             decreasing_speed(rightEndPoint1,
               distanceTraveled))) -
         (headingError),
@@ -727,7 +732,7 @@ void strafeWhileTurning(int speed, double distance){
   printf("heading average  %f\n", get_average_inertial()); 
   task::sleep(10); 
 } 
-strafeWalk(-10, 80, 90, 0.6); 
+strafeWalk(-10, 80, 90, 0.6, 0); 
 }
 
 int intakeOn() {
