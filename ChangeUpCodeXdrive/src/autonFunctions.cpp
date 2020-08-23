@@ -243,14 +243,14 @@ const double minimum_velocity = 15.0;
 
 double increasing_speed(double starting_point, double current_position, double addingFactor) { // how fast the robot starts to pick up its speed
   static
-  const double acceleration_constant = 65.0;
+  const double acceleration_constant = 80.0;
   return acceleration_constant * fabs(current_position - starting_point) +
     (minimum_velocity + addingFactor);
 }
 
 double decreasing_speed(double ending_point, double current_position) { // how fast the robot starts to slow down before reaching its distance
   static
-  const double deceleration_constant = 30.0;
+  const double deceleration_constant = 40.0;
   return deceleration_constant * fabs(current_position - ending_point) +
     minimum_velocity;
 }
@@ -303,10 +303,10 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
   double rightStartPoint1 = (verticalTracker.rotation(rotationUnits::rev));
   double rightEndPoint1 = rightStartPoint1 + wheelRevs;
 
-  front_L.spin(fwd, direction * (minimum_velocity), velocityUnits::pct);
-  front_R.spin(fwd, direction * (minimum_velocity), velocityUnits::pct);
-  back_R.spin(fwd, direction * (minimum_velocity), velocityUnits::pct);
-  back_L.spin(fwd, direction * (minimum_velocity), velocityUnits::pct);
+  front_L.spin(fwd, direction * (minimum_velocity + 1), velocityUnits::pct);
+  front_R.spin(fwd, direction * (minimum_velocity - 1), velocityUnits::pct);
+  back_R.spin(fwd, direction * (minimum_velocity + 1), velocityUnits::pct);
+  back_L.spin(fwd, direction * (minimum_velocity - 1), velocityUnits::pct);
   
   task::sleep(90);
 
@@ -339,11 +339,23 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
     }
 
     headingError = -(headingOfRobot - get_average_inertial()) * multiply;
-    printf("heading error %f\n", error);
-    printf("heading multiplied error %f\n", headingErrorTest);
+    /*printf("heading error %f\n", std::min(
+          maxVelocity,
+          std::min(increasing_speed(
+              leftStartPoint,
+              distanceTraveled, addingFactor),
+            decreasing_speed(leftEndPoint,
+              distanceTraveled))));*/
+    //printf("heading multiplied error %f\n", headingErrorTest);
     //printf("encoder value %f\n", distanceTraveled);
     //printf("wheelRevs %f\n", wheelRevs);
     //printf("encoder error %f\n", rightEndPoint);
+
+    printf("front Left %f\n", front_L.velocity(pct));
+    printf("front Right %f\n", front_R.velocity(pct));
+    printf("back Left %f\n", back_L.velocity(pct));
+    printf("back Right %f\n", back_R.velocity(pct));
+
 
     if (direction * (distanceTraveled - leftStartPoint) <
       direction * wheelRevs) {

@@ -70,8 +70,8 @@ void autonomous(void) {
   while (inertial_Down.isCalibrating()) {
    wait(100, msec);
   }
-  //task fakeSpaceMan = task(update);
-  moveForwardWalk(24, 80, 0, 0.6, 1, 50);
+  task fakeSpaceMan = task(update);
+  moveForwardWalk(80, 80, 0, 0.6, 0.1, 0);
   //deaccel(50, 24, 1.1);
   /*rotatePID(30, 40);
   forwardWhileRotating30to90(90, 0, 80, -24);

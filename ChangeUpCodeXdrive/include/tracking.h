@@ -20,6 +20,8 @@ void move_drive(int x, int y, int a);
 
 int move_to_target( void );
 
+void newTryAtTurningWhileGoingForward(int maxSpeed, double startingAngle, double endingAngle);
+
 void brakeDrive(void);
 
 void move_to_target_sync(double target_x, double target_y, double target_a, bool brakeOn = true, double max_xy = 127, bool cubeLineUp = false,  bool debug = false, bool inDrive = false);

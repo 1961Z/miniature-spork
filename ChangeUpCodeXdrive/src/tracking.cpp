@@ -239,6 +239,10 @@ void forwardWhileRotating90to145(int angle, double K, double V, double strafeDis
   moveForwardWalk(strafeDistance, V, angle, 0.6, 0.6, 0);
 }
 
+void newTryAtTurningWhileGoingForward(int maxSpeed, double startingAngle, double endingAngle){
+  
+}
+
 void brakeDrive(){
 front_L.stop(hold);
 front_R.stop(hold);
