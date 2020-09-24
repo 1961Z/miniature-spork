@@ -16,14 +16,10 @@ int joyStickControl() {
     double front_right = (double)(Controller1.Axis3.position(pct) - Controller1.Axis4.position(pct));
     double back_right = (double)(Controller1.Axis3.position(pct) + Controller1.Axis4.position(pct));
 
-    //Find the largest possible sum of X and Y
     double max_raw_sum = (double)(abs(Controller1.Axis3.position(pct)) + abs(Controller1.Axis4.position(pct)));
 
-    //Find the largest joystick value
     double max_XYstick_value = (double)(std::max(abs(Controller1.Axis3.position(pct)), abs(Controller1.Axis4.position(pct))));
 
-    //The largest sum will be scaled down to the largest joystick value, and the others will be
-    //scaled by the same amount to preserve directionality
     if (max_raw_sum != 0) {
       front_left = front_left / max_raw_sum * max_XYstick_value;
       back_left = back_left / max_raw_sum * max_XYstick_value;
@@ -31,23 +27,17 @@ int joyStickControl() {
       back_right = back_right / max_raw_sum * max_XYstick_value;
     }
 
-    //Now to consider rotation
-    //Naively add the rotational axis
     front_left = front_left + Controller1.Axis1.position(pct);
     back_left = back_left + Controller1.Axis1.position(pct);
     front_right = front_right - Controller1.Axis1.position(pct);
     back_right = back_right - Controller1.Axis1.position(pct);
 
-    //What is the largest sum, or is 100 larger?
     max_raw_sum = std::max(fabs(front_left), std::max(fabs(back_left), std::max(fabs(front_right), std::max(fabs(back_right), 100.0))));
 
-    //Scale everything down by the factor that makes the largest only 100, if it was over
     front_left = front_left / max_raw_sum * 100.0;
     back_left = back_left / max_raw_sum * 100.0;
     front_right = front_right / max_raw_sum * 100.0;
     back_right = back_right / max_raw_sum * 100.0;
-
-    //Write the manipulated values out to the motors
 
     front_L.spin(forward, front_left , velocityUnits::pct);
     front_R.spin(forward, front_right , velocityUnits::pct);
@@ -58,8 +48,21 @@ int joyStickControl() {
   }
 }
 
-void  testForPrabu(){
-  //random stuff
+
+
+void outtakeAll() {
+  if(Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing()){
+    conveyor_L.spin(fwd, -100, pct);
+    conveyor_R.spin(fwd, -100, pct);
+    intake_L.spin(fwd, -100, pct);
+    intake_R.spin(fwd, -100, pct);
+  }
+  else{ 
+    conveyor_L.stop();
+    conveyor_R.stop();
+    intake_L.stop();
+    intake_R.stop();
+  }
 }
 
 int conveyorToggle() {
@@ -69,10 +72,10 @@ int conveyorToggle() {
       task f = task(outtake1Ball);
     } 
     else if (Controller1.ButtonA.pressing()) {
-    task m = task(outtake3Ball);
+      task m = task(outtake3Ball);
     }
     else if(Controller1.ButtonB.pressing()){
-    task q = task(outtake2Ball);
+      task q = task(outtake2Ball);
     }
     else{
       //nothing needed in else but it just makes the code look a bit cleaner

@@ -132,7 +132,7 @@ void usercontrol(void) {
   task z = task(toggle);
   task fakeSpaceMan = task(update);
   while (1) {
-    testForPrabu(); 
+    outtakeAll(); 
     /*double rotationRight = pow(front_R.rotation(rev), 2);
     double rotationLeft = pow(front_L.rotation(rev), 2);
     double rotationRightBack = pow(back_R.rotation(rev), 2);
