@@ -156,7 +156,7 @@ void forwardWhileRotating(int angle, double K, double V, double strafeDistance) 
     task::sleep(10);
     stopWatch += 0.01;
   }
-  brakeDrive();
+  holdDrive();
   strafeWalk(strafeDistance, V, angle, 0.6, 0);
 }
 
@@ -179,7 +179,7 @@ void forwardWhileRotating30(int angle, double K, double V, double strafeDistance
     task::sleep(10);
     stopWatch += 0.01;
   }
-  brakeDrive();
+  holdDrive();
   strafeWalk(strafeDistance, V, angle, 0.6, 0);
 }
 
@@ -241,13 +241,6 @@ void forwardWhileRotating90to145(int angle, double K, double V, double strafeDis
 
 void newTryAtTurningWhileGoingForward(int maxSpeed, double startingAngle, double endingAngle){
   
-}
-
-void brakeDrive(){
-front_L.stop(hold);
-front_R.stop(hold);
-back_L.stop(hold);
-back_R.stop(hold);
 }
 
 
@@ -418,7 +411,7 @@ int move_to_target(){
     else if (fabs(error_a) <= deg_to_rad(0.5) && fabs(error_x) <= 0.5 && fabs(error_y) <= 0.5 && !cubeLineUp){
       difference_a = 0;
       printf("i hope");
-      brakeDrive();
+      holdDrive();
       if(brakeOn) {
         task::sleep(600);
       }

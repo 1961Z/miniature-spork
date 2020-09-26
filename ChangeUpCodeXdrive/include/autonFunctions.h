@@ -1,6 +1,24 @@
 #ifndef AUTONFUNCTIONS_H
 #define AUTONFUNCTIONS_H
 
+void inertialCalibration();
+
+void setDriveSpeed(int leftSpeed, int rightSpeed);
+
+void holdDrive(); 
+
+void brakeDrive(); 
+
+void coastDrive();
+
+void setIntakeSpeed(int speed);
+
+void brakeIntake(); 
+
+void setConveyorSpeed(int speed);
+
+void brakeConveyor();
+
 void moveForward(int speed, double distanceToTravel);
 
 void moveForwardFast(int speed, double distanceToTravel);
@@ -71,6 +89,8 @@ void primShooterWithLimit( void );
 
 int bcount(void);
 
+int BallCount(void);
+
 int intakeOn( void );
 
 void intakeOff( void );
@@ -78,6 +98,20 @@ void intakeOff( void );
 void outtake1BallAuton( void );
 void outtake2BallAuton( void );
 void outtake3BallAuton( void );
+
+void createBallCountTask( void );
+
+void stopBallCountTask( void );
+
+void createPrimeTask( void );
+
+void stopPrimeTask( void );
+
+void createIntakeOnTask( void );
+
+void stopIntakeOn( void );
+
+void homeRowAuton( void );
 
 extern bool whenIntakingPrime; 
 

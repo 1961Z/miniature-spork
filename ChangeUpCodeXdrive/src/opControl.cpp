@@ -140,9 +140,3 @@ int primeTheConveyor(){
     task::sleep(10);
   }
 }
-
-int BallCount(){
-  while(true){
-    bcount();
-  }
-}

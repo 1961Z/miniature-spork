@@ -8,6 +8,29 @@
 
 using namespace vex;
 
+Tracking tracking;
+
+int intakeSpeedPCT = 100;
+
+int ballFinal = 0;
+
+bool checkingI = true;
+
+bool checkingT = true;
+
+bool goingDown = false;
+
+void inertialCalibration(){
+  inertial_Up.calibrate();
+   while (inertial_Up.isCalibrating()) {
+     wait(100, msec);
+  }
+  inertial_Down.calibrate();
+  while (inertial_Down.isCalibrating()) {
+   wait(100, msec);
+  }
+}
+
 void resetFunction() {
   back_L.resetRotation();
   back_R.resetRotation();
@@ -17,15 +40,54 @@ void resetFunction() {
   horizontalTracker.resetRotation();
 }
 
-Tracking tracking;
+void setDriveSpeed(int leftSpeed, int rightSpeed){
+  front_L.spin(fwd, leftSpeed, velocityUnits::pct);
+  front_R.spin(fwd, rightSpeed, velocityUnits::pct);
+  back_L.spin(fwd, leftSpeed, velocityUnits::pct);
+  back_R.spin(fwd, rightSpeed, velocityUnits::pct);
+}
 
 
-int intakeSpeedPCT = 100;
+void holdDrive(){
+  front_L.stop(hold);
+  front_R.stop(hold);
+  back_L.stop(hold);
+  back_R.stop(hold);
+}
 
-int ballFinal = 0;
-bool checkingI = true;
-bool checkingT = true;
-bool goingDown = false;
+void brakeDrive(){
+  front_L.stop(brake);
+  front_R.stop(brake);
+  back_L.stop(brake);
+  back_R.stop(brake);
+}
+
+void coastDrive(){
+  front_L.stop(coast);
+  front_R.stop(coast);
+  back_L.stop(coast);
+  back_R.stop(coast);
+}
+
+void setIntakeSpeed(int speed){
+  intake_L.spin(fwd, speed, pct);
+  intake_R.spin(fwd, speed, pct);
+}
+
+void brakeIntake(){
+  intake_R.stop(brake);
+  intake_L.stop(brake);
+}
+
+void setConveyorSpeed(int speed){
+  conveyor_L.spin(fwd, speed, pct);
+  conveyor_R.spin(fwd, speed, pct);
+}
+
+void brakeConveyor(){
+  conveyor_L.stop(brake);
+  conveyor_R.stop(brake);
+}
 
 int bcount() {
   if(goingDown == false) {
@@ -1044,4 +1106,59 @@ void outtake3BallAuton() {
     }
     task::sleep(1);
   } 
+}
+
+int BallCount(){
+  while(true){
+    bcount();
+  }
+}
+
+void createBallCountTask(){
+  task y = task(BallCount);
+}
+
+void stopBallCountTask(){
+  task::stop(BallCount);
+}
+
+void createPrimeTask(){
+  task poop = task(primeShoot);
+}
+
+void stopPrimeTask(){
+  task::stop(primeShoot);
+}
+
+void createIntakeOnTask(){
+  task ughh = task(intakeOn);
+}
+
+void stopIntakeOn(){
+  task::stop(intakeOn);
+}
+
+void homeRowAuton(){ 
+
+  createBallCountTask();
+  createIntakeOnTask();
+  moveForwardWalk(16, 80, 0, 0.6, 50, 0); //double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal, double addingFactor
+  rotatePID(30, 90); //turning pid  int angle, int maxPower 
+  stopIntakeOn();
+  brakeIntake();
+  createPrimeTask();
+  moveForwardWalk(5, 80, 30, 0.6, 50, 0);
+  stopPrimeTask();
+  outtake1BallAuton();
+  moveForward(70, 38);
+  strafeWhileTurning(20, 24);
+  moveForwardWalk(3, 80, 90, 0.6, 50, 0);
+  outtake1BallAuton();
+  moveForward(100, 20);
+  strafeWalk(-30, 80, 90, 0.6, 0);
+  rotatePID(135, 90);
+  createIntakeOnTask();
+  moveForwardFast(80,34);
+  setConveyorSpeed(100);
+
 }
