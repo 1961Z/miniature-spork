@@ -1,12 +1,12 @@
-## Welcome to Avi Dubes Page
+## Welcome to 1961Z Page
 
 You can use the [editor on GitHub](https://github.com/1961Z/miniature-spork/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Who am I 
+### Who are we 
 
-I am the lead Programmer for the team 1961Z and I love pizza. 
+We are a team located in Cumming, Georgia and are one of the top teams in the world. We also love to help our commuity.
 
 ```c++
 cout << "Hello World" 
