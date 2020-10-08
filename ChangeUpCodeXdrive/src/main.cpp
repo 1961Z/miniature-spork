@@ -30,7 +30,7 @@ void autonomous(void) {
   
   inertialCalibration();
   task fakeSpaceMan = task(update);  
-  homeRowAuton(); 
+  ball2Auton(); 
 
 }
 
@@ -38,20 +38,35 @@ void usercontrol(void) {
 
   coastDrive();
   task s = task(joyStickControl);
-  task e = task(intakeToggle);
-  task x = task(conveyorToggle);
-  task y = task(BallCount);
-  task z = task(toggle);
-  task fakeSpaceMan = task(update);
+  //task e = task(intakeToggle);
+  //task x = task(conveyorToggle);
+  //task y = task(BallCount);
+  //task z = task(toggle);
+  //task fakeSpaceMan = task(update);
 
   while (1) {
 
-    outtakeAll(); 
-    printf("Theta: %f\n", average_inertial());
-    printf("leftfront: %f\n", front_L.velocity(pct));
-    printf("leftback: %f\n", back_L.velocity(pct));
+    //outtakeAll(); 
+    double driftLeftError = (front_R.rotation(rev) + back_L.rotation(rev));
+    double driftRightError = (front_L.rotation(rev) + back_R.rotation(rev));
+    double combinedDriftError = ((driftLeftError - driftRightError));
+    /*double rotationLeft = pow(front_L.rotation(rev), 2);
+    double rotationLeftBack = pow(back_L.rotation(rev), 2);
+    combinedDriftError = sqrt(rotationLeft + rotationLeftBack);*/
+
+    double combinedDriftErrorMultiply = combinedDriftError * (-3.14159); 
+
+    double horizontalTrackerError = (horizontalTracker.rotation(rev) * (3.14 * 2.85) * 1);
+      
+    double pogChamp = ((horizontalTrackerError + combinedDriftErrorMultiply) * 0.5); //* (circumference);
+    
+    printf("Drift: %f\n", combinedDriftErrorMultiply);
+    printf("Horizontal: %f\n", horizontalTrackerError);
+    printf("pogChamp: %f\n", pogChamp);
+    //printf("leftfront: %f\n", back_L.rotation(rev));
+    /*printf("leftback: %f\n", back_L.velocity(pct));
     printf("rightfront: %f\n", front_R.velocity(pct));
-    printf("rightback: %f\n", back_R.velocity(pct));
+    printf("rightback: %f\n", back_R.velocity(pct));*/
     //printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
     //printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
     //printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
@@ -71,3 +86,4 @@ int main() {
     wait(100, msec);
   }
 }
+  

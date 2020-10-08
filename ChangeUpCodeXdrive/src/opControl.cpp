@@ -48,23 +48,6 @@ int joyStickControl() {
   }
 }
 
-
-
-void outtakeAll() {
-  if(Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing()){
-    conveyor_L.spin(fwd, -100, pct);
-    conveyor_R.spin(fwd, -100, pct);
-    intake_L.spin(fwd, -100, pct);
-    intake_R.spin(fwd, -100, pct);
-  }
-  else{ 
-    conveyor_L.stop();
-    conveyor_R.stop();
-    intake_L.stop();
-    intake_R.stop();
-  }
-}
-
 int conveyorToggle() {
   while (true) {
 

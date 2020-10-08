@@ -7,6 +7,8 @@ void setDriveSpeed(int leftSpeed, int rightSpeed);
 
 void holdDrive(); 
 
+int debugging( void );
+
 void brakeDrive(); 
 
 void coastDrive();
@@ -23,13 +25,17 @@ void moveForward(int speed, double distanceToTravel);
 
 void moveForwardFast(int speed, double distanceToTravel);
 
-void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal, double addingFactor);
+void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal, double addingFactor, int sideWays, double sideWaysDistance);
 
 void deaccel(int speed, double dist, double strength);
 
 void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double addingFactor);
 
+void stafeThanForward(double speed, bool side);
+
 void turnCrawl(double degree, int velocity);  
+
+void rightPivotTurn(int speed, int angle);
 
 struct PID{
   float current;
@@ -79,6 +85,8 @@ int scoreGoal( void );
 
 void primeShooterWithVision( void );
 
+int outtake0Ball( void );
+
 int outtake1Ball( void );
 
 int outtake2Ball( void ); 
@@ -110,6 +118,10 @@ void stopPrimeTask( void );
 void createIntakeOnTask( void );
 
 void stopIntakeOn( void );
+
+void outtakeIntakes(double revolutions, int speed);
+
+void ball2Auton( void );
 
 void homeRowAuton( void );
 

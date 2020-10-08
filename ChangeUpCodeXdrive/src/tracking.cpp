@@ -236,7 +236,7 @@ void forwardWhileRotating90to145(int angle, double K, double V, double strafeDis
     stopWatch += 0.01;
   }
   //brakeDrive();
-  moveForwardWalk(strafeDistance, V, angle, 0.6, 0.6, 0);
+  //moveForwardWalk(strafeDistance, V, angle, 0.6, 0.6, 0);
 }
 
 void newTryAtTurningWhileGoingForward(int maxSpeed, double startingAngle, double endingAngle){
