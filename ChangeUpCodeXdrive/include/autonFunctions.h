@@ -25,7 +25,11 @@ void moveForward(int speed, double distanceToTravel);
 
 void moveForwardFast(int speed, double distanceToTravel);
 
-void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal, double addingFactor, int sideWays, double sideWaysDistance);
+double calculateLeftSpeed(double speed, int turningRadius);
+
+double calculateRightSpeed(double speed, int turningRadius);
+
+void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal, double addingFactor, int sideWays, double turningRadius,  double angleNeededToFuckBitches, double sideWaysDistance, double stafeAtEnd, double distanceAtEnd, double angleAtEnd, double turningRadiusAtEnd);
 
 void deaccel(int speed, double dist, double strength);
 
@@ -35,7 +39,7 @@ void stafeThanForward(double speed, bool side);
 
 void turnCrawl(double degree, int velocity);  
 
-void rightPivotTurn(int speed, int angle);
+void rightPivotTurn(int speed, int angle, double turningRadius);
 
 struct PID{
   float current;
@@ -104,6 +108,7 @@ int intakeOn( void );
 void intakeOff( void );
 
 void outtake1BallAuton( void );
+void outtake1BallAutonSlow( void );
 void outtake2BallAuton( void );
 void outtake3BallAuton( void );
 
@@ -121,7 +126,11 @@ void stopIntakeOn( void );
 
 void outtakeIntakes(double revolutions, int speed);
 
+void preAuton( void );
+
 void ball2Auton( void );
+
+void skills( void );
 
 void homeRowAuton( void );
 

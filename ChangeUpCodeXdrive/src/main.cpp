@@ -22,27 +22,30 @@ competition Competition;
 void pre_auton(void) {
   
   vexcodeInit();
-  inertialCalibration();
+  preAuton();
 
 }
 
 void autonomous(void) { 
   
-  inertialCalibration();
   task fakeSpaceMan = task(update);  
-  ball2Auton(); 
-
+  homeRowAuton();
+  //move_to_target_sync(36, 24, deg_to_rad(90), false, 127, false);
+  //skills(); 
+  //rotatePID(30, 90);
+  //forwardWhileRotating30to90(0, 0, 0, 60);
 }
 
 void usercontrol(void) {
-
+  
+  //inertialCalibration();
   coastDrive();
   task s = task(joyStickControl);
-  //task e = task(intakeToggle);
-  //task x = task(conveyorToggle);
-  //task y = task(BallCount);
-  //task z = task(toggle);
-  //task fakeSpaceMan = task(update);
+  task e = task(intakeToggle);
+  task x = task(conveyorToggle);
+  task y = task(BallCount);
+  task z = task(primeTheConveyor);
+  task fakeSpaceMan = task(update);
 
   while (1) {
 
