@@ -53,7 +53,7 @@ struct PID{
 	float lastError;
 };
 
-int iMovePid(int target);
+float iSpeedPid(float target, bool leftSide);
 
 int iRotatePid(int target);
 

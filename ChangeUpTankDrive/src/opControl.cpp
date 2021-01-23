@@ -6,13 +6,38 @@
 
 using namespace vex;
 
+double leftDriveSpeed, rightDriveSpeed, leftDriveCalculation, rightDriveCalculation;
+
 /*-----------------------------------------------------------------------------*/
 /** @brief     Base Control */
 /*-----------------------------------------------------------------------------*/
 int joyStickControl() {
   while (true) {
+    leftDriveCalculation = (Controller1.Axis3.position() + (Controller1.Axis1.position()));
+    rightDriveCalculation = (Controller1.Axis3.position() - (Controller1.Axis1.position()));
+    /*if(fabs(leftDriveCalculation) >= 40){
+      leftDriveSpeed = leftDriveCalculation; 
+    }
+    else {
+      leftDriveSpeed = (leftDriveCalculation * 0.5);
+    }
+
+    if(fabs(rightDriveCalculation) >= 40){
+      rightDriveSpeed = rightDriveCalculation; 
+    }
+    else {
+      rightDriveSpeed = (rightDriveCalculation * 0.5);
+    }*/
+    //leftDriveSpeed = sgn(leftDriveCalculation) * ( 0.01 *(pow(leftDriveCalculation, 2))); 
+    //rightDriveSpeed = sgn(rightDriveCalculation) * ( 0.01 *(pow(rightDriveCalculation, 2))); 
+
+    //printf("leftDrive %ld\n", Controller1.Axis3.position());
+    //printf("rightDrive %ld\n", Controller1.Axis1.position());
+    
     leftDrive.spin (fwd, (Controller1.Axis3.position() + (Controller1.Axis1.position())), pct);
     rightDrive.spin(fwd, (Controller1.Axis3.position() - (Controller1.Axis1.position())), pct);
+    //leftDrive.spin(fwd, leftDriveSpeed, pct);
+    //rightDrive.spin(fwd, rightDriveSpeed, pct);
     task::sleep(10);
   }
 }
@@ -20,13 +45,13 @@ int joyStickControl() {
 int conveyorToggle() {
   while (true) {
 
-    if (Controller1.ButtonL2.pressing()) {
+    if (Controller1.ButtonL1.pressing()) {
       task f = task(outtake1Ball);
     } 
     else if (Controller1.ButtonA.pressing()) {
       task m = task(outtake3Ball);
     }
-    else if(Controller1.ButtonB.pressing()){
+    else if(Controller1.ButtonL2.pressing()){
       task q = task(outtake2Ball);
     }
     else{

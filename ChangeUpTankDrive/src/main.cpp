@@ -28,8 +28,8 @@ void pre_auton(void) {
 
 void autonomous(void) { 
   task fakeSpaceMan = task(update);  
-  inertialCalibration();
-  testAuton(); 
+  //inertialCalibration();
+  homeRowAuton(); 
   //homeRowAuton();
   //move_to_target_sync(36, 24, deg_to_rad(90), false, 127, false);
   ///skills(); 
@@ -47,7 +47,7 @@ void usercontrol(void) {
   task e = task(intakeToggle);
   task x = task(conveyorToggle);
   task y = task(BallCount);
-  task z = task(primeTheConveyor);
+  //task z = task(primeTheConveyor);
   task fakeSpaceMan = task(update);
 
   while (1) {
@@ -65,10 +65,19 @@ void usercontrol(void) {
     double horizontalTrackerError = (horizontalTracker.rotation(rev) * (3.14 * 2.85) * 1);
       
     double pogChamp = ((horizontalTrackerError + combinedDriftErrorMultiply) * 0.5); //* (circumference);
+
+    if(leftDrive.temperature(pct) > 50){
+      Controller1.rumble("----");
+    }
+    //Controller1.Screen.setCursor(4, 0);
+
+    //Controller1.Screen.print("Base temp: %f\n", leftDrive.temperature(pct));
+    printf("Base temp: %f\n", front_L.temperature(pct));
+    printf("Base temp: %f\n", back_L.temperature(pct));
     
-    printf("Drift: %f\n", combinedDriftErrorMultiply);
-    printf("Horizontal: %f\n", horizontalTrackerError);
-    printf("pogChamp: %f\n", pogChamp);
+    //printf("left %f\n", front_L.rotation(rev));
+    //printf("right %f\n", middle_L.rotation(rev));
+    //printf("Horizontal Tracker %f\n", back_L.rotation(rev));
     //printf("leftfront: %f\n", back_L.rotation(rev));
     /*printf("leftback: %f\n", back_L.velocity(pct));
     printf("rightfront: %f\n", front_R.velocity(pct));
