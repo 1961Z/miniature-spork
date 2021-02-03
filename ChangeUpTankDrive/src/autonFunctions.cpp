@@ -472,7 +472,7 @@ double increasing_speed(double starting_point, double current_position, double a
 
 double increasing_speed_slow(double starting_point, double current_position, double addingFactor) { // how fast the robot starts to pick up its speed
   static
-  const double acceleration_constant = 40.0;  //tuned 80
+  const double acceleration_constant = 60.0;  //tuned 80
   return acceleration_constant * fabs(current_position - starting_point) +
     (15);
 }
@@ -485,7 +485,7 @@ double decreasing_speed(double ending_point, double current_position) { // how f
 
 double decreasing_speed_slow(double ending_point, double current_position) { // how fast the robot starts to slow down before reaching its distance
   static
-  const double deceleration_constant = 20.0; //tuned 25
+  const double deceleration_constant = 35.0; //tuned 25
   return deceleration_constant * fabs(current_position - ending_point) + 5;
 }
 
@@ -620,7 +620,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
     }
 
     if(direction == 1){
-    if (sameEncoderValue > 4 ) {
+    if (sameEncoderValue > 10 ) {
       break;
     }
     }
@@ -670,10 +670,10 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
     }*/
 
     if(((direction * wheelRevs) - 1.06) > distanceTraveled){
-    headingError = -(headingOfRobot - get_average_inertial()) * 0.6;
+    headingError = -(headingOfRobot - get_average_inertial()) * multiply;
     }
     else{
-    headingError = -(headingOfRobot - get_average_inertial()) * 0.6;  
+    headingError = -(headingOfRobot - get_average_inertial()) * multiply;  
     }
 
     printf("left %f\n", leftDrive.velocity(pct));
@@ -1467,20 +1467,16 @@ int outtake1Ball() {
 }
 
 void outtake1BallAuton() {
-  conveyor_R.resetRotation();
-  printf("ooga Booga");
+  indexer.resetRotation(); 
   while (true) { 
-    if (conveyor_R.rotation(rev) < 4) {
-      conveyor_L.spin(fwd, 100, velocityUnits::pct);
-      conveyor_R.spin(fwd, 100, velocityUnits::pct);
-    }
-    else {
-      conveyor_L.stop(brake);
-      conveyor_R.stop(brake);
+    if (indexer.rotation(rev) < 2) {
+      indexer.spin(fwd, 100, velocityUnits::pct);
+    } else {
+       indexer.stop(brake);
       break;
     }
     task::sleep(10);
-  }
+  } 
 }
 
 void outtake1BallAutonSlow() {
@@ -1504,7 +1500,7 @@ void outtake1BallAutonSlow() {
 int outtake2Ball() {
   indexer.resetRotation(); 
   while (true) { 
-    if (fabs(indexer.rotation(rev)) < 4) {
+    if (fabs(indexer.rotation(rev)) < 5.5) {
       indexer.spin(fwd, 100, velocityUnits::pct);
       //conveyor_R.spin(fwd, 100, velocityUnits::pct);
     } else {
@@ -1520,7 +1516,7 @@ int outtake2Ball() {
 void outtake2BallAuton() {
   indexer.resetRotation(); 
   while (true) { 
-    if (indexer.rotation(rev) < 4.5) {
+    if (indexer.rotation(rev) < 5.5) {
       indexer.spin(fwd, 100, velocityUnits::pct);
     } else {
        indexer.stop(brake);
@@ -1600,7 +1596,7 @@ void stopIntakeOn(){
 
 int stopIntakeFunction(){ 
   int x = 0; 
-  int timeLimit = 1150;
+  int timeLimit = 1250;
   while(x < timeLimit){
     x+= 10 ; 
     task::sleep(10);
@@ -1664,7 +1660,9 @@ void homeRowAuton(){
   outtake2BallAuton();
   task::stop(sto);
   indexer.stop();
+  intake.spin(reverse, 100, pct);
   moveForwardWalk(-24, 80, 90, 0.6);
+  brakeIntake();
   rotatePID(225, 80);
   moveForwardWalk(85, 80, 225, 0.6);
   rotatePID(180, 80);
@@ -1682,115 +1680,80 @@ void homeRowAuton(){
 
 
 void skills(){
-  int cancel = 0;
   createBallCountTask();
+  indexer.spin(fwd, 100, pct);
+  task::sleep(200);
+  indexer.stop(); 
   createIntakeOnTask();
-  setDriveSpeed(-5, -5);
-  task::sleep(1000);
-  moveForwardWalk(11, 80, 0, 0.6, 2, 0);  
+  moveForwardWalk(12, 80, 0, 0.6);
   rotatePID(45, 80);
-  moveForwardWalk(32, 80, 45, 0.6, 1, 0);  
+  moveForwardWalk(24, 80, 45, 0.6);
+  stopIntakeOn(); 
+  brakeIntake(); 
   rotatePID(90, 80);
-  stopIntakeOn();
-  brakeIntake();
-  createPrimeTask();
-  moveForwardWalk(10, 80, 90, 0.6, 2, 0);
-  outtake1BallAuton();
-  task::sleep(300);
-  moveForwardWalk(-13, 80, 90, 0.6, 2, 0);  
-  rotatePID(-45, 80);
-  createIntakeOnTask();
-  moveForwardWalk(46, 80, -45, 0.6, 1, 0);  
-  rotatePID(45, 80); 
-  stopIntakeOn();
-  brakeIntake();
-  createPrimeTask();
-  moveForwardWalk(3, 80, 45, 0.6, 2, 0);  
-  waitTillOver = false;
-  while(true){
-    if(waitTillOver == true || cancel == 500){
-    break;
-    }
-    cancel += 10; 
-    task::sleep(10);
-  }
-  stopPrimeTask();
-  outtake1BallAuton();
-  moveForwardWalk(-17, 80, 45, 0.6, 2, 0); 
+  moveForwardWalk(14, 80, 90, 0.6);
+  outtake2BallAuton();
+  moveForwardWalk(-16, 80, 90, 0.6);
   createIntakeOnTask();
   rotatePID(-45, 80);
-  moveForwardWalk(48, 70, -45, 0.6, 1, 0);   
-  moveForwardWalk(-12, 80, -45, 0.6, 2, 0); 
+  moveForwardWalk(46, 80, -45, 0.6);
+  rotatePID(45, 80);
+  stopIntakeOn();
+  moveForwardWalk(7, 80, 45, 0.6);
+  outtake2BallAuton();
+  moveForwardWalk(-22, 80, 45, 0.6);
+  rotatePID(-45, 80);
+  createIntakeOnTask();
+  moveForwardWalk(48, 80, -45, 0.6);
+  moveForwardWalk(-14, 80, -45, 0.6);
   rotatePID(0, 80);
   stopIntakeOn();
-  brakeIntake();
-  createPrimeTask();
-  moveForwardWalk(47, 80, 0, 0.6, 1, 0);
-  outtake1BallAuton();
-  moveForwardWalk(-46, 80, -5, 0.6, 0, 0);
-  createIntakeOnTask();
+  moveForwardWalk(26, 80, 0, 0.6);
+  outtake2BallAuton();
+  moveForwardWalk(-46, 80, 0, 0.6);
   rotatePID(-135, 80);
-  moveForwardWalk(23, 80, -135, 0.6, 1, 0);
+  createIntakeOnTask();
+  moveForwardWalk(24, 80, -135, 0.6);
   rotatePID(-45, 80);
   stopIntakeOn();
-  brakeIntake();
-  createPrimeTask();
-  moveForwardWalk(30, 80, -45, 0.6, 1, 0);
-  outtake1BallAuton();
-  moveForwardWalk(-5, 80, -45, 0.6, 2, 0);
+  moveForwardWalk(26, 80, -45, 0.6);
+  outtake2Ball();
+  moveForwardWalk(-10, 80, -45, 0.6);
   rotatePID(-135, 80);
   createIntakeOnTask();
-  moveForwardWalk(48, 80, -135, 0, 1, 0);
+  moveForwardWalk(46, 80, -135, 0.6);
   rotatePID(-90, 80);
   stopIntakeOn();
-  brakeIntake();
-  createPrimeTask();
-  moveForwardWalk(10, 80, -90, 0, 2, 0);
-  outtake1BallAuton();
-  moveForwardWalk(-17, 80, -90, 0.6, 2, 0);  
+  moveForwardWalk(12, 80, -90, 0.6);
+  outtake2BallAuton();
+  moveForwardWalk(-16, 80, -90, 0.6);
   rotatePID(-225, 80);
   createIntakeOnTask();
-  moveForwardWalk(43, 80, -225, 0.6, 1, 0);  
-  rotatePID(-135, 80); 
+  moveForwardWalk(44, 80, -225, 0.6);
+  rotatePID(-135, 80);
   stopIntakeOn();
-  brakeIntake();
-  cancel = 0;
-  createPrimeTask();
-  moveForwardWalk(4, 80, -135, 0.6, 2, 0);  
-  waitTillOver = false;
-  while(true){
-    if(waitTillOver == true || cancel == 500){
-    break;
-    }
-    cancel += 10; 
-    task::sleep(10);
-  }
-  stopPrimeTask();
-  outtake1BallAuton();
-  moveForwardWalk(-8, 80, -135, 0.6, 2, 0);  //-135
+  moveForwardWalk(5, 80, -135, 0.6);
+  outtake2BallAuton();
+  moveForwardWalk(-12, 80, -135, 0.6);
   createIntakeOnTask();
-  rotatePID(45, 80);     //45
-  moveForwardWalk(12, 80, 45, 0.6, 2, 0, false);  //45
-  strafeWalk(-2.5, 40, 45, 0.6, 0);
+  rotatePID(45, 80);
+  moveForwardWalk(10, 80, 45, 0.6);
+  rotatePID(-150, 80);
+  moveForwardWalk(-20, 80, -150, 0.6);
+  moveForwardWalk(20, 80, -150, 0);
+  rotatePID(-225, 80);
+  moveForwardWalk(48, 80, -225, 0.6);
+  moveForwardWalk(-12, 80, -225, 0.6);
   stopIntakeOn();
-  brakeIntake();
-  moveForwardFast(40, 18);
-  createPrimeTask();
-  rotatePID(30, 80);
-  outtake1BallAutonSlow();
-  moveForwardWalk(-22, 80, 45, 0.6, 1, 0);
-  rotatePID(135, 80);
-  createIntakeOnTask();
-  moveForwardWalk(34, 80, 135, 0.6, 1, 0);
-  moveForwardWalk(-2, 80, 135, 0.6, 2, 0);
-  rotatePID(180, 80);
-  stopIntakeOn();
-  brakeIntake();
-  createPrimeTask();
-  moveForwardWalk(40, 60, 180, 0.6, 2, 0);
+  rotatePID(-180, 80);
+  moveForwardWalk(26, 80, -180, 0.6);
   outtake1BallAuton();
-  //rotatePID(90, 90);
-  //moveForwardWalk(48, 80, 90, 2.5, 4, 0);
+  moveForwardWalk(-48, 80, -180, 0.6);
+  rotatePID(0, 80);
+  moveForwardWalk(24, 80, 0, 0.6);
+  outtake1BallAuton();
+  moveForwardWalk(-24, 80, 0, 0.6);
+  
 }
 
 void testAuton(){ 
