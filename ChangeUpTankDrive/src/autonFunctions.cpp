@@ -249,32 +249,25 @@ void brakeConveyor(){
   conveyor_R.stop(brake);
 }
 
+int ballC = 0;
+
+bool sense = false;
+
 int bcount() {
-  if(goingDown == false) {
-    if(checkingI == true && LineTrackerIntake.reflectivity() > 5) {
-      ballFinal++;
-      checkingI = false;
+  while(true) {
+    printf("percent: %ld\n", Line.value(percentUnits::pct));
+    printf("ball count: %ld\n", ballC);
+
+    if(Line.value(percentUnits::pct) < 50 && sense == false) {
+      ballC++;
+      sense = true;
     }
-    if(LineTrackerIntake.reflectivity() < 5) {
-      checkingI = true;
+    else if (Line.value(percentUnits::pct) > 50) {
+      sense = false;
     }
 
-    if(checkingT == true && LineTrackerTop.reflectivity() < 8) {
-      ballFinal--;
-      checkingT = false;
-    }
-    if(LineTrackerTop.reflectivity() > 8) {
-      checkingT = true;
-    }
-  } 
-  // Brain.Screen.printAt(1, 20, "balli count: %d", ballI);
-  // Brain.Screen.printAt(1, 40, "ballT count: %d", ballT);
-  // Brain.Screen.printAt(1, 40, "intake line: %d", LineTrackerIntake.reflectivity());
-  // Brain.Screen.printAt(1, 60, "middle line: %d", LineTrackerMiddle.reflectivity());
-  // Brain.Screen.printAt(1, 80, "top line: %d", LineTrackerTop.reflectivity());
-  Brain.Screen.printAt(1, 20, "ball count: %ld\n", ballFinal);
-
-  return ballFinal;
+    return ballC;
+  }
 }
 
 void visionRGB() {
@@ -1418,7 +1411,6 @@ void primShooterWithLimit() {
       intake.spin(directionType::fwd, 100, velocityUnits::pct);
       task::sleep(10);
       if(timerCountDown == 1) {
-        ballFinal++;
       }
       timerCountDown += 10;
     }
