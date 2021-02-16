@@ -61,12 +61,6 @@ void usercontrol(void) {
     double rotationLeftBack = pow(back_L.rotation(rev), 2);
     combinedDriftError = sqrt(rotationLeft + rotationLeftBack);*/
 
-    double combinedDriftErrorMultiply = combinedDriftError * (-3.14159); 
-
-    double horizontalTrackerError = (horizontalTracker.rotation(rev) * (3.14 * 2.85) * 1);
-      
-    double pogChamp = ((horizontalTrackerError + combinedDriftErrorMultiply) * 0.5); //* (circumference);
-
     if(leftDrive.temperature(pct) > 50){
       Controller1.rumble("----");
     }
@@ -76,7 +70,7 @@ void usercontrol(void) {
     printf("Base temp: %f\n", front_L.temperature(pct));
     printf("Base temp: %f\n", back_L.temperature(pct));
     
-    //printf("left %f\n", front_L.rotation(rev));
+    //printf("left %f\n", verticalTracker.rotation(rev));
     //printf("right %f\n", middle_L.rotation(rev));
     //printf("Horizontal Tracker %f\n", back_L.rotation(rev));
     //printf("leftfront: %f\n", back_L.rotation(rev));

@@ -76,8 +76,8 @@ int update (void){
 
  while (true) {
 //amount encoders moved (radians)
-	 newright = -verticalTracker.rotation(deg) / 360.0* (2.85*M_PI);
-	 newback =  horizontalTracker.rotation(deg) / 360.0* (2.75*M_PI);
+	 newright = leftTracker.rotation(deg) / 360.0* (2.85*M_PI);
+	 newback =  rightTracker.rotation(deg) / 360.0* (2.75*M_PI);
 	 Right = newright - lastright;
 	 Back = newback - lastback;
    timeUpdate = timer().time(msec)-last_time; 
