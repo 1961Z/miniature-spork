@@ -27,51 +27,33 @@ void pre_auton(void) {
 }
 
 void autonomous(void) { 
-  task fakeSpaceMan = task(update);  
   //inertialCalibration();
   skills();
-  //homeRowAuton(); 
-  //homeRowAuton();
-  //move_to_target_sync(36, 24, deg_to_rad(90), false, 127, false);
-  ///skills(); 
-  //rotatePID(30, 90);
-  //forwardWhileRotating30to90(0, 0, 0, 60);
 }
 
 void usercontrol(void) {
   indexer.spin(fwd, 100, pct);
   task::sleep(500);
   indexer.stop(brake);
-  //inertialCalibration();
   coastDrive();
   task s = task(joyStickControl);
   task e = task(intakeToggle);
   task x = task(conveyorToggle);
   task y = task(BallCount);
-  //task z = task(primeTheConveyor);
-  task fakeSpaceMan = task(update);
 
   while (1) {
 
     //outtakeAll(); 
-    double driftLeftError = (front_R.rotation(rev) + back_L.rotation(rev));
-    double driftRightError = (front_L.rotation(rev) + back_R.rotation(rev));
-    double combinedDriftError = ((driftLeftError - driftRightError));
-    /*double rotationLeft = pow(front_L.rotation(rev), 2);
-    double rotationLeftBack = pow(back_L.rotation(rev), 2);
-    combinedDriftError = sqrt(rotationLeft + rotationLeftBack);*/
 
     if(leftDrive.temperature(pct) > 50){
-      Controller1.rumble("----");
+      //Controller1.rumble("----");
     }
-    //Controller1.Screen.setCursor(4, 0);
-
-    //Controller1.Screen.print("Base temp: %f\n", leftDrive.temperature(pct));
+    
     printf("Base temp: %f\n", front_L.temperature(pct));
     printf("Base temp: %f\n", back_L.temperature(pct));
     
-    //printf("left %f\n", verticalTracker.rotation(rev));
-    //printf("right %f\n", middle_L.rotation(rev));
+    printf("left %f\n", leftTracker.rotation(rev));
+    printf("right %f\n", rightTracker.rotation(rev));
     //printf("Horizontal Tracker %f\n", back_L.rotation(rev));
     //printf("leftfront: %f\n", back_L.rotation(rev));
     /*printf("leftback: %f\n", back_L.velocity(pct));

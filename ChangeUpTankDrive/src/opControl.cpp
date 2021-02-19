@@ -48,7 +48,7 @@ int conveyorToggle() {
     if (Controller1.ButtonL1.pressing()) {
       task f = task(outtake1Ball);
     } 
-    else if (Controller1.ButtonA.pressing()) {
+    else if (Controller1.ButtonDown.pressing()) {
       task m = task(outtake3Ball);
     }
     else if(Controller1.ButtonL2.pressing()){
