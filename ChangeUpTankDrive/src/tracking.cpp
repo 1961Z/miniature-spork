@@ -76,8 +76,8 @@ int update (void){
 
  while (true) {
 //amount encoders moved (radians)
-	 newright = -verticalTracker.rotation(deg) / 360.0* (2.85*M_PI);
-	 newback =  horizontalTracker.rotation(deg) / 360.0* (2.75*M_PI);
+	 newright = leftTracker.rotation(deg) / 360.0* (2.85*M_PI);
+	 newback =  rightTracker.rotation(deg) / 360.0* (2.75*M_PI);
 	 Right = newright - lastright;
 	 Back = newback - lastback;
    timeUpdate = timer().time(msec)-last_time; 
@@ -148,13 +148,13 @@ int move_to_target(){
   tracking.target_y = moveParams.target_y;
   tracking.target_a = moveParams.target_a;
   double power_d;
-  bool debug = moveParams.debug;
+  //bool debug = moveParams.debug;
   bool cubeLineUp = moveParams.cubeLineUp;
   bool brakeOn = moveParams.brakeOn;
   bool inDrive = moveParams.inDrive;
   double x = 120; 
   double max_power_a = x, max_power_xy = moveParams.max_xy;
-  double min_power_a = 1, min_power_xy = 90;
+  double min_power_xy = 90;
   double scale;
 
   double last_power_a = max_power_a, last_power_x = max_power_xy, last_power_y = max_power_xy;
@@ -162,8 +162,8 @@ int move_to_target(){
 
   double error_a, error_x, error_y, error_d, errorLocalx, errorLocaly;
   double difference_a;
-  double kP_a = 127, kP_d = 0.0022;
-  double kI_a = 12, kI_d = 0.01;   // kI_a = 0.01, kI_d = 0.0022;
+  double kP_d = 0.0022;
+  double kI_d = 0.01;   // kI_a = 0.01, kI_d = 0.0022;
   unsigned long last_time = timer().time(msec);
 
   error_a = tracking.target_a - tracking.global_angle;

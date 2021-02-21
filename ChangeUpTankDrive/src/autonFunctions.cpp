@@ -34,12 +34,10 @@ void inertialCalibration(){
 void resetFunction() {
   back_L.resetRotation();
   back_R.resetRotation();
-  middle_L.resetRotation();
-  middle_R.resetRotation();
   front_L.resetRotation();
   front_R.resetRotation();
-  verticalTracker.resetRotation();
-  horizontalTracker.resetRotation();
+  leftTracker.resetRotation();
+  rightTracker.resetRotation();
 }
 
 int rainbowlogo() {
@@ -239,16 +237,10 @@ void brakeIntake(){
   intake.stop(brake);
 }
 
-void setConveyorSpeed(int speed){
-  conveyor_L.spin(fwd, speed, pct);
-  conveyor_R.spin(fwd, speed, pct);
-}
 
-void brakeConveyor(){
-  conveyor_L.stop(brake);
-  conveyor_R.stop(brake);
-}
+int ballC = 0;
 
+<<<<<<< HEAD
 int ballC = 0;
 
 bool sense = false;
@@ -268,6 +260,25 @@ int bcount() {
 
     return ballC;
   }
+=======
+bool senseTop = false;
+bool senseBottom = false;
+
+int bcount() {
+  while(true) {
+    if(ballC <= 3 && ballC >= 0) {
+    printf("ball count: %id\n", ballC);
+        if(LineTrackerIntake.reflectivity() > 17 && senseBottom == false) {
+          ballC++;
+          senseBottom = true;
+        }
+        else if (LineTrackerIntake.reflectivity() < 10) {
+          senseBottom = false;
+        }
+      }
+    }
+  return ballC;
+>>>>>>> TankDrive
 }
 
 void visionRGB() {
@@ -343,7 +354,7 @@ void deaccel(int speed, double dist, double strength){
   resetFunction();
 
   //double lastEncoderValue = 0.0;
-  double startPoint = (verticalTracker.rotation(rotationUnits::rev)) * -1;
+  double startPoint = (leftTracker.rotation(rotationUnits::rev)) * -1;
   double endPoint = startPoint + wheelRevs;
 
   double calcVel = speed;
@@ -370,18 +381,18 @@ void deaccel(int speed, double dist, double strength){
   back_L.spin(fwd, speed, velocityUnits::pct);
 
   task::sleep(70);
-  // printf("encoder %f\n", verticalTracker.position(rotationUnits::rev));
+  // printf("encoder %f\n", leftTracker.position(rotationUnits::rev));
   bool run = true;
   calcVel = speed;
   subtractor = 0;
 
   while(run == true){
-    printf("encoder %f\n", verticalTracker.rotation(rev));
+    printf("encoder %f\n", leftTracker.rotation(rev));
     Brain.Screen.printAt(1, 40, "count %ld\n", count);
-    if((endPoint - verticalTracker.position(rotationUnits::rev)) == count){
+    if((endPoint - leftTracker.position(rotationUnits::rev)) == count){
       resetFunction();      
       while(calcVel > 1){
-        subtractor = pow(strength, verticalTracker.position(rotationUnits::rev)); 
+        subtractor = pow(strength, leftTracker.position(rotationUnits::rev)); 
         calcVel -= subtractor;
         front_R.spin(fwd, calcVel, velocityUnits::pct);
         front_L.spin(fwd, calcVel, velocityUnits::pct);
@@ -496,29 +507,28 @@ int conversion(double degree) {
 
 }
 
-int get_average_encoder() {
-  int position = ((((back_L.rotation(deg)) - (((back_R.rotation(deg))))))) / 2;
+float get_average_encoder() {
+  float position = (-(leftTracker.rotation(rev)) + (rightTracker.rotation(rev))) / 2;
   return position;
 }
 
 float get_average_inertial() {
   float robotDirection = (-inertial_Up.rotation(deg) - inertial_Down.rotation(deg)) / 2;
-  //printf("heading average  %f\n", get_average_inertial());
   return robotDirection;
 }
 
 double calculateLeftSpeed(double speed, int turningRadius){
-double angularSpeed = ((speed * 2) * (2 * M_PI)) / (60);
-double leftSpeed = (angularSpeed) * (turningRadius - 11.5);
-leftSpeed = leftSpeed / 2;
-return leftSpeed;
+ double angularSpeed = ((speed * 2) * (2 * M_PI)) / (60);
+ double leftSpeed = (angularSpeed) * (turningRadius - 11.5);
+ leftSpeed = leftSpeed / 2;
+ return leftSpeed;
 }
 
 double calculateRightSpeed(double speed, int turningRadius){
-double angularSpeed = ((speed * 2) * (2 * M_PI)) / (60);
-double rightSpeed = (angularSpeed) * (turningRadius + 11.5); 
-rightSpeed = rightSpeed / 2; 
-return rightSpeed;
+ double angularSpeed = ((speed * 2) * (2 * M_PI)) / (60);
+ double rightSpeed = (angularSpeed) * (turningRadius + 11.5); 
+ rightSpeed = rightSpeed / 2; 
+ return rightSpeed;
 }
 
 PID sSpeedPid;
@@ -553,7 +563,7 @@ bool switchStatement = false;
 double headingError = 0;
 double headingErrorTest = 0;
 double pogChamp = 0;  
-double horizontalTrackerError = 0;
+double rightTrackerError = 0;
 double distanceTraveledlast = 0; 
 double driftLeftError = 0, driftRightError = 0, combinedDriftError = 0, combinedDriftErrorMultiply = 0;  
 
@@ -569,9 +579,9 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
   double wheelRevs = ((distanceIn) / circumference);
   distanceAtEnd = distanceAtEnd / circumference; 
   resetFunction();
-  double leftStartPoint = (leftDrive.rotation(rotationUnits::rev));
+  double leftStartPoint = (leftTracker.rotation(rotationUnits::rev));
   double leftEndPoint = leftStartPoint + wheelRevs;
-  double rightStartPoint = (rightDrive.rotation(rotationUnits::rev));
+  double rightStartPoint = (rightTracker.rotation(rotationUnits::rev));
   double rightEndPoint = rightStartPoint + wheelRevs;
   double leftSpeed, rightSpeed; 
   double offset = 0;
@@ -604,9 +614,9 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
   int sameEncoderValue = 0;
   double distanceTraveled = 0;
 
-  while ((direction * (rightDrive.rotation(rotationUnits::rev) - rightStartPoint) <
+  while ((direction * (get_average_encoder() - rightStartPoint) <
        direction * wheelRevs) ||
-      (direction * (leftDrive.rotation(rotationUnits::rev) - leftStartPoint) <
+      (direction * (get_average_encoder() - leftStartPoint) <
        direction * wheelRevs)) {
     if ((rightDrive.velocity(rpm) == 0 || leftDrive.velocity(rpm) == 0)) {
       ++sameEncoderValue;
@@ -628,7 +638,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
     }*/
 
     distanceTraveledlast = distanceTraveled; 
-    distanceTraveled = ((rightDrive.rotation(rev) + leftDrive.rotation(rev)) / 2);
+    distanceTraveled = (get_average_encoder());
 
     /*if(distanceTraveled > distanceAtEnd && switchStatement == false && fabs(get_average_inertial()) < angleAtEnd){
       sideWays = 2;
@@ -889,146 +899,6 @@ main ()
 }
 */ // This is for testing on an online compiler to make sure the speeds are resonable 
 
-void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double addingFactor) {
-
-  static
-  const double circumference = 3.14159 * 2.75;
-  if (distanceIn == 0)
-    return;
-  double direction = distanceIn > 0 ? 1.0 : -1.0;
-  double wheelRevs = ((distanceIn - (direction * 1)) / circumference);
-  resetFunction();
-
-  //double lastEncoderValue = 0.0;
-  double leftStartPoint = (horizontalTracker.rotation(rotationUnits::rev));
-  double leftEndPoint = leftStartPoint + wheelRevs;
-  double leftStartPoint1 = (horizontalTracker.rotation(rotationUnits::rev));
-  double leftEndPoint1 = leftStartPoint1 + wheelRevs;
-  double rightStartPoint = (horizontalTracker.rotation(rotationUnits::rev));
-  double rightEndPoint = rightStartPoint + wheelRevs;
-  double rightStartPoint1 = (horizontalTracker.rotation(rotationUnits::rev));
-  double rightEndPoint1 = rightStartPoint1 + wheelRevs;
-
-  int sameEncoderValue = 0;
-
-  front_L.spin(fwd, direction * minimum_velocity, velocityUnits::pct);
-  back_L.spin(fwd, direction * -minimum_velocity, velocityUnits::pct);
-  front_R.spin(fwd, direction * -minimum_velocity, velocityUnits::pct);
-  back_R.spin(fwd, direction * minimum_velocity, velocityUnits::pct);
-
-  task::sleep(90);
-  printf("front right encoder %f\n", front_R.rotation(rev));
-  printf("distance needed to travel %f\n", rightEndPoint);
-  double distanceTraveled = 0;
-  //double driftLeftError = (front_R.rotation(deg) + back_L.rotation(deg));
-  //double driftRightError = (front_L.rotation(deg) + back_R.rotation(deg));
-  //double previousOffset = (driftLeftError - driftRightError) / 2;
-
-  while (direction * (rightStartPoint + distanceTraveled) < direction * rightEndPoint) {
-
-    if (back_R.velocity(rpm) == 0) {
-      ++sameEncoderValue;
-    }
-
-    if (sameEncoderValue > 2) {
-      //break;
-    }
-
-    double rotationLeft = pow(front_L.rotation(rev), 2);
-    double rotationLeftBack = pow(back_L.rotation(rev), 2);
-    distanceTraveled = (horizontalTracker.rotation(rotationUnits::rev));
-
-    double driftLeftError = (front_R.rotation(deg) + back_L.rotation(deg));
-    double driftRightError = (front_L.rotation(deg) + back_R.rotation(deg));
-    double error = (verticalTracker.rotation(rotationUnits::rev));
-
-    if (error > -2.5 && error < 2.5) {
-      headingErrorTest = direction * 0;
-    } else {
-      headingErrorTest = direction * 0;
-    }
-
-    headingError = -(headingOfRobot - get_average_inertial()) * multiply;
-    printf("heading error %f\n", headingError);
-    printf("encoder value %f\n", distanceTraveled);
-    printf("wheelRevs %f\n", wheelRevs);
-    printf("encoder error %f\n", rightEndPoint);
-
-    if (direction * (rightStartPoint + distanceTraveled) < direction * rightEndPoint) {
-      front_L.setVelocity(
-        direction * std::min(
-          maxVelocity,
-          std::min(increasing_speed(
-              leftStartPoint,
-              distanceTraveled, addingFactor),
-            decreasing_speed(leftEndPoint,
-              distanceTraveled))) +
-        (headingError),
-        vex::velocityUnits::pct);
-    } else {
-      front_L.stop(hold);
-    }
-
-    if (direction * (rightStartPoint + distanceTraveled) < direction * rightEndPoint) {
-      back_L.setVelocity(
-        direction * -(std::min(
-            maxVelocity,
-            std::min(increasing_speed(leftStartPoint1,
-                distanceTraveled, addingFactor),
-              decreasing_speed(leftEndPoint1,
-                distanceTraveled))) +
-          (headingError)),
-        vex::velocityUnits::pct);
-    } else {
-      back_L.stop(hold);
-    }
-
-    if (direction * (rightStartPoint + distanceTraveled) < direction * rightEndPoint) {
-      front_R.setVelocity(
-        direction * -(std::min(
-            maxVelocity,
-            std::min(increasing_speed(
-                rightStartPoint,
-                distanceTraveled, addingFactor),
-              decreasing_speed(rightEndPoint,
-                distanceTraveled))) -
-          (headingError)),
-        vex::velocityUnits::pct);
-    } else {
-      front_R.stop(hold);
-    }
-
-    if (direction * (rightStartPoint + distanceTraveled) < direction * rightEndPoint) {
-      back_R.setVelocity(
-        direction * std::min(
-          maxVelocity,
-          std::min(increasing_speed(rightStartPoint1,
-              distanceTraveled, addingFactor),
-            decreasing_speed(rightEndPoint1,
-              distanceTraveled))) -
-        (headingError),
-        vex::velocityUnits::pct);
-    } else {
-      back_R.stop(hold);
-    }
-    task::sleep(10);
-  }
-  holdDrive();
-  //rotatePID(headingOfRobot, 60);
-}
-
-void stafeThanForward(double speed, bool side){
-  if(side == true){
-  front_L.spin(fwd, speed, pct);
-  back_R.spin(fwd, speed, pct);
-  front_R.stop();
-  back_L.stop();
-  }
-  else
-  {
-    setDriveSpeed(0, speed);
-  }
-}
 
 void rightPivotTurn(int speed, int angle, double turningRadius){ 
 double angularSpeed = ((speed * 2) * (2 * M_PI)) / (60);
@@ -1204,6 +1074,52 @@ void ObjectLooker(int sigNumber, int speed) {
   reached = false;
 }
 
+bool whenIntakingPrime = false; 
+bool startConveyorToGoDown = false;
+int counterForSigs = 0; 
+
+int timeKeeper;
+
+bool waitTillOver = false; 
+int threshold = 40;
+bool cancel = false;
+
+void primeShooterWithVision(){
+  //visionCamera.setSignature(SIG_1);
+  visionCamera.takeSnapshot(SIG_1);
+  printf("Object Count %ld\n", visionCamera.objectCount);
+  printf("Object height %i\n", visionCamera.largestObject.height);
+  if(waitTillOver == false){ 
+    if (visionCamera.largestObject.exists) {
+      if (visionCamera.largestObject.height < 210 && visionCamera.largestObject.height > 120 && visionCamera.objectCount == 1) {
+      //task L = task(primeShoot);
+      whenIntakingPrime = true;  
+      startConveyorToGoDown = true; 
+
+      } 
+    }
+  } else if(visionCamera.largestObject.height < 80 || !visionCamera.largestObject.exists) {
+    whenIntakingPrime = false;
+    int timerCountDown = 0;
+    while (timerCountDown < 1000) {
+      task::sleep(10);
+      timerCountDown += 10;
+    }
+    timerCountDown = 0;
+    while (timerCountDown < 1000 && startConveyorToGoDown == true) {
+      task::stop(intakeToggle);
+      intake.spin(directionType::fwd, 100, velocityUnits::pct);
+      task::sleep(10);
+      timerCountDown += 10;   
+    }
+    intake.stop(brake);
+    task::resume(intakeToggle);
+    startConveyorToGoDown = false; 
+    whenIntakingPrime = false; 
+    waitTillOver = false;
+  }
+}
+
 
 void strafeWhileTurning(int speed, double distance){
  while(get_average_inertial() < 89){ 
@@ -1219,14 +1135,8 @@ strafeWalk(-10, 80, 90, 0.6, 0);
 int intakeOn() {
   while(true){
     intake.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
-    if(LineTrackerIntake.reflectivity() >= 10) {
       task intakingBalls = task(scoreGoal);
-    }
   }
-}
-
-void intakeOff(){
-  intake.stop(brake);
 }
 
 int whenToStop = 0;
@@ -1234,22 +1144,24 @@ int whenToStop = 0;
 int intakeToggle() {
   while (true) {
 
-    if(Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing()){
+    if(Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing() && (indexer.velocity(pct) < 100)){
       setIntakeSpeed(-100);
       indexer.spin(fwd, -100, pct);
+      ballC = 0;
       whenToStop = 1; 
+      task::stop(scoreGoal);
     }
     else if (Controller1.ButtonR1.pressing()) {
       intake.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
-      if(LineTrackerIntake.reflectivity() >= 17){
-        task intakingBalls = task(scoreGoal);
-        if(whenIntakingPrime == true) {
-          task intakeAndScore = task(primeShoot);
-        }
+      if(LineTrackerIntake.reflectivity() > 17){
+      task intakingBalls = task(scoreGoal);
       }
     } 
     else if (Controller1.ButtonR2.pressing()) {
       intake.spin(directionType::rev, intakeSpeedPCT, voltageUnits::volt);
+    }
+    else if(Controller1.ButtonUp.pressing()){
+      task intakingBalls = task(scoreGoal);
     } 
     else {
       brakeIntake();
@@ -1264,92 +1176,40 @@ int intakeToggle() {
   }
 }
 
-int timeKeeper;
+bool canceled = false;
+bool tip = false;
+bool booga = false;
 
-void intakeMoves(){
- conveyor_L.rotateFor(fwd, 1, sec, 100, velocityUnits::pct);
- conveyor_R.rotateFor(fwd, 1, sec, 100, velocityUnits::pct);
-}
-
-bool waitTillOver = false; 
-int threshold = 40;
-bool cancel = false;
-
-int primeShoot() {
-  int timerBased = 0;
-  cancel = false;
+int scoreGoal() {
+  indexer.resetRotation();
   while (true) {
-
-    if (LineTrackerTop.reflectivity() < 10) { 
-      conveyor_L.spin(directionType::fwd, 100, velocityUnits::pct);
-      conveyor_R.spin(directionType::fwd, 100, velocityUnits::pct);
-    } 
-    else {
-      conveyor_L.stop(brake);
-      conveyor_R.stop(brake);
-      waitTillOver = true; 
-      break;
-    }
-
-    task::sleep(0);
-    timerBased += 10;
-  }
-  return 1;
-}
-
-int goBackDown(){
- int timerCountDown = 0; 
-  while(true){
-     while (timerCountDown < 1000) {
-      task::stop(intakeToggle);
-      conveyor_L.spin(directionType::rev, 100, velocityUnits::pct);
-      conveyor_R.spin(directionType::rev, 100, velocityUnits::pct);
-      intake.spin(directionType::fwd, 100, velocityUnits::pct);
+      if (ballC == 1 || ballC == 2) {
+        if (!(topConveyor.pressing())) {
+          tip = true;
+          indexer.spin(fwd, 100, pct);
+          printf("here");
+        } else if (topConveyor.pressing() && tip == true) {
+          indexerTop.spin(fwd, 100, pct);
+          task::sleep(20);
+          tip = false;
+          indexerTop.stop(hold);
+        } else if (indexerBottom.rotation(rev) < 2.2 && ballC == 2) {
+          indexerTop.stop(hold);
+          indexerBottom.spin(fwd, 100, pct);
+        } else {
+          indexer.stop(hold);
+          break;
+        }
+      } else {
+        indexer.stop(hold);
+        break;
+      }
       task::sleep(10);
-      timerCountDown += 10;
-      goingDown = true;
-    }
-    conveyor_L.stop(brake);
-    conveyor_R.stop(brake);
-    task::resume(intakeToggle);
-    goingDown = false;
-}
-    
-}
-
-bool canceled = false; 
-
-int scoreGoal(){
-  int timerBased = 0;
-  canceled = false;
-  while (true) {
-    // 79 middle 11 intake
-    if(LineTrackerTop.reflectivity() > 10){
-      if(LineTrackerIntake.reflectivity() > 10){
-        indexer.spin(fwd, 50, velocityUnits::pct);
-      }
-      else{
-      indexer.stop(hold);
-      break;
-      }
-    }
-    else if (LineTrackerIntake.reflectivity() > 17 || ((LineTrackerMiddle.reflectivity() < 22 && LineTrackerIntake.reflectivity() > 2))) {
-     
-      indexer.spin(fwd, 50, velocityUnits::pct);
-
     } 
-
-    else {
-      indexer.stop(hold);
-      break;
-    }
-
-    task::sleep(0);
-    timerBased += 10;
-  }
   return 1;
 }
 
+<<<<<<< HEAD
 bool whenIntakingPrime = false; 
 bool startConveyorToGoDown = false;
 int counterForSigs = 0; 
@@ -1427,134 +1287,157 @@ void primShooterWithLimit() {
   }
 }
 
+=======
+>>>>>>> TankDrive
 int outtake0Ball() {
-  indexer.resetRotation(); 
-  while (true) { 
+  indexer.resetRotation();
+  while (true) {
     if (fabs(indexer.rotation(rev)) < 0) {
       indexer.spin(fwd, 100, velocityUnits::pct);
-    }
-    else {
+    } else {
       indexer.stop(hold);
       break;
     }
     task::sleep(10);
   }
-  return 1; 
-}
-
-int outtake1Ball() {
-  indexer.resetRotation(); 
-  while (true) { 
-    if (fabs(indexer.rotation(rev)) < 2) {
-      indexer.spin(fwd, 100, velocityUnits::pct);
-      //conveyor_R.spin(fwd, 100, velocityUnits::pct);
-    }
-    else {
-      indexer.stop(brake);
-      break;
-    }
-    task::sleep(10);
-  }
-  return 1; 
+  return 1;
 }
 
 void outtake1BallAuton() {
-  indexer.resetRotation(); 
-  while (true) { 
-    if (indexer.rotation(rev) < 2) {
-      indexer.spin(fwd, 100, velocityUnits::pct);
-    } else {
-       indexer.stop(brake);
-      break;
+  indexer.spin(fwd, 100, pct);
+  task::sleep(100);
+  indexer.resetRotation();
+  while (true) {
+      if (indexer.rotation(rev) < 0.8) {
+        indexer.spin(fwd, 100, pct);
+      } else {
+        indexer.stop(brake);
+        //ballC--;
+        break;
+      }
     }
-    task::sleep(10);
-  } 
 }
 
-void outtake1BallAutonSlow() {
-  conveyor_R.resetRotation();
-  printf("ooga Booga");
-  while (true) { 
-    if (conveyor_R.rotation(rev) < 3) {
-      conveyor_L.spin(fwd, 70, velocityUnits::pct);
-      conveyor_R.spin(fwd, 70, velocityUnits::pct);
-    }
-    else {
-      conveyor_L.stop(brake);
-      conveyor_R.stop(brake);
-      break;
-    }
-    task::sleep(10);
+int outtake1Ball() {
+  indexer.resetRotation();
+  int x = 0;
+  if(ballC >= 1){
+  indexerTop.spin(fwd, 100, pct);
+  task::sleep(100);
   }
+  while (true) {
+      if( !(topConveyor.pressing()) && ballC > 1){
+       indexer.spin(fwd, 100, pct);
+       printf("ooga");
+      }
+      else if (indexer.rotation(rev) < 2 && ballC == 1) {
+        indexer.spin(fwd, 100, pct);
+      } 
+      else {
+        if(ballC >= 1){
+        indexer.spin(fwd, 100, pct);
+        task::sleep(50);
+        indexerTop.stop(hold);
+        indexerBottom.stop(hold);
+        ballC--;
+        }
+        break;
+      }
+    task::sleep(10);
+    x+=10; 
+    }
+  return 1;
 }
-
 
 int outtake2Ball() {
-  indexer.resetRotation(); 
-  while (true) { 
-    if (fabs(indexer.rotation(rev)) < 5.5) {
-      indexer.spin(fwd, 100, velocityUnits::pct);
-      //conveyor_R.spin(fwd, 100, velocityUnits::pct);
+  indexerTop.resetRotation();
+  int x = 0;
+  while (true) {
+    if (fabs(indexerTop.rotation(rev)) < 9) {
+      if (ballC == 2) {
+        indexer.spin(fwd, 100, pct);
+      } else {
+        indexerTop.spin(fwd, 100, velocityUnits::pct);
+        if (!topConveyor.pressing()) {
+          while (x < 200) {
+            task::sleep(100);
+            x += 100;
+          }
+          indexerBottom.spin(fwd, 100, pct);
+        } else {
+          indexerBottom.stop(brake);
+        }
+      }
     } else {
       indexer.stop(brake);
-      //conveyor_R.stop(brake);
+      ballC -= 2;
       break;
     }
     task::sleep(1);
   }
-  return 1; 
+  return 1;
 }
 
 void outtake2BallAuton() {
-  indexer.resetRotation(); 
-  while (true) { 
-    if (indexer.rotation(rev) < 5.5) {
-      indexer.spin(fwd, 100, velocityUnits::pct);
-    } else {
-       indexer.stop(brake);
-      break;
-    }
-    task::sleep(10);
-  } 
-}
-
-int outtake3Ball() {
-  conveyor_R.resetRotation(); 
+  indexerTop.resetRotation();
+  int x = 0;
   while (true) {
-    if (conveyor_R.rotation(rev) < 6) {
-     conveyor_L.spin(fwd, 100, velocityUnits::pct);
-     conveyor_R.spin(fwd, 100, velocityUnits::pct);
-    } 
-    
-    else {
-      conveyor_L.stop(brake);
-      conveyor_R.stop(brake);
+    if (fabs(indexerTop.rotation(rev)) < 9) {
+      if (ballC == 2) {
+        indexer.spin(fwd, 100, pct);
+      } else {
+        indexerTop.spin(fwd, 100, velocityUnits::pct);
+        if (!topConveyor.pressing()) {
+          while (x < 200) {
+            task::sleep(100);
+            x += 100;
+          }
+          indexerBottom.spin(fwd, 100, pct);
+        } else {
+          indexerBottom.stop(brake);
+        }
+      }
+    } else {
+      indexer.stop(brake);
+      ballC -= 2;
       break;
     }
     task::sleep(1);
   }
-  return 1; 
 }
 
-void outtake3BallAuton() {
-  conveyor_R.resetRotation(); 
+int outtake3Ball() {
+  indexerTop.resetRotation();
   while (true) {
-    if (conveyor_R.rotation(rev) < 6) {
-     conveyor_L.spin(fwd, 100, velocityUnits::pct);
-     conveyor_R.spin(fwd, 100, velocityUnits::pct);
-    } 
-    
-    else {
-      conveyor_L.stop(brake);
-      conveyor_R.stop(brake);
+    if (fabs(indexerTop.rotation(rev)) < 9) {
+     indexer.spin(fwd, 100, pct);
+    } else {
+      indexer.stop(brake);
+      ballC -= 3;
       break;
     }
     task::sleep(1);
-  } 
+  }
+  return 1;
 }
 
-int BallCount(){
-  while(true){
+void outtake3BallAuton() {
+  indexer.resetRotation();
+  while (true) {
+    if (indexer.rotation(rev) < 6) {
+      indexer.spin(fwd, 100, velocityUnits::pct);
+    }
+
+    else {
+      indexer.stop(brake);
+      break;
+    }
+    task::sleep(1);
+  }
+}
+
+int BallCount() {
+  while (true) {
     bcount();
   }
 }
@@ -1567,13 +1450,13 @@ void stopBallCountTask(){
   task::stop(BallCount);
 }
 
-void createPrimeTask(){
+/*void createPrimeTask(){
   task poop = task(primeShoot);
 }
 
 void stopPrimeTask(){
   task::stop(primeShoot);
-}
+}*/
 
 void createIntakeOnTask(){
   task ughh = task(intakeOn);
