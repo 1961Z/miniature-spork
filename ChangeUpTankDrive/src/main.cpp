@@ -36,6 +36,7 @@ void usercontrol(void) {
   task::sleep(500);
   indexer.stop(brake);
   coastDrive();
+  inertialCalibration();
   task s = task(joyStickControl);
   task e = task(intakeToggle);
   task x = task(conveyorToggle);
@@ -46,20 +47,21 @@ void usercontrol(void) {
     //outtakeAll(); 
 
     if(leftDrive.temperature(pct) > 50){
-      //Controller1.rumble("----");
+      Controller1.rumble("----");
     }
     
-    printf("Base temp: %f\n", front_L.temperature(pct));
-    printf("Base temp: %f\n", back_L.temperature(pct));
-    
-    printf("left %f\n", leftTracker.rotation(rev));
-    printf("right %f\n", rightTracker.rotation(rev));
+    //printf("Base temp: %f\n", front_L.temperature(pct));
+    ///printf("Base temp: %f\n", back_L.temperature(pct));
+    //float robotDirection = (-inertial_Up.rotation(deg) - inertial_Down.rotation(deg)) / 2;
+    //printf("heading %f\n", robotDirection);
+    //printf("left %f\n", leftTracker.rotation(rev));
+    //printf("right %f\n", rightTracker.rotation(rev));
     //printf("Horizontal Tracker %f\n", back_L.rotation(rev));
     //printf("leftfront: %f\n", back_L.rotation(rev));
     /*printf("leftback: %f\n", back_L.velocity(pct));
     printf("rightfront: %f\n", front_R.velocity(pct));
     printf("rightback: %f\n", back_R.velocity(pct));*/
-    //printf("Light Sensor Middle %ld\n", LineTrackerMiddle.reflectivity());
+    //printf("Light Sensor Middle %ld\n", goalChecker.reflectivity());
     //printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
     //printf("Light Sensor Top %ld\n", LineTrackerTop.reflectivity());
     wait(10, msec); 

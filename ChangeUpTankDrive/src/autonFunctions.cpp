@@ -245,19 +245,18 @@ bool senseBottom = false;
 
 int bcount() {
   while(true) {
+    if(ballC <= 3 && ballC >= 0) {
     printf("ball count: %id\n", ballC);
-    if(!goalChecker.pressing()){
-    if(LineTrackerIntake.reflectivity() > 17 && senseBottom == false) {
-      ballC++;
-      senseBottom = true;
+        if(LineTrackerIntake.reflectivity() > 17 && senseBottom == false) {
+          ballC++;
+          senseBottom = true;
+        }
+        else if (LineTrackerIntake.reflectivity() < 10) {
+          senseBottom = false;
+        }
+      }
     }
-    else if (LineTrackerIntake.reflectivity() < 10) {
-      senseBottom = false;
-    }
-    }
-
-    return ballC;
-  }
+  return ballC;
 }
 
 void visionRGB() {
@@ -1126,6 +1125,7 @@ int intakeToggle() {
     if(Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing()){
       setIntakeSpeed(-100);
       indexer.spin(fwd, -100, pct);
+      ballC = 0;
       whenToStop = 1; 
     }
     else if (Controller1.ButtonR1.pressing()) {
@@ -1159,9 +1159,7 @@ bool booga = false;
 
 int scoreGoal() {
   indexer.resetRotation();
-  int x = 0;
   while (true) {
-    if (!(goalChecker.pressing())) {
       if (ballC == 1 || ballC == 2) {
         if (!(topConveyor.pressing())) {
           tip = true;
@@ -1169,7 +1167,7 @@ int scoreGoal() {
           printf("here");
         } else if (topConveyor.pressing() && tip == true) {
           indexerTop.spin(fwd, 100, pct);
-          task::sleep(50);
+          task::sleep(20);
           tip = false;
           indexerTop.stop(hold);
         } else if (indexerBottom.rotation(rev) < 2.2 && ballC == 2) {
@@ -1183,19 +1181,8 @@ int scoreGoal() {
         indexer.stop(hold);
         break;
       }
-    } else {
-      indexerTop.spin(fwd, 100, pct);
-      task::sleep(50);
-      while(  !(topConveyor.pressing())){
-        indexer.spin(fwd, 100, pct);
-        task::sleep(10);
-        x+=10;
-      }
-      indexer.stop(hold);
-      break;
-    }
-    task::sleep(10);
-  }
+      task::sleep(10);
+    } 
   return 1;
 }
 
@@ -1231,8 +1218,10 @@ void outtake1BallAuton() {
 int outtake1Ball() {
   indexer.resetRotation();
   int x = 0;
+  if(ballC >= 1){
   indexerTop.spin(fwd, 100, pct);
   task::sleep(100);
+  }
   while (true) {
       if( !(topConveyor.pressing()) && ballC > 1){
        indexer.spin(fwd, 100, pct);
@@ -1242,11 +1231,13 @@ int outtake1Ball() {
         indexer.spin(fwd, 100, pct);
       } 
       else {
+        if(ballC >= 1){
         indexer.spin(fwd, 100, pct);
         task::sleep(50);
         indexerTop.stop(hold);
         indexerBottom.stop(hold);
         ballC--;
+        }
         break;
       }
     task::sleep(10);
@@ -1259,21 +1250,24 @@ int outtake2Ball() {
   indexerTop.resetRotation();
   int x = 0;
   while (true) {
-    if (fabs(indexerTop.rotation(rev)) < 7) {
-      indexerTop.spin(fwd, 100, velocityUnits::pct);
-      if (!topConveyor.pressing()) {
-        while (x < 50) {
-          task::sleep(10);
-          x += 10;
-        }
-        indexerBottom.spin(fwd, 100, pct);
+    if (fabs(indexerTop.rotation(rev)) < 9) {
+      if (ballC == 2) {
+        indexer.spin(fwd, 100, pct);
       } else {
-        indexerBottom.stop(brake);
+        indexerTop.spin(fwd, 100, velocityUnits::pct);
+        if (!topConveyor.pressing()) {
+          while (x < 200) {
+            task::sleep(100);
+            x += 100;
+          }
+          indexerBottom.spin(fwd, 100, pct);
+        } else {
+          indexerBottom.stop(brake);
+        }
       }
     } else {
       indexer.stop(brake);
       ballC -= 2;
-      task intakingBalls = task(scoreGoal);
       break;
     }
     task::sleep(1);
@@ -1286,15 +1280,19 @@ void outtake2BallAuton() {
   int x = 0;
   while (true) {
     if (fabs(indexerTop.rotation(rev)) < 9) {
-      indexerTop.spin(fwd, 100, velocityUnits::pct);
-      if (!topConveyor.pressing()) {
-        while (x < 200) {
-          task::sleep(100);
-          x += 100;
-        }
-        indexerBottom.spin(fwd, 100, pct);
+      if (ballC == 2) {
+        indexer.spin(fwd, 100, pct);
       } else {
-        indexerBottom.stop(brake);
+        indexerTop.spin(fwd, 100, velocityUnits::pct);
+        if (!topConveyor.pressing()) {
+          while (x < 200) {
+            task::sleep(100);
+            x += 100;
+          }
+          indexerBottom.spin(fwd, 100, pct);
+        } else {
+          indexerBottom.stop(brake);
+        }
       }
     } else {
       indexer.stop(brake);
@@ -1307,19 +1305,9 @@ void outtake2BallAuton() {
 
 int outtake3Ball() {
   indexerTop.resetRotation();
-  int x = 0;
   while (true) {
-    if (fabs(indexerTop.rotation(rev)) < 14) {
-      indexerTop.spin(fwd, 100, velocityUnits::pct);
-      if (!topConveyor.pressing()) {
-        while (x < 200) {
-          task::sleep(100);
-          x += 100;
-        }
-        indexerBottom.spin(fwd, 100, pct);
-      } else {
-        indexerBottom.stop(brake);
-      }
+    if (fabs(indexerTop.rotation(rev)) < 9) {
+     indexer.spin(fwd, 100, pct);
     } else {
       indexer.stop(brake);
       ballC -= 3;

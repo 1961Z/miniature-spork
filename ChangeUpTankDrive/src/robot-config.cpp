@@ -15,13 +15,13 @@ motor intakeRight = motor(PORT4, ratio6_1, false);
 motor indexerBottom = motor(PORT5, ratio6_1, true);
 motor indexerTop = motor(PORT6, ratio6_1, false);
 
-inertial inertial_Up = inertial(PORT1);
-inertial inertial_Down = inertial(PORT2);
+inertial inertial_Up = inertial(PORT15);
+inertial inertial_Down = inertial(PORT16);
 encoder leftTracker = encoder(Brain.ThreeWirePort.A); //flipped 
 encoder rightTracker = encoder(Brain.ThreeWirePort.C);
 line LineTrackerIntake = line(Brain.ThreeWirePort.E);
 limit topConveyor = limit(Brain.ThreeWirePort.F);
-bumper goalChecker = bumper(Brain.ThreeWirePort.G);
+line goalChecker = line(Brain.ThreeWirePort.G);
 
 motor_group   leftDrive( front_L, back_L );
 motor_group   rightDrive( front_R, back_R );

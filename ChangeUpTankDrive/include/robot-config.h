@@ -16,7 +16,7 @@ extern inertial inertial_Down;
 extern controller Controller1;
 extern line LineTrackerIntake;
 extern limit topConveyor;
-extern bumper goalChecker;
+extern line goalChecker;
 extern encoder leftTracker; 
 extern encoder rightTracker;
 extern motor_group leftDrive; 

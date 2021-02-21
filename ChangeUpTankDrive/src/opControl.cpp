@@ -44,13 +44,12 @@ int joyStickControl() {
 
 int conveyorToggle() {
   while (true) {
-
-    if (Controller1.ButtonL1.pressing()) {
-      task f = task(outtake1Ball);
-    } 
-    else if (Controller1.ButtonDown.pressing()) {
+    if (Controller1.ButtonLeft.pressing()){
       task m = task(outtake3Ball);
     }
+    else if (Controller1.ButtonL1.pressing()) {
+      task f = task(outtake1Ball);
+    } 
     else if(Controller1.ButtonL2.pressing()){
       task q = task(outtake2Ball);
     }
