@@ -22,6 +22,7 @@ encoder rightTracker = encoder(Brain.ThreeWirePort.C);
 line LineTrackerIntake = line(Brain.ThreeWirePort.E);
 limit topConveyor = limit(Brain.ThreeWirePort.F);
 line goalChecker = line(Brain.ThreeWirePort.G);
+line LineTrackerOuttake = line(Brain.ThreeWirePort.H);
 
 motor_group   leftDrive( front_L, back_L );
 motor_group   rightDrive( front_R, back_R );

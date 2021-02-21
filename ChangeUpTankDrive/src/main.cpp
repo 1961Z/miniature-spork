@@ -36,7 +36,7 @@ void usercontrol(void) {
   task::sleep(500);
   indexer.stop(brake);
   coastDrive();
-  inertialCalibration();
+  //inertialCalibration();
   task s = task(joyStickControl);
   task e = task(intakeToggle);
   task x = task(conveyorToggle);

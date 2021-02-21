@@ -1122,11 +1122,12 @@ int whenToStop = 0;
 int intakeToggle() {
   while (true) {
 
-    if(Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing()){
+    if(Controller1.ButtonR1.pressing() && Controller1.ButtonR2.pressing() && (indexer.velocity(pct) < 100)){
       setIntakeSpeed(-100);
       indexer.spin(fwd, -100, pct);
       ballC = 0;
       whenToStop = 1; 
+      task::stop(scoreGoal);
     }
     else if (Controller1.ButtonR1.pressing()) {
       intake.spin(directionType::fwd, intakeSpeedPCT, voltageUnits::volt);
