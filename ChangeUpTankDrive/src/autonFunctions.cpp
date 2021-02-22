@@ -240,45 +240,31 @@ void brakeIntake(){
 
 int ballC = 0;
 
-<<<<<<< HEAD
-int ballC = 0;
-
-bool sense = false;
-
-int bcount() {
-  while(true) {
-    printf("percent: %ld\n", Line.value(percentUnits::pct));
-    printf("ball count: %ld\n", ballC);
-
-    if(Line.value(percentUnits::pct) < 50 && sense == false) {
-      ballC++;
-      sense = true;
-    }
-    else if (Line.value(percentUnits::pct) > 50) {
-      sense = false;
-    }
-
-    return ballC;
-  }
-=======
 bool senseTop = false;
 bool senseBottom = false;
 
 int bcount() {
   while(true) {
     if(ballC <= 3 && ballC >= 0) {
-    printf("ball count: %id\n", ballC);
-        if(LineTrackerIntake.reflectivity() > 17 && senseBottom == false) {
-          ballC++;
-          senseBottom = true;
-        }
-        else if (LineTrackerIntake.reflectivity() < 10) {
-          senseBottom = false;
-        }
+      printf("ball count: %id\n", ballC);
+      if(LineTrackerIntake.reflectivity() > 17 && senseBottom == false) {
+        ballC++;
+        senseBottom = true;
+      }
+      else if (LineTrackerIntake.reflectivity() < 10) {
+        senseBottom = false;
+      }
+
+      if(LineTrackerOuttake.reflectivity() > 17 && senseTop == false) {
+        ballC--;
+        senseTop = true;
+      }
+      else if (LineTrackerOuttake.reflectivity() < 10) {
+        senseTop = false;
       }
     }
+  }
   return ballC;
->>>>>>> TankDrive
 }
 
 void visionRGB() {
