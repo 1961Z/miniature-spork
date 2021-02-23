@@ -27,8 +27,8 @@ void pre_auton(void) {
 }
 
 void autonomous(void) { 
-  //inertialCalibration();
-  skills();
+  inertialCalibration();
+  testAuton();
 }
 
 void usercontrol(void) {
@@ -54,6 +54,8 @@ void usercontrol(void) {
     ///printf("Base temp: %f\n", back_L.temperature(pct));
     //float robotDirection = (-inertial_Up.rotation(deg) - inertial_Down.rotation(deg)) / 2;
     //printf("heading %f\n", robotDirection);
+    float position = (-(leftTracker.rotation(rev)) + (rightTracker.rotation(rev))) / 2;
+    printf("position %f\n", position);
     //printf("left %f\n", leftTracker.rotation(rev));
     //printf("right %f\n", rightTracker.rotation(rev));
     //printf("Horizontal Tracker %f\n", back_L.rotation(rev));
