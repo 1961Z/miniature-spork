@@ -130,6 +130,10 @@ void preAuton( void );
 
 void ball2Auton( void );
 
+int stopIntakeFunction();
+
+int stopIntakeFunction2nd();
+
 void skills( void );
 
 void testAuton( void );

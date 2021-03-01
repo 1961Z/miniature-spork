@@ -34,8 +34,8 @@ int joyStickControl() {
     //printf("leftDrive %ld\n", Controller1.Axis3.position());
     //printf("rightDrive %ld\n", Controller1.Axis1.position());
     
-    //leftDrive.spin (fwd, (Controller1.Axis3.position() + (Controller1.Axis1.position())), pct);
-    //rightDrive.spin(fwd, (Controller1.Axis3.position() - (Controller1.Axis1.position())), pct);
+    //leftDrive.spin (fwd, (Controller1.Axis2.position() + (Controller1.Axis1.position())), pct);
+    //rightDrive.spin(fwd, (Controller1.Axis2.position() - (Controller1.Axis1.position())), pct);
     leftDrive.spin(fwd, leftDriveSpeed, pct);
     rightDrive.spin(fwd, rightDriveSpeed, pct);
     task::sleep(10);
@@ -44,7 +44,7 @@ int joyStickControl() {
 
 int conveyorToggle() {
   while (true) {
-    if (Controller1.ButtonLeft.pressing()){
+   if (Controller1.ButtonLeft.pressing()){
       task m = task(outtake3Ball);
     }
     else if (Controller1.ButtonL1.pressing()) {
