@@ -254,12 +254,12 @@ int bcount() {
           senseBottom = false;
         }
 
-        if (hoodConveyor.pressing() && senseTop == false) {
+        /*if (LineTrackerOuttake.reflectivity() > 99 && senseTop == false) {
           ballC--;
           senseTop = true;
-        } else if (!hoodConveyor.pressing()) {
+        } else if (LineTrackerOuttake.reflectivity() < 100) {
           senseTop = false;
-        }
+        }*/
       }
       task::sleep(10);
   }
