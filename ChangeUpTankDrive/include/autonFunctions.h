@@ -138,6 +138,10 @@ void skills( void );
 
 void testAuton( void );
 
+void center4GoalAuton( void );
+
+void centerGoalAuton( void );
+
 void homeRowAuton( void );
 
 extern bool whenIntakingPrime; 

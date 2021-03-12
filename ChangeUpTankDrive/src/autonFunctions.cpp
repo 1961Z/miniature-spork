@@ -587,7 +587,7 @@ double rightTrackerError = 0;
 double distanceTraveledlast = 0; 
 double driftLeftError = 0, driftRightError = 0, combinedDriftError = 0, combinedDriftErrorMultiply = 0;  
 
-void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal = 0, double addingFactor = 0, bool cancel = true, int sideWays = 4, double turningRadius = 0, double angleNeeded = 0, double sideWaysDistance = 0, double stafeAtEnd = 0, double distanceAtEnd = 100, double angleAtEnd = 0, double turningRadiusAtEnd = 0) {
+void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, bool cancel = true, double multiplyForHorizontal = 0, double addingFactor = 0, int sideWays = 4, double turningRadius = 0, double angleNeeded = 0, double sideWaysDistance = 0, double stafeAtEnd = 0, double distanceAtEnd = 100, double angleAtEnd = 0, double turningRadiusAtEnd = 0) {
 
   static const double circumference = 3.14159 * 2.77;
   if (distanceIn == 0)
@@ -622,21 +622,21 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
 
   while ((direction * (get_average_encoder() - rightStartPoint) < direction * wheelRevs) || (direction * (get_average_encoder() - leftStartPoint) < direction * wheelRevs)) {
     
-    if ((rightDrive.velocity(rpm) == 0 || leftDrive.velocity(rpm) == 0)) {
-      ++sameEncoderValue;
-    }
-
-    if(sameEncoderValue > 10){
-      //break;
-    }
-
 
    /* if ((goalChecker.pressing()) && distanceTraveled > 0.1 && cancel == true) {
       break;
     }*/
 
-    distanceTraveledlast = distanceTraveled; 
     distanceTraveled = (get_average_encoder());
+
+
+    if ((goalChecker.reflectivity()  > 3 || (fabs(leftDrive.velocity(pct)) < 1) || (fabs(rightDrive.velocity(pct)) < 1)) && cancel == true && fabs(distanceTraveled) > 0.1) {
+      ++sameEncoderValue;
+    }
+
+    if(sameEncoderValue > 10){
+      break;
+    }
 
     //y\ =\ 2\cos\left(\frac{x}{20}\right)\ +2
 
@@ -649,17 +649,17 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
       headingError = headingError;
     }
 
-    //printf("heading %f\n", get_average_inertial());
-    //printf("headingError %f\n", PIDPowerHeading); 
+    printf("heading %f\n", get_average_inertial());
+    printf("headingError %f\n", PIDPowerHeading); 
     //printf("distanceTraveled %f\n", distanceTraveled);
 
       if (direction * (distanceTraveled - leftStartPoint) < direction * wheelRevs) {
         if ((fabs(distanceTraveled) < 0.8)) {
-          if(direction == fabs(direction)){
+          if(direction == fabs(direction)){ 
           leftSpeed = maxVelocity; 
           }
           else{
-          leftSpeed = increasing_speed(leftStartPoint, distanceTraveled, offset);
+          leftSpeed = std::min(increasing_speed(leftStartPoint, distanceTraveled, offset), maxVelocity);
           }
           leftSpeed = (directionLeft * (leftSpeed - headingError));
           front_L.spin(fwd, leftSpeed, pct);
@@ -686,7 +686,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
           rightSpeed = maxVelocity; 
           }
           else{
-          rightSpeed = increasing_speed(leftStartPoint, distanceTraveled, offset);
+          rightSpeed = std::min(increasing_speed(leftStartPoint, distanceTraveled, offset), maxVelocity);
           }
           rightSpeed = (directionLeft * (rightSpeed + headingError));
           front_R.spin(fwd, rightSpeed, pct);
@@ -707,6 +707,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
       } else {
         brakeDrive();
       }
+      distanceTraveledlast = distanceTraveled; 
       task::sleep(10);
     }
   brakeDrive();
@@ -719,9 +720,9 @@ PID sRotatePid;
 double;
 
 int iRotatePid(int target) {
-  sRotatePid.kP = 0.5;
+  sRotatePid.kP = 0.49;
   sRotatePid.kI = 0;
-  sRotatePid.kD = 0.0;
+  sRotatePid.kD = 0.;
 
   sRotatePid.current = get_average_inertial();
   sRotatePid.error = target - sRotatePid.current;
@@ -791,12 +792,36 @@ void rotatePID(int angle, int maxPower) {
   exit_function = false;
   while (fabs(get_average_inertial() - angle) > maxError && !exit_function) {
     int PIDPower = iRotatePid(angle);
-    printf("left Speed Real %f\n", leftDrive.velocity(pct));
     printf("heading average  %f\n", get_average_inertial());
     int power = abs(PIDPower) < maxPower ? PIDPower : maxPower * (PIDPower / abs(PIDPower));
     leftDrive.spin(fwd,  -power, velocityUnits::pct);
     rightDrive.spin(fwd, power, velocityUnits::pct);
     if (timer > 800 && fabs(leftDrive.velocity(pct)) < minVelocity) {
+      exit_function = true;
+    }
+    wait(10, msec);
+    timer += 10;
+  }
+  brakeDrive();
+}
+
+void rotatePIDWack(int angle, int maxPower, bool leftSide) {
+  double maxError = 0.1;
+  int timer = 0;
+  double minVelocity = 4;
+  exit_function = false;
+  while (fabs(get_average_inertial() - angle) > maxError && !exit_function) {
+    int PIDPower = iRotatePid(angle);
+    printf("heading average  %f\n", get_average_inertial());
+    int power = abs(PIDPower) < maxPower ? PIDPower : maxPower * (PIDPower / abs(PIDPower));
+    if(leftSide == 1){
+    rightDrive.stop(hold);
+    leftDrive.spin(fwd,  -power, velocityUnits::pct);
+    }
+    else{
+    rightDrive.spin(fwd, power, velocityUnits::pct);
+    }
+    if (timer > 600 && fabs(leftDrive.velocity(pct)) < minVelocity) {
       exit_function = true;
     }
     wait(10, msec);
@@ -994,7 +1019,6 @@ int scoreGoal() {
         if (!(topConveyor.pressing())) {
           tip = true;
           indexer.spin(fwd, 100, pct);
-          printf("here");
         } else if (topConveyor.pressing() && tip == true) {
           indexerTop.spin(fwd, 100, pct);
           task::sleep(40);
@@ -1009,14 +1033,6 @@ int scoreGoal() {
         }
       }
     } else {
-      indexerTop.spin(fwd, 100, pct);
-      task::sleep(50);
-      while (!(topConveyor.pressing()) || x < 200) {
-        indexer.spin(fwd, 100, pct);
-        task::sleep(10);
-        x += 10;
-      }
-      indexer.stop(hold);
       break;
     }
     task::sleep(10);
@@ -1039,11 +1055,9 @@ int outtake0Ball() {
 }
 
 void outtake1BallAuton() {
-  indexer.spin(fwd, 100, pct);
-  task::sleep(100);
   indexer.resetRotation();
   while (true) {
-      if (indexer.rotation(rev) < 2) {
+      if (indexer.rotation(rev) < 3.2) {
         indexer.spin(fwd, 100, pct);
       } else {
         indexer.stop(brake);
@@ -1206,14 +1220,15 @@ void stopIntakeOn(){
 }
 
 int stopIntakeFunction(){ 
-  int x = 0; 
-  int timeLimit = 1250;
-  while(x < timeLimit){
-    x+= 10 ; 
-    task::sleep(10);
-  }
-  if(x >= timeLimit){
-    stopIntakeOn();
+  while(true){
+    if(ballC >= 1){
+      brakeIntake();
+      printf("balls %i\n", ballC);
+    }
+    if(topConveyor.pressing()){
+      stopIntakeOn();
+      break;
+    }
   }
   return 1;
 }
@@ -1256,6 +1271,83 @@ void preAuton() {
   resetFunction();
 }
 
+void center4GoalAuton(){
+  createBallCountTask();
+  setIntakeSpeed(-100);
+  indexer.spin(fwd, 100, pct);
+  task::sleep(75);
+  moveForwardWalk(34, 90, 0, 1000, false);
+  brakeIntake();
+  indexer.stop(); 
+  createIntakeOnTask();
+  rotatePID(90, 90);
+  task sto = task(stopIntakeFunction);
+  moveForwardWalk(36, 100, 90, 1000);
+  outtake1BallAuton();
+  task::stop(sto);
+  indexer.stop();
+  intake.spin(reverse, 100, pct);
+  task::sleep(75);
+  moveForwardWalk(-32, 90, 90, 1000);
+  rotatePID(-45, 80);
+  task::sleep(50);
+  createIntakeOnTask();
+  moveForwardWalk(25, 90, -45, 1000);
+  task::sleep(75);
+  stopIntakeOn();
+  rotatePID(45, 90);
+  moveForwardWalk(-24, 40, 45, 0.6);
+  rotatePID(-45, 90);
+  moveForwardWalk(-1, 90, -45, 1000);
+  rotatePID(-90, 90);
+  moveForwardWalk(12, 90, -90, 1000);
+  outtake1BallAuton();
+  moveForwardWalk(-10, 100, -90, 1000);
+
+}
+
+void centerGoalAuton(){
+  createBallCountTask();
+  setIntakeSpeed(-100);
+  indexer.spin(fwd, 100, pct);
+  moveForwardWalk(34, 90, 0, 1000, false);
+  brakeIntake();
+  indexer.stop(); 
+  createIntakeOnTask();
+  rotatePID(90, 90);
+  task sto = task(stopIntakeFunction);
+  moveForwardWalk(36, 100, 90, 1000);
+  outtake1BallAuton();
+  task::stop(sto);
+  indexer.stop();
+  intake.spin(reverse, 100, pct);
+  task::sleep(75);
+  moveForwardWalk(-32, 90, 90, 1000, false);
+  rotatePID(-45, 90);
+  createIntakeOnTask();
+  moveForwardWalk(24, 90, -45, 1000);
+  task::sleep(75);
+  stopIntakeOn();
+  moveForwardWalk(-22, 100, -45, 0.6);
+  task::sleep(75);
+  rotatePID(-90, 80);
+  intakeRight.spin(fwd, -100, pct);
+  intakeLeft.spin(fwd, 100, pct);
+  moveForwardWalk(40, 100, -90, 1000);
+  outtake1BallAuton();
+  brakeIntake();
+  moveForwardWalk(-4, 100, -90, 1000, false);
+  createIntakeOnTask();
+  rotatePID(-170, 90);
+  task stop = task(stopIntakeFunction);
+  moveForwardWalk(82, 100, -165, 1000);
+  outtake1BallAuton();
+  task::stop(sto);
+  indexer.stop();
+  moveForwardWalk(-24, 100, -165, 1000);
+
+}
+
 void homeRowAuton(){
   createBallCountTask();
   setIntakeSpeed(-100);
@@ -1264,26 +1356,26 @@ void homeRowAuton(){
   brakeIntake();
   indexer.stop(); 
   createIntakeOnTask();
-  moveForwardWalk(34, 80, 0, 0.6);
-  rotatePID(90, 80);
+  moveForwardWalk(34, 90, 0, 10);
+  rotatePID(90, 100);
   task sto = task(stopIntakeFunction);
-  moveForwardWalk(34, 80, 90, 0.6);
+  moveForwardWalk(34, 90, 90, 10);
   outtake2BallAuton();
   task::stop(sto);
   indexer.stop();
   intake.spin(reverse, 100, pct);
-  moveForwardWalk(-24, 80, 90, 0.6);
+  moveForwardWalk(-24, 90, 90, 10);
   brakeIntake();
-  rotatePID(225, 80);
-  moveForwardWalk(82, 80, 225, 0.6);
-  rotatePID(180, 80);
+  rotatePID(225, 100);
+  moveForwardWalk(82, 90, 225, 10);
+  rotatePID(180, 100);
   createIntakeOnTask();
   task st = task(stopIntakeFunction2nd);
-  moveForwardWalk(28, 80, 180, 0.6);
+  moveForwardWalk(28, 90, 180, 10);
   outtake2BallAuton();
   task::stop(st);
   intake.spin(reverse, 100, pct);
-  moveForwardWalk(-24, 80, 180, 0.6);
+  moveForwardWalk(-24, 90, 180, 10);
   brakeIntake();
 
   

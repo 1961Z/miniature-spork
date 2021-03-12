@@ -1,7 +1,7 @@
 /*vex-vision-config:begin*/
 #include "vex.h"
-vex::vision::signature SIG_1 = vex::vision::signature (1, -4077, -3245, -3661, -3081, -2033, -2557, 5.4, 0);
-vex::vision::signature SIG_2 = vex::vision::signature (2, -461, 415, -23, -51, 51, 0, 3, 0);
+vex::vision::signature SIG_1 = vex::vision::signature (1, 0, 0, 0, 0, 0, 0, 3, 0);
+vex::vision::signature SIG_2 = vex::vision::signature (2, 0, 0, 0, 0, 0, 0, 3, 0);
 vex::vision::signature SIG_3 = vex::vision::signature (3, 0, 0, 0, 0, 0, 0, 2.5, 0);
 vex::vision::signature SIG_4 = vex::vision::signature (4, 0, 0, 0, 0, 0, 0, 2.5, 0);
 vex::vision::signature SIG_5 = vex::vision::signature (5, 0, 0, 0, 0, 0, 0, 2.5, 0);

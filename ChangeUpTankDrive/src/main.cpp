@@ -27,15 +27,16 @@ void pre_auton(void) {
 }
 
 void autonomous(void) { 
-  homeRowAuton();
+  inertialCalibration();
+  centerGoalAuton();
 }
 
 void usercontrol(void) {
   task::stop(stopIntakeFunction);
   task::stop(stopIntakeFunction2nd);
-  //indexer.spin(fwd, 100, pct);
-  //task::sleep(500);
-  //indexer.stop(brake);
+  indexer.spin(fwd, 100, pct);
+  task::sleep(500);
+  indexer.stop(brake);
   coastDrive();
   //inertialCalibration();
   task s = task(joyStickControl);
