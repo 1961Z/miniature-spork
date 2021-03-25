@@ -1078,7 +1078,7 @@ void outtake1BallAutonCenter() {
   indexer.resetRotation();
   while (true) {
       if (indexer.rotation(rev) < 10) {
-        indexer.spin(fwd, 100, pct);
+        indexer.spin(fwd, 90, pct);
       } else {
         indexerTop.stop(brake);
         ballC--;
@@ -1438,7 +1438,7 @@ void homeRowAuton(){
 }
 
 void skills(){
-  /*createBallCountTask();
+  createBallCountTask();
   setIntakeSpeed(-100);
   indexer.spin(fwd, 100, pct);
   task::sleep(500);
@@ -1480,8 +1480,8 @@ void skills(){
   moveForwardWalk(-19, 50, 45, 10);
   task::sleep(50);
   rotatePID(-45, 80);
-  stopFlushOutIntake();
   ballC = 0;
+  stopFlushOutIntake();
   createIntakeOnTask();
   moveForwardWalk(48, 90, -45, 1000);
   task::sleep(50);
@@ -1574,16 +1574,17 @@ void skills(){
   moveForwardWalk(20, 85, -315, 1000); //-225
   task::sleep(50);
   rotatePID(-405, 80); //-45
-  stopIntakeOn();*/
+  stopIntakeOn();
   setIntakeSpeed(-100);
-  moveForwardWalk(50, 40, 0, 0.1);
-  moveForwardWalk(-4, 90, 0, 0.1);
-  moveForwardWalk(7, 90, 0, 0.1); //-405
+  moveForwardWalk(50, 40, -405, 0.001);
   task::sleep(1000);
   outtake1BallAutonCenter();
   task::sleep(500);
   moveForwardWalk(-24, 40, 0, 0.1);
-  
+
+
+  /*moveForwardWalk(-4, 90, 0, 0.1);
+  moveForwardWalk(7, 40, 0, 0.1); //-405*/
   /*moveForwardWalk(-4, 90, -405, 0.1); //-405
   rotatePID(-315, 80); // -315
   moveForwardWalk(-4, 50, -315, 0.1); // -315
