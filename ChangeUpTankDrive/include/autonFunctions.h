@@ -37,7 +37,15 @@ void strafeWalk(double distanceIn, double maxVelocity, double headingOfRobot, do
 
 void stafeThanForward(double speed, bool side);
 
-void turnCrawl(double degree, int velocity);  
+void turnCrawl(double degree, int velocity);
+
+float get_average_encoder_deg();
+
+float get_average_encoder_deg_turn();
+
+float get_average_inertial();
+
+float angleConvertor(double ticks);
 
 void rightPivotTurn(int speed, int angle, double turningRadius);
 

@@ -28,14 +28,16 @@ void pre_auton(void) {
 
 void autonomous(void) { 
   inertialCalibration();
-  centerGoalAuton();
+  skills();
 }
 
 void usercontrol(void) {
   task::stop(stopIntakeFunction);
   task::stop(stopIntakeFunction2nd);
   indexer.spin(fwd, 100, pct);
+  intake.spin(fwd, -100, pct);
   task::sleep(500);
+  intake.stop(brake);
   indexer.stop(brake);
   coastDrive();
   //inertialCalibration();
@@ -60,14 +62,14 @@ void usercontrol(void) {
     //printf("position %f\n", position);
     //printf("left %f\n", leftTracker.rotation(rev));
     //printf("right %f\n", rightTracker.rotation(rev));
-    //printf("Horizontal Tracker %f\n", back_L.rotation(rev));
-    //printf("leftfront: %f\n", back_L.rotation(rev));
+    //printf("heading %f\n", get_average_inertial());
+    //printf("encoder: %f\n", angleConvertor(get_average_encoder_deg_turn())); // 6.5, 
     /*printf("leftback: %f\n", back_L.velocity(pct));
     printf("rightfront: %f\n", front_R.velocity(pct));
     printf("rightback: %f\n", back_R.velocity(pct));*/
     printf("Light Sensor Middle %ld\n", goalChecker.reflectivity());
     printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
-    printf("Light Sensor Top %ld\n", LineTrackerOuttake.reflectivity());
+    /*printf("Light Sensor Top %ld\n", LineTrackerOuttake.reflectivity());*/
     wait(10, msec); 
 
   }
