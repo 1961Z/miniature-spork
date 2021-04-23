@@ -27,8 +27,8 @@ void pre_auton(void) {
 }
 
 void autonomous(void) { 
-  inertialCalibration();
-  skills();
+  //inertialCalibration();
+  homeRowAuton();
 }
 
 void usercontrol(void) {

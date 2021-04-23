@@ -539,12 +539,12 @@ int iHeadingPid(float target) {
 
 PID sMovePid;
 
-int iMovePid(float target) {
+int iMovePid(float target, double currentValue) {
   sMovePid.kP = 0.13; //0.13
   sMovePid.kI = 0;
   sMovePid.kD = 0.2;
 
-  sMovePid.current = get_average_encoder_deg();
+  sMovePid.current = currentValue;
   sMovePid.error = target - sMovePid.current;
   sMovePid.integral += sMovePid.error;
   sMovePid.derivative = sMovePid.error - sMovePid.lastError;
@@ -618,21 +618,25 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
  }
 
   int sameEncoderValue = 0;
-  double distanceTraveled = 0;
+  double distanceTraveledRight = 0;
+  double distanceTraveledLeft = 0;
   double distanceTraveledlast = 0; 
   double PIDPowerL, PIDPowerR, PIDPowerHeading; 
+  bool rightDriveComplete = false;
+  bool leftDriveComplete = false;
 
-  while ((direction * (get_average_encoder() - rightStartPoint) < direction * wheelRevs) || (direction * (get_average_encoder() - leftStartPoint) < direction * wheelRevs)) {
+  while (true) {
     
 
    /* if ((goalChecker.pressing()) && distanceTraveled > 0.1 && cancel == true) {
       break;
     }*/
 
-    distanceTraveled = (get_average_encoder());
+    distanceTraveledLeft =  -(leftTracker.rotation(degrees));
+    distanceTraveledRight = rightTracker.rotation(degrees);
 
 
-    if ((goalChecker.reflectivity()  > 120 || (fabs(leftDrive.velocity(pct)) < 1) || (fabs(rightDrive.velocity(pct)) < 1)) && cancel == true && fabs(distanceTraveled) > 0.1) {
+    if ((goalChecker.reflectivity()  > 120 || (fabs(leftDrive.velocity(pct)) < 1) || (fabs(rightDrive.velocity(pct)) < 1)) && cancel == true && fabs(distanceTraveledRight) > 0.1) {
       ++sameEncoderValue;
     }
 
@@ -655,19 +659,19 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
     printf("headingError %f\n", PIDPowerHeading); 
     //printf("distanceTraveled %f\n", distanceTraveled);
 
-      if (direction * (distanceTraveled - leftStartPoint) < direction * wheelRevs) {
-        if ((fabs(distanceTraveled) < 0.8)) {
+      if (direction * (distanceTraveledLeft - leftStartPoint) < direction * wheelRevsDegree) {
+        if ((fabs(distanceTraveledLeft) < 0.8)) {
           if(direction == fabs(direction)){ 
           leftSpeed = maxVelocity; 
           }
           else{
-          leftSpeed = std::min(increasing_speed(leftStartPoint, distanceTraveled, offset), maxVelocity);
+          leftSpeed = std::min(increasing_speed(leftStartPoint, distanceTraveledLeft, offset), maxVelocity);
           }
           leftSpeed = (directionLeft * (leftSpeed - headingError));
           front_L.spin(fwd, leftSpeed, pct);
           back_L.spin(fwd, leftSpeed, pct);
         } else {
-          PIDPowerL = iMovePid(wheelRevsDegree);
+          PIDPowerL = iMovePid(wheelRevsDegree, distanceTraveledLeft);
           PIDPowerL = fabs(PIDPowerL) < maxVelocity ? PIDPowerL : maxVelocity * (PIDPowerL / fabs(PIDPowerL));
           printf("left Speed %f\n", PIDPowerL);
           PIDPowerL = ((PIDPowerL - headingError));
@@ -680,21 +684,22 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
         }
         //leftDrive.spin(fwd, leftSpeed, pct);*/
       } else {
-        brakeDrive();
+        leftDrive.stop(brake);
+        leftDriveComplete = true;
       }
-      if (direction * (distanceTraveled - rightStartPoint) < direction * wheelRevs) {
-        if ((fabs(distanceTraveled) < 0.8)) {
+      if (direction * (distanceTraveledRight - rightStartPoint) < direction * wheelRevsDegree) {
+        if ((fabs(distanceTraveledRight) < 0.8)) {
           if(direction == fabs(direction)){
           rightSpeed = maxVelocity; 
           }
           else{
-          rightSpeed = std::min(increasing_speed(leftStartPoint, distanceTraveled, offset), maxVelocity);
+          rightSpeed = std::min(increasing_speed(rightStartPoint, distanceTraveledRight, offset), maxVelocity);
           }
           rightSpeed = (directionLeft * (rightSpeed + headingError));
           front_R.spin(fwd, rightSpeed, pct);
           back_R.spin(fwd, rightSpeed, pct);
         } else {
-          PIDPowerR = iMovePid( wheelRevsDegree);
+          PIDPowerR = iMovePid(wheelRevsDegree, distanceTraveledRight);
           PIDPowerR = fabs(PIDPowerR) < maxVelocity ? PIDPowerR : maxVelocity * (PIDPowerR / fabs(PIDPowerR));
           PIDPowerR = ((PIDPowerR + headingError));
           printf("right Speed %f\n", PIDPowerR);
@@ -707,9 +712,13 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
         }
         //rightDrive.spin(fwd, rightSpeed, pct);*/
       } else {
-        brakeDrive();
+        rightDrive.stop(brake);
+        rightDriveComplete = true; 
       }
-      distanceTraveledlast = distanceTraveled; 
+      if(rightDriveComplete == true && leftDriveComplete == true){
+        break;
+      }
+      //distanceTraveledlast = distanceTraveled; 
       task::sleep(10);
     }
   brakeDrive();
@@ -1014,33 +1023,32 @@ int intakeToggle() {
 bool canceled = false;
 bool tip = false;
 bool booga = false;
-bool skill = true;
+bool skill = false;
 
 int scoreGoal() {
   indexer.resetRotation();
   int x = 0;
   while (true) {
-    if (goalChecker.reflectivity() < 99) {
+    if (1 == 1) {
       if (ballC == 1 || ballC == 2) {
         if (!(topConveyor.pressing())) {
           tip = true;
-          indexer.spin(fwd, 75, pct);
+          indexer.spin(fwd, 100, pct); //75
         } else if (topConveyor.pressing() && tip == true) {
-          indexerTop.spin(fwd, 75, pct);
-          task::sleep(40);
+          indexerTop.spin(fwd, 100, pct); //75
+          task::sleep(35); // 40
           tip = false;
           indexerTop.stop(hold);  
-        } else if (indexerBottom.rotation(rev) < 2.2 && ballC == 2  && skill == false) {
+        } else if (indexerBottom.rotation(rev) < 1.2 && ballC == 2  && skill == false) {
           indexerTop.stop(hold);
-          indexerBottom.spin(fwd, 75, pct);
+          indexerBottom.spin(fwd, 100, pct); //75
         } else {
           indexer.stop(hold);
           break;
         }
       }
-    } else {
+    } else {  
       break;
-
     }
     task::sleep(10);
   }
@@ -1062,13 +1070,14 @@ int outtake0Ball() {
 }
 
 void outtake1BallAuton() {
-  indexerTop.resetRotation();
+  indexer.resetRotation();
   while (true) {
-      if (indexerTop.rotation(rev) < 4) {
-        indexerTop.spin(fwd, 100, pct);
+      if (indexer.rotation(rev) < 3.5) {
+        indexer.spin(fwd, 100, pct);
       } else {
-        indexerTop.stop(brake);
+        indexer.stop(brake);
         ballC--;
+        printf("here");
         break;
       }
     }
@@ -1134,7 +1143,7 @@ int outtake2Ball() {
             task::sleep(100);
             x += 100;
           }
-          indexerBottom.spin(fwd, 100, pct);
+          indexerBottom.spin(fwd, 75, pct);
         } else {
           indexerBottom.stop(brake);
         }
@@ -1362,19 +1371,20 @@ void centerGoalAuton(){
   createBallCountTask();
   setIntakeSpeed(-100);
   indexer.spin(fwd, 100, pct);
-  moveForwardWalk(34, 90, 0, 1000, false);
+  moveForwardWalk(32.5, 90, 0, 1000);
   brakeIntake();
   indexer.stop(); 
   createIntakeOnTask();
-  rotatePID(90, 90);
+  rotatePID(90, 80);
   task sto = task(stopIntakeFunction);
   moveForwardWalk(36, 100, 90, 1000);
-  outtake1BallAuton();
+  outtake2BallAuton();
   task::stop(sto);
   indexer.stop();
   intake.spin(reverse, 100, pct);
   task::sleep(75);
-  moveForwardWalk(-32, 90, 90, 1000, false);
+  ballC = 0;
+  moveForwardWalk(-32, 90, 90, 10);
   rotatePID(-45, 90);
   createIntakeOnTask();
   moveForwardWalk(24, 90, -45, 1000);
@@ -1386,17 +1396,18 @@ void centerGoalAuton(){
   intakeRight.spin(fwd, -100, pct);
   intakeLeft.spin(fwd, 100, pct);
   moveForwardWalk(40, 100, -90, 1000);
-  outtake1BallAuton();
+  outtake2BallAuton();
   brakeIntake();
-  moveForwardWalk(-4, 100, -90, 1000, false);
-  createIntakeOnTask();
-  rotatePID(-170, 90);
-  task stop = task(stopIntakeFunction);
-  moveForwardWalk(82, 100, -165, 1000);
-  outtake1BallAuton();
-  task::stop(sto);
-  indexer.stop();
-  moveForwardWalk(-24, 100, -165, 1000);
+  ballC = 0;
+  moveForwardWalk(-4, 100, -90, 1000);
+  //createIntakeOnTask();
+  rotatePID(-168, 80);
+  //task stop = task(stopIntakeFunction);
+  moveForwardWalk(82, 100, -163, 1000);
+  //outtake1BallAuton();
+  //task::stop(sto);
+  //indexer.stop();
+  //moveForwardWalk(-24, 100, -163, 1000);
 
 }
 
@@ -1412,7 +1423,8 @@ void homeRowAuton(){
   task::sleep(50);
   rotatePID(90, 80);
   task sto = task(stopIntakeFunction);
-  moveForwardWalk(36, 90, 90, 1000);
+  moveForwardWalk(38, 90, 90, 1000);
+  task::sleep(250);
   outtake2BallAuton();
   task::stop(sto);
   indexer.stop();
@@ -1421,17 +1433,18 @@ void homeRowAuton(){
   ballC = 0;
   brakeIntake();
   task::sleep(50);
-  rotatePID(230, 80);
+  rotatePID(225, 80);
   createIntakeOnTask();
   moveForwardWalk(82, 90, 225, 1000);
   rotatePID(180, 80);
   task st = task(stopIntakeFunction);
   moveForwardWalk(28, 90, 180, 1000);
+  task::sleep(250);
   outtake2BallAuton();
   task::stop(st);
   intake.spin(reverse, 100, pct);
   ballC = 0; 
-  moveForwardWalk(-24, 90, 180, 1000);
+  moveForwardWalk(-24, 90, 180, 10);
   brakeIntake();
 
   
@@ -1468,7 +1481,7 @@ void skills(){
   moveForwardWalk(46.5, 90, -45, 1000);
   task::sleep(50);
   rotatePID(46, 80);
-  moveForwardWalk(5, 90, 45, 1000);
+  moveForwardWalk(8, 90, 45, 1000);
   while(ballC < 2){
   task::sleep(10);
   }
@@ -1577,9 +1590,9 @@ void skills(){
   stopIntakeOn();
   setIntakeSpeed(-100);
   moveForwardWalk(50, 40, -405, 0.001);
-  task::sleep(1000);
-  outtake1BallAutonCenter();
   task::sleep(500);
+  outtake1BallAutonCenter();
+  task::sleep(250);
   moveForwardWalk(-24, 40, 0, 0.1);
 
 

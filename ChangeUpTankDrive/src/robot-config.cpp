@@ -10,8 +10,8 @@ motor front_R = motor(PORT20, ratio6_1, true);
 motor front_L = motor(PORT12, ratio6_1, false);
 motor back_R = motor(PORT19, ratio6_1, false);
 motor back_L = motor(PORT11, ratio6_1, true);
-motor intakeLeft = motor(PORT3, ratio6_1, true);
-motor intakeRight = motor(PORT4, ratio6_1, false);
+motor intakeLeft = motor(PORT7, ratio6_1, true);
+motor intakeRight = motor(PORT8, ratio6_1, false);
 motor indexerBottom = motor(PORT5, ratio6_1, true);
 motor indexerTop = motor(PORT6, ratio6_1, false);
 
