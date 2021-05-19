@@ -29,7 +29,7 @@ double calculateLeftSpeed(double speed, int turningRadius);
 
 double calculateRightSpeed(double speed, int turningRadius);
 
-void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double multiplyForHorizontal, double addingFactor, int sideWays, double turningRadius,  double angleNeeded, double sideWaysDistance, double stafeAtEnd, double distanceAtEnd, double angleAtEnd, double turningRadiusAtEnd);
+void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double endOfSlew, bool cancel = true, bool slew = true);
 
 void deaccel(int speed, double dist, double strength);
 
@@ -146,11 +146,15 @@ void skills( void );
 
 void testAuton( void );
 
+void newAuton( void );
+
 void center4GoalAuton( void );
 
 void centerGoalAuton( void );
 
 void homeRowAuton( void );
+
+void homeRowAutonNew( void );
 
 extern bool whenIntakingPrime; 
 

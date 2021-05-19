@@ -76,7 +76,7 @@ int autoAlignWithGoal() {
   while (true) {
 
     if (Controller1.ButtonL1.pressing() && hit == false) {
-
+      
       hit = 1;
       lowTower = !lowTower;
       switchMode = !switchMode;
@@ -109,11 +109,14 @@ int autoAlignWithGoal() {
 
 int primeTheConveyor(){
   while(true){
-    if(Controller1.ButtonL1.pressing()){
-      indexer.spin(fwd, 127, volt);
+    if(Controller1.ButtonL1.pressing() && Controller1.ButtonL2.pressing()){
+      indexer.spin(fwd, -100, pct);
+    }
+    else if(Controller1.ButtonL1.pressing()){
+      indexer.spin(fwd, 100, pct);
     }
     else if(Controller1.ButtonL2.pressing()){
-      indexer.spin(reverse, 127, volt);
+      indexerBottom.spin(fwd, 90, pct);
     }
     else{
       indexer.stop(coast);

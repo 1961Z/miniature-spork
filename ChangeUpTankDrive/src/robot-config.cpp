@@ -17,8 +17,8 @@ motor indexerTop = motor(PORT6, ratio6_1, false);
 
 inertial inertial_Up = inertial(PORT15);
 inertial inertial_Down = inertial(PORT16);
-encoder leftTracker = encoder(Brain.ThreeWirePort.A); //flipped 
-encoder rightTracker = encoder(Brain.ThreeWirePort.C);
+encoder rightTracker = encoder(Brain.ThreeWirePort.A); //flipped 
+encoder leftTracker = encoder(Brain.ThreeWirePort.C);
 line LineTrackerIntake = line(Brain.ThreeWirePort.E);
 line goalChecker = line(Brain.ThreeWirePort.G);
 limit trackerOuttake = limit(Brain.ThreeWirePort.H);

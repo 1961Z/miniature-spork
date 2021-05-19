@@ -27,8 +27,8 @@ void pre_auton(void) {
 }
 
 void autonomous(void) { 
-  //inertialCalibration();
-  homeRowAuton();
+  inertialCalibration();
+  newAuton();
 }
 
 void usercontrol(void) {
@@ -47,9 +47,6 @@ void usercontrol(void) {
   task y = task(BallCount);
 
   while (1) {
-
-    //outtakeAll(); 
-
     if(leftDrive.temperature(pct) > 50){
       Controller1.rumble("----");
     }
@@ -60,15 +57,15 @@ void usercontrol(void) {
     //printf("heading %f\n", robotDirection);
     //float position = (-(leftTracker.rotation(rev)) + (rightTracker.rotation(rev))) / 2;
     //printf("position %f\n", position);
-    //printf("left %f\n", leftTracker.rotation(rev));
+    printf("left %f\n", leftTracker.rotation(rev));
     //printf("right %f\n", rightTracker.rotation(rev));
     //printf("heading %f\n", get_average_inertial());
     //printf("encoder: %f\n", angleConvertor(get_average_encoder_deg_turn())); // 6.5, 
     /*printf("leftback: %f\n", back_L.velocity(pct));
     printf("rightfront: %f\n", front_R.velocity(pct));
     printf("rightback: %f\n", back_R.velocity(pct));*/
-    printf("Light Sensor Middle %ld\n", goalChecker.reflectivity());
-    printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
+    //printf("Light Sensor Middle %ld\n", goalChecker.reflectivity());
+    //printf("Light Sensor Intake %ld\n", LineTrackerIntake.reflectivity());
     /*printf("Light Sensor Top %ld\n", LineTrackerOuttake.reflectivity());*/
     wait(10, msec); 
 
