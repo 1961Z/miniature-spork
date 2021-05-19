@@ -411,6 +411,11 @@ double calculateRightSpeed(double speed, int turningRadius){
 
 static const double circumference = 3.14159 * 2.77;
 
+//slope based y2 - y1 / x2 - x1 
+// y = speed 
+// x = distance
+// returns acceleration speed
+
 double increasing_speed(double currentPosition, double endPosition, double maxSpeed) {
   double acceleration_constant;
   endPosition = ((360 * endPosition) / circumference);
@@ -418,6 +423,9 @@ double increasing_speed(double currentPosition, double endPosition, double maxSp
   acceleration_constant =  (maxSpeed - minimumVelocity) / (endPosition - 0);
   return acceleration_constant * fabs(currentPosition) + (minimumVelocity);
 }
+
+//heading PID simple P loop also added a D loop
+//helps dealing with variablistic headings more reactive compared to a simple p loop
 
 PID sHeadingPid;
 
@@ -434,6 +442,9 @@ int iHeadingPid(float target) {
 
   return (((sHeadingPid.error) * (sHeadingPid.kP)) + ((sHeadingPid.derivative) * (sHeadingPid.kD)) + ((sHeadingPid.integral) * (sHeadingPid.kI)));
 }
+
+//move pid for your drive
+//pid runs seperatly on right drive and left drive so they are not averages of one another
 
 PID sMovePid;
 
@@ -453,7 +464,9 @@ int iMovePid(float target, double currentValue) {
 
 PID sSpeedPid;
 
-float iSpeedPid(float target, bool leftSide) {
+//velocity pid to change and make sure velcotiy was at what we wanted it to be at
+
+/*float iSpeedPid(float target, bool leftSide) {
   sSpeedPid.kP = 0.16; //2
   sSpeedPid.kD = 0;
   sSpeedPid.kI = 0;
@@ -476,7 +489,7 @@ float iSpeedPid(float target, bool leftSide) {
   sSpeedPid.lastError = sSpeedPid.error;
 
   return (((sSpeedPid.error) * (sSpeedPid.kP)) + ((sSpeedPid.derivative) * (sSpeedPid.kD)) + ((sSpeedPid.integral) * (sSpeedPid.kI)));
-}
+}*/
 
 bool switchStatement = false; 
 
@@ -486,7 +499,7 @@ double pogChamp = 0;
 double rightTrackerError = 0;
 double driftLeftError = 0, driftRightError = 0, combinedDriftError = 0, combinedDriftErrorMultiply = 0;  
 
-void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double endOfSlew, bool cancel, bool slew){
+void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobot, double multiply, double endOfSlew, bool cancel, bool slew){ //7 first distance, second max velocity, third desired heading, fourth max value you want for heading, fifth distance you want to accelerate for, sixth cancel function, seventh do you want to slew
   static const double circumference = 3.14159 * 2.77;
   if (distanceIn == 0)
     return;
@@ -512,7 +525,7 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
     distanceTraveledRight = -(rightTracker.rotation(degrees));
 
 
-    if ((goalChecker.reflectivity()  > 120 || (fabs(leftDrive.velocity(pct)) < 1) || (fabs(rightDrive.velocity(pct)) < 1)) && cancel == true && fabs(distanceTraveledRight) > 0.1) {
+    if ((goalChecker.reflectivity()  > 120 || (fabs(leftDrive.velocity(pct)) < 1) || (fabs(rightDrive.velocity(pct)) < 1)) && cancel == true && fabs(distanceTraveledRight) > 0.1) { //cancel function loop
       ++sameEncoderValue;
     }
 
@@ -522,11 +535,11 @@ void moveForwardWalk(double distanceIn, double maxVelocity, double headingOfRobo
 
     //y\ =\ 2\cos\left(\frac{x}{20}\right)\ +2
 
-    PIDPowerHeading = iHeadingPid(headingOfRobot);
+    PIDPowerHeading = iHeadingPid(headingOfRobot); //pid heading calculated
     headingError = fabs(PIDPowerHeading) < multiply ? PIDPowerHeading : multiply * (PIDPowerHeading / fabs(PIDPowerHeading));
 
     if (direction == fabs(direction)) {
-      headingError = headingError;
+      headingError = headingError;   //can remove this statment if you want
     } else {
       headingError = headingError;
     }
@@ -857,7 +870,6 @@ void rotatePID(int angle, int maxPower, double kP, double kI, double kD) {
     int power = abs(PIDPower) < maxPower ? PIDPower : maxPower * (PIDPower / abs(PIDPower));
     leftDrive.spin(fwd,  -power, velocityUnits::pct);
     rightDrive.spin(fwd, power, velocityUnits::pct);
-    
     if (fabs(get_average_inertial() - angle) < maxError || cancelStart == true){
       if(c++ == 0){
       cancelStart = true;
